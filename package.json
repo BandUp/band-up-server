@@ -1,0 +1,21 @@
+{
+  "name": "Band-Up-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha"
+  },
+  "dependencies":{
+    "ejs": "2.4.1",
+    "express": "4.13.3",
+    "mocha": "*"
+  },
+    "engines": {
+    "node": "6.2.0"
+  },
+  "keywords": [],
+  "author": "Bad-Melodies",
+  "license": "ISC",
+}
