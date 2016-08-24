@@ -1,7 +1,7 @@
 {
   "name": "Band-Up-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "an API server for the band upp android app",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,7 +10,8 @@
   "dependencies":{
     "ejs": "2.4.1",
     "express": "4.13.3",
-    "mocha": "*"
+    "mocha": "*",
+    "mongoose": "4.5.10"
   },
     "engines": {
     "node": "6.2.0"
