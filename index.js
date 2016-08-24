@@ -1,10 +1,10 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.listen(process.env.PORT || 8080, function () {
+app.listen(process.env.PORT || 8080, () => {
   console.log('Example app listening on port 3000!');
 });
