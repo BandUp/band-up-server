@@ -1,36 +1,43 @@
 // ========== Package import ==========
 const express = require('express');
+const expressSession = require('express-session');
 const app = express();
 const http = require('http').Server(app);
-const chat = require('./socket/chatserver');
+const flash    = require('connect-flash');
 const mongoose = require('mongoose');
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+
+// our files import
+const User = require('./models/user');
+const chat = require('./socket/chatserver');
 
 // =========== app setup ===========
 require('dotenv').config(); // get all app keys and app-secrets
+
 const port = process.env.PORT || 3000;
-chat.setup(http);
+
 
 mongoose.connect(process.env.MONGO_CONNECTION);
 
-app.get('/', (req, res) => {
-  res.send('Hello World! and nice to see you');
-});
+chat.setup(http);
 
-// get all profiles in range
-app.get('/profiles', (req, res) => {
-  // TODO: current version is a prototype must implement!
-  res.json([
-  		{name: 'Bergþór'},
-  		{name: 'Dagur'},
-  		{name: 'Elvar'},
-  		{name: 'Rafael'}
-  	]);
-});
+app.use(expressSession({
+  secret: 'mySecretKey',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+require('./config/passport')(passport);
+console.log('test');
+
+
+// =========== app routes ===========
+require('./routes')(app, passport);
 
 // =========== app startup ===========
 app.listen(port, () => {
-  console.log(process.env.TEST_STRING);
   console.log('Example app listening on port:' + port);
 });

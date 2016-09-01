@@ -343,4 +343,5 @@ module.exports.setup = function(server){
 			this.locked = false;
 		};
 	}
+	console.log('chat is setup and ready');
 };
