@@ -6,30 +6,35 @@ const http = require('http').createServer(app);
 const flash    = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 // our files import
 const User = require('./models/user');
 const chat = require('./socket/chatserver');
 
 // =========== app setup ===========
+// this will cast an error on Heroku that we don't need to worry about
 require('dotenv').config(); // get all app keys and app-secrets
+
+app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGO_CONNECTION);
 
 chat.setup(http);
-
+require('./config/passport')(passport);
 app.use(expressSession({
   secret: 'mySecretKey',
   resave: false,
   saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-require('./config/passport')(passport);
+
 console.log('test');
 
 
