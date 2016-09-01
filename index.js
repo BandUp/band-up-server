@@ -2,7 +2,7 @@
 const express = require('express');
 const expressSession = require('express-session');
 const app = express();
-const http = require('http').Server(app);
+const http = require('http').createServer(app);
 const flash    = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -37,7 +37,7 @@ console.log('test');
 require('./routes')(app, passport);
 
 // =========== app startup ===========
-app.listen(port, () => {
+http.listen(port, () => {
   //console.log(process.env.TEST_STRING);
   console.log('Example app listening on port:' + port);
 });
