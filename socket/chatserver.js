@@ -2,6 +2,7 @@
 module.exports.setup = function(server){
 	console.log("Starting upp socket instance");
 	var io = require('socket.io').listen(server);
+	server.listen(8080);
 	//Store room in an object.
 	var rooms = {};
 	//Global user object, since we want to know what rooms each user is in etc.
