@@ -12,7 +12,7 @@ require('dotenv').config(); // get all app keys and app-secrets
 const port = process.env.PORT || 3000;
 chat.setup(http);
 
-mongoose.connect(process.env.MONGO_CONNECTION);
+//mongoose.connect(process.env.MONGO_CONNECTION);
 
 app.get('/', (req, res) => {
   res.send('Hello World! and nice to see you');
@@ -31,6 +31,6 @@ app.get('/profiles', (req, res) => {
 
 // =========== app startup ===========
 app.listen(port, () => {
-  console.log(process.env.TEST_STRING);
+  //console.log(process.env.TEST_STRING);
   console.log('Example app listening on port:' + port);
 });
