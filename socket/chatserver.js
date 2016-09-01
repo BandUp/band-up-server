@@ -1,8 +1,9 @@
 
 module.exports.setup = function(server){
-	console.log("Starting upp socket instance port: 8080");
+	const socketPort = 8080;
+	console.log("Socket instance for chat starting on port " + socketPort);
 	var io = require('socket.io').listen(server);
-	server.listen(8080);
+	server.listen(socketPort);
 	//Store room in an object.
 	var rooms = {};
 	//Global user object, since we want to know what rooms each user is in etc.
