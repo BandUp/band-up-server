@@ -1,6 +1,6 @@
 
 module.exports.setup = function(server){
-	console.log("Starting upp socket instance");
+	console.log("Starting upp socket instance port: 8080");
 	var io = require('socket.io').listen(server);
 	server.listen(8080);
 	//Store room in an object.
