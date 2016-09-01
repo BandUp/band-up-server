@@ -16,7 +16,6 @@ require('dotenv').config(); // get all app keys and app-secrets
 
 const port = process.env.PORT || 3000;
 
-
 mongoose.connect(process.env.MONGO_CONNECTION);
 
 chat.setup(http);
@@ -39,5 +38,6 @@ require('./routes')(app, passport);
 
 // =========== app startup ===========
 app.listen(port, () => {
+  //console.log(process.env.TEST_STRING);
   console.log('Example app listening on port:' + port);
 });

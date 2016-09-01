@@ -1,7 +1,9 @@
 
 module.exports.setup = function(server){
-	console.log("Starting upp socket instance");
+	const socketPort = 8080;
+	console.log("Socket instance for chat starting on port " + socketPort);
 	var io = require('socket.io').listen(server);
+	server.listen(socketPort);
 	//Store room in an object.
 	var rooms = {};
 	//Global user object, since we want to know what rooms each user is in etc.
@@ -10,8 +12,8 @@ module.exports.setup = function(server){
 	rooms.Lobby = new Room();
 	rooms.Lobby.setTopic("Welcome to the Lobby!");
 
-	io.sockets.on('connection', function (socket) {
-
+	io.on('connection', function (socket) {
+		console.log("Client connected");
 		function getUsers () {
 			var userlist = [];
 
@@ -25,7 +27,6 @@ module.exports.setup = function(server){
 
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
-
 			//Check if username is avaliable.
 			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
 				socket.username = username;
@@ -159,6 +160,7 @@ module.exports.setup = function(server){
 
 		// when the user disconnects.. perform this
 		socket.on('disconnect', function() {
+			console.log("Client disconnected");
 			if(socket.username) {
 				//If the socket doesn't have a username the client joined and parted without
 				//chosing a username, so we just close the socket without any cleanup.
