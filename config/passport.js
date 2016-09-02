@@ -55,4 +55,30 @@ module.exports = function(passport){
       });
     });
   }));
+
+  // local login
+  passport.use('local-login', new LocalStrategy({
+    usernameField: 'username',
+    passwordField: 'password',
+    passReqToCallback: true
+  }, function(req, username, password, done){
+    User.findOne({'local.username': username}, function(err, user){
+      // start with error reporting
+      if(err){
+        console.log(err.message);
+        return done(err);
+      }
+      // no user with username was found
+      if(!user){
+        return done(err);
+      }
+      // check wether the password is incorrect
+      if(!user.validPassword(password)){
+        return done(null, false, req.flash('loginMessage', 'incorrect password'));
+      }
+
+      // all checks passed, return succesful user
+      return done(null, user);
+    });
+  }));
 };

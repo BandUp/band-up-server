@@ -17,4 +17,10 @@ module.exports = function(app, passport){
         {name: 'Rafael'}
       ]);
   });
+
+  app.post('/login-local', passport.authenticate('local-login', {
+    successRedirect: '/nearby-users',
+    failureRedirect: '/login-local',
+    failureFlash: true
+  }));
 };
