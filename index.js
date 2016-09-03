@@ -7,6 +7,8 @@ const flash    = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 
 // our files import
 const User = require('./models/user');
@@ -16,19 +18,17 @@ const chat = require('./socket/chatserver');
 // this will cast an error on Heroku that we don't need to worry about
 require('dotenv').config(); // get all app keys and app-secrets
 
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // need this for auth
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_CONNECTION);
+mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 
 chat.setup(http);
 require('./config/passport')(passport);
-app.use(expressSession({
-  secret: 'mySecretKey',
-  resave: false,
-  saveUninitialized: false
-}));
+app.use(expressSession({secret: 'mySecretKey'}));
 
 app.use(passport.initialize());
 app.use(passport.session());

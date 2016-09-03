@@ -4,12 +4,10 @@ module.exports = function(app, passport){
   });
 
   app.post('/signup-local', passport.authenticate('local-signup', {
-    successRedirect: '/nearby-users',
-    failureRedirect: '/signup-fail',
     failureFlash: true
   }));
 
-  app.post('/nearby-users', (req, res) => {
+  app.get('/nearby-users', (req, res) => {
       res.json([
         {name: 'Bergþór'},
         {name: 'Dagur'},
