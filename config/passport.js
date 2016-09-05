@@ -33,8 +33,7 @@ module.exports = function(passport){
         }
         // see if we found a user
         if(user){
-          return done(null, false,
-            req.flash('signupMessage', 'username is already taken'));
+          return done(null, false, {message: "user already exists"});
         }else{
           // no user with said username
           // create user
