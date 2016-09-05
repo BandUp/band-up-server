@@ -3,9 +3,11 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.post('/signup-local', passport.authenticate('local-signup', {
-    failureFlash: true
-  }));
+  app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
+    // this function only gets called when signup was succesful
+    // req.user contains authenticated user.
+    res.status(201).send(req.user._id);
+  });
 
   app.get('/nearby-users', (req, res) => {
       res.json([

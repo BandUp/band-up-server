@@ -28,7 +28,11 @@ mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 
 chat.setup(http);
 require('./config/passport')(passport);
-app.use(expressSession({secret: 'mySecretKey'}));
+app.use(expressSession({
+  secret: 'mySecretKey',
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
