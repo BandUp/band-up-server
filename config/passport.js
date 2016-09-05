@@ -46,6 +46,9 @@ module.exports = function(passport){
 
           // attempt to save user
           newUser.save((err) =>{
+            if(err){
+              return res.status(500).json(err);
+            }
             return done(err, newUser);
           });
         }
@@ -62,16 +65,16 @@ module.exports = function(passport){
     User.findOne({'local.username': username}, function(err, user){
       // start with error reporting
       if(err){
-        console.log(err);
+        console.log(err.message);
         return done(err);
       }
       // no user with username was found
       if(!user){
-        return done(err);
+        return done(null, false, {message: 'No such user registered'});
       }
       // check wether the password is incorrect
       if(!user.validPassword(password)){
-        return done(null, false, req.flash('loginMessage', 'incorrect password'));
+        return done(null, false, {message: 'incorrect password'});
       }
 
       // all checks passed, return succesful user
