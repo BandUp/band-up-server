@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 
 const port = process.env.PORT || 3000;
 
+mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 
 chat.setup(http);
