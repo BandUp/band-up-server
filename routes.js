@@ -18,9 +18,9 @@ module.exports = function(app, passport){
       ]);
   });
 
-  app.post('/login-local', passport.authenticate('local-login', {
-    successRedirect: '/nearby-users',
-    failureRedirect: '/login-local',
-    failureFlash: true
-  }));
+  app.post('/login-local', passport.authenticate('local-login'), (req, res) => {
+    // this function only gets called when signup was succesful
+    // req.user contains authenticated user.
+    res.status(200).send(req.user);
+  });
 };
