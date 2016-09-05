@@ -62,7 +62,7 @@ module.exports = function(passport){
     User.findOne({'local.username': username}, function(err, user){
       // start with error reporting
       if(err){
-        console.log(err.message);
+        console.log(err);
         return done(err);
       }
       // no user with username was found
