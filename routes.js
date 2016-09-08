@@ -23,6 +23,6 @@ module.exports = function(app, passport){
   }), (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
-    res.status(200).send(req.sessionID);
+    res.status(200).json({sessionID: req.sessionID}).send();
   });
 };
