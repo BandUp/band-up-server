@@ -7,8 +7,7 @@ module.exports = function(app, passport){
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     // Rafá was here ;p
-    //res.status(201).json({id: req.user._id}).send();
-    res.status(201).json({"success"}).send();
+    res.status(201).json({id: req.user._id}).send();
   });
 
   app.get('/nearby-users', (req, res) => {
