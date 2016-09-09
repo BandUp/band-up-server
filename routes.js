@@ -6,6 +6,7 @@ module.exports = function(app, passport){
   app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
+    // Rafá was here ;p
     res.status(201).json({id: req.user._id}).send();
   });
 
