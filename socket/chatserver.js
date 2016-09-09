@@ -141,10 +141,12 @@ module.exports.setup = function(server){
 			//If user exists in global user list.
 			if(users[msgObj.nick] !== undefined) {
 				//Send the message only to this user.
+				console.log("Sending message '"+ msgObj.message+"' to " + msgObj.nick);
 				users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
 				//Callback recieves true.
 				fn(true);
 			}
+			console.log("Sending message failed");
 			fn(false);
 		});
 
