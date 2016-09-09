@@ -4,7 +4,7 @@
 ### Description
 Connects to the Socket.IO server.
 ### Returns
-List of users connected.
+List of connected users.
 ### Callback
 None.
 ##```adduser```
