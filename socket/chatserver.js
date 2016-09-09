@@ -26,19 +26,21 @@ module.exports.setup = function(server){
 
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
-			console.log("Adding user " + username);
+			
 			//Check if username is avaliable.
 			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
 				socket.username = username;
 
 				//Store user object in global user roster.
 				users[username] = { username: socket.username, channels: {}, socket: this };
+				console.log("Username available. Adding user: " + username);
 				fn(true); // Callback, user name was available
 
 				//Send updated users when new one joins
 				io.sockets.emit('userlist', getUsers());
 			}
 			else {
+				console.log("Username " + username + "unavailable.");
 				fn(false); // Callback, it wasn't available
 			}
 		});
