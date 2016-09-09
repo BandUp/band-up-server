@@ -1,4 +1,3 @@
-
 module.exports.setup = function(server){
 	const socketPort = 8080;
 	console.log("Socket instance for chat starting on port " + socketPort);
