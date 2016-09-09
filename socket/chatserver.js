@@ -27,6 +27,7 @@ module.exports.setup = function(server){
 
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
+			console.log("Adding user " + username);
 			//Check if username is avaliable.
 			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
 				socket.username = username;
@@ -136,6 +137,8 @@ module.exports.setup = function(server){
 		});
 
 		socket.on('privatemsg', function (msgObj, fn) {
+			console.log("Private Message:");
+			console.log(msgObj);
 			//If user exists in global user list.
 			if(users[msgObj.nick] !== undefined) {
 				//Send the message only to this user.
