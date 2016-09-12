@@ -27,6 +27,22 @@ module.exports = function(app, passport){
     res.status(200).json({sessionID: req.sessionID}).send();
   });
 
+  app.post('/email', isLoggedIn, (req, res) => {
+    // get current user into easy to handle variable
+    let user = req.session.passport.user;
+    // update email
+    user.local.email = req.body.email;
+    user.login((err) => {
+      if(err) return err;
+      res.status(200).send();
+    });
+  });
+
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.status(200).send();
+  });
+
   // route middleware to make sure user is logged in
   function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
