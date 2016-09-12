@@ -26,4 +26,13 @@ module.exports = function(app, passport){
     // req.user contains authenticated user.
     res.status(200).json({sessionID: req.sessionID}).send();
   });
+
+  // route middleware to make sure user is logged in
+  function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    // user is not authorized send 401 back
+    res.status(401).send();
+  }
 };
