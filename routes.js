@@ -29,11 +29,12 @@ module.exports = function(app, passport){
 
   app.post('/email', isLoggedIn, (req, res) => {
     // get current user into easy to handle variable
-    let user = req.session.passport.user;
+    let user = req.user;
+    console.log(user);
     // update email
     user.local.email = req.body.email;
-    user.login((err) => {
-      if(err) return err;
+    user.save((err) => {
+      console.log(user);
       res.status(200).send();
     });
   });
