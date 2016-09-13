@@ -3,7 +3,7 @@ process.env.NODE_ENV = 'test';
 
 const app = require('../index');
 
-require('../models/local-passport-test')(app);
+require('../config/local-passport-test')(app);
 
 describe('Array', function() {
   describe('#indexOf()', function() {
