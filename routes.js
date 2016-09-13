@@ -30,11 +30,9 @@ module.exports = function(app, passport){
   app.post('/email', isLoggedIn, (req, res) => {
     // get current user into easy to handle variable
     let user = req.user;
-    console.log(user);
     // update email
     user.local.email = req.body.email;
     user.save((err) => {
-      console.log(user);
       res.status(200).send();
     });
   });
