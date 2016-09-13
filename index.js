@@ -17,11 +17,12 @@ const chat = require('./socket/chatserver');
 // needed for testing
 module.exports = http;
 // =========== app setup ===========
+var env = process.env.NODE_ENV || 'dev';
 // this will cast an error on Heroku that we don't need to worry about
 require('dotenv').config();
 
 app.use(morgan('dev', {
-  // skip login in tests
+  // skip logs in tests
   skip: function(req, res) {return process.env.NODE_ENV === 'test';}
 })); // log every request to the console
 app.use(cookieParser()); // need this for auth
@@ -31,7 +32,6 @@ const port = process.env.PORT || 3000;
 
 mongoose.Promise = global.Promise;
 if(process.env.NODE_ENV === 'test'){
-  console.log(process.env.MONGO_TEST);
   mongoose.connect(process.env.MONGO_TEST);
 }else{
   mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
