@@ -19,11 +19,9 @@ module.exports = function(passport){
     passwordField: 'password',
     passReqToCallback: true
   }, function(req, username, password, done){
-    console.log(username);
     // asynchronous
     // User.findOne won't fire unless data is sent back
     process.nextTick(function(){
-      console.log('registering new user');
       // find user with same username (checking if this is a pre-existing user)
       User.findOne({'local.username': username}, (err, user) => {
         // if there was an error return it
