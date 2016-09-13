@@ -18,7 +18,7 @@ const chat = require('./socket/chatserver');
 module.exports = http;
 // =========== app setup ===========
 // this will cast an error on Heroku that we don't need to worry about
-
+require('dotenv').config();
 
 app.use(morgan('dev', {
   // skip login in tests
@@ -31,7 +31,8 @@ const port = process.env.PORT || 3000;
 
 mongoose.Promise = global.Promise;
 if(process.env.NODE_ENV === 'test'){
-  mongoose.connect('mongodb://127.0.0.1/test');
+  console.log(process.env.MONGO_TEST);
+  mongoose.connect(process.env.MONGO_TEST);
 }else{
   mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 }
