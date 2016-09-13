@@ -2,7 +2,6 @@ const assert = require('assert');
 process.env.NODE_ENV = 'test';
 
 const app = require('../index');
-require('dotenv').config();
 require('./local-passport-test')(app);
 
 describe('Array', function() {
