@@ -41,6 +41,10 @@ module.exports = function(app){
         });
       });
 
+      /*
+      * Author: Dagur
+      * Signees:
+      */
       it('should return 200 on succesful login', function (done) {
         request(app) // make a request to app
           .post('/login-local') // this path
@@ -53,6 +57,11 @@ module.exports = function(app){
             done();
           });
       });
+
+      /*
+      * Author: Dagur
+      * Signees:
+      */
       it('should return token on succesful login', function (done) {
         request(app)
           .post('/login-local')
@@ -65,6 +74,11 @@ module.exports = function(app){
             done();
           });
       });
+
+      /*
+      * Author: Dagur
+      * Signees:
+      */
       it('should return 401 on unsuccesful login', function (done) {
         request(app)
           .post('/login-local')
@@ -97,6 +111,10 @@ module.exports = function(app){
           });
       });
 
+      /*
+      * Author: Dagur
+      * Signees:
+      */
       it('should return 401 on trying to use duplicate usernames', function (done) {
         let user = {
           username: "testPerson",

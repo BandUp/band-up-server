@@ -2,6 +2,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 
 module.exports = function(passport){
+  // facebook authentication
+  require('./facebook-passport')(passport);
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -40,7 +42,7 @@ module.exports = function(passport){
           // set local credentials
           newUser.local.username = username;
           newUser.local.password = newUser.generateHash(password);
-          newUser.local.email    = req.body.email;
+          newUser.email          = req.body.email;
           newUser.local.age      = req.body.age;
 
           console.log(newUser.local.email);

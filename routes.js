@@ -3,7 +3,15 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
+  app.get('/login-facebook',
+          passport.authenticate('facebook-token'),
+          (req, res) => {
+              res.json({sessionID: req.sessionID}).send(200);
+  });
+
+  app.post('/signup-local',
+            passport.authenticate('local-signup'),
+            (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     // Rafá was here ;p
@@ -19,9 +27,11 @@ module.exports = function(app, passport){
       ]);
   });
 
-  app.post('/login-local', passport.authenticate('local-login', {
-    failureFlash: true
-  }), (req, res) => {
+  app.post('/login-local',
+            passport.authenticate('local-login', {
+              failureFlash: true
+            }),
+            (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     res.status(200).json({sessionID: req.sessionID}).send();
@@ -31,7 +41,7 @@ module.exports = function(app, passport){
     // get current user into easy to handle variable
     let user = req.user;
     // update email
-    user.local.email = req.body.email;
+    user.email = req.body.email;
     user.save((err) => {
       res.status(200).send();
     });
