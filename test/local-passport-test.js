@@ -15,6 +15,7 @@ module.exports = function(app){
       mongoose.connect(dbURI, done);
     });
 
+    // clean out database before every test
     beforeEach(function(done) {
       clearDB((err) => {
         if(err) throw err;
@@ -32,6 +33,8 @@ module.exports = function(app){
         let newUser = new user();
         newUser.local.username = "TestPerson";
         newUser.local.password = newUser.generateHash("SecretTestPassword");
+        newUser.local.email = 'woo@mail.com';
+        newUser.local.age = 22;
         newUser.save((err) => {
           if(err) throw err;
           done();
@@ -39,12 +42,12 @@ module.exports = function(app){
       });
 
       it('should return 200 on succesful login', function (done) {
-        request(app)
-          .post('/login-local')
-          .send({
+        request(app) // make a request to app
+          .post('/login-local') // this path
+          .send({ // send this object
             username: 'TestPerson',
             password: 'SecretTestPassword'
-          }).end((err, res) => {
+          }).end((err, res) => { // callback with resukts
             if(err) throw err;
             res.status.should.be.equal(200);
             done();
