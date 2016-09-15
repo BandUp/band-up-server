@@ -16,7 +16,7 @@ let userSchema = mongoose.Schema({
     name: String,
     email: String
   },
-  instruments: [String]
+  instruments: [int]
 });
 
 // methoods
