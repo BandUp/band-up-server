@@ -1,4 +1,4 @@
-const FacebookStrategy = require('passport-facebook-token').Strategy;
+const FacebookStrategy = require('passport-facebook-token');
 
 // load up user model
 const User = require('../models/user');
