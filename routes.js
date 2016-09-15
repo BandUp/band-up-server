@@ -1,3 +1,4 @@
+const Instrument = require('./models/instrument');
 module.exports = function(app, passport){
   app.get('/', (req, res) => {
     res.send('Hello world!');
@@ -62,13 +63,15 @@ module.exports = function(app, passport){
   }
 
   app.get('/instruments', (req, res) => {
-    res.json([
-      {id: 1, name: 'Gitar'},
-      {id: 2, name: 'Drums'},
-      {id: 3, name: 'Bass'},
-      {id: 4, name: 'Vocals'},
-      {id: 5, name: 'Percussion'}
-    ]);
-    res.status(200).send();
+    Instrument.find({}, function(err, doc) {
+    	if (err) {
+    		console.log("Error occurred:");
+    		console.log(err);
+    		res.status(500).send("Unknown internal server error occurred.");
+    		return;
+    	}
+    	res.type('text/json');
+    	res.status(200).send(doc);
+    }).sort({order: 'ascending'});
   });
 };
