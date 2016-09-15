@@ -63,7 +63,7 @@ module.exports = function(app, passport){
   }
 
   app.get('/instruments', (req, res) => {
-    Instrument.Instrument.find({}, function(err, doc) {
+    Instrument.find({}, function(err, doc) {
     	if (err) {
     		console.log("Error occurred:");
     		console.log(err);
