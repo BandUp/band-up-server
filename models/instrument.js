@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // schema definition
 let instrument = mongoose.Schema({
-  id: int,
+  id: Integer,
   name: String
 });
 
