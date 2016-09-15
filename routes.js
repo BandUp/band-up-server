@@ -1,4 +1,6 @@
-const models = require('./models');
+const instrument = require('./models/instrument');
+const genre = require('./models/genre');
+
 module.exports = function(app, passport){
   app.get('/', (req, res) => {
     res.send('Hello world!');
@@ -63,7 +65,7 @@ module.exports = function(app, passport){
   }
 
   app.get('/instruments', (req, res) => {
-    models.Instrument.find({}, function(err, doc) {
+    instrument.find({}, function(err, doc) {
     	if (err) {
     		console.log("Error occurred:");
     		console.log(err);
@@ -76,7 +78,7 @@ module.exports = function(app, passport){
   });
 
   app.get('/genres', (req, res) => {
-    models.Genre.find({}, function(err, doc) {
+    genre.find({}, function(err, doc) {
       if (err) {
         console.log("Error occurred:");
         console.log(err);
