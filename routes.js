@@ -72,6 +72,6 @@ module.exports = function(app, passport){
     	}
     	res.type('text/json');
     	res.status(200).send(doc);
-    });
+    }).sort({order: 'ascending'});
   });
 };
