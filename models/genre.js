@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // schema definition
 let genre = mongoose.Schema({
-  id: Integer,
+  id: String,
   name: String
 });
 
