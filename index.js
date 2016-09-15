@@ -14,6 +14,7 @@ const morgan = require('morgan');
 
 // our files import
 const User = require('./models/user');
+const Instrument = require('./models/instrument');
 const chat = require('./socket/chatserver');
 
 // needed for testing
