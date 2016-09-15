@@ -74,4 +74,17 @@ module.exports = function(app, passport){
     	res.status(200).send(doc);
     }).sort({order: 'ascending'});
   });
+
+  app.get('/genres', (req, res) => {
+    Genre.find({}, function(err, doc) {
+      if (err) {
+        console.log("Error occurred:");
+        console.log(err);
+        res.status(500).send("Unknown internal server error occurred.");
+        return;
+      }
+      res.type('text/json');
+      res.status(200).send(doc);
+    }).sort({order: 'ascending'});
+  });
 };
