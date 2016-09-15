@@ -60,4 +60,15 @@ module.exports = function(app, passport){
     // user is not authorized send 401 back
     res.status(401).send();
   }
+
+  app.get('/instruments', (req, res) => {
+    res.json([
+      {id: 1, name: 'Gitar'},
+      {id: 2, name: 'Drums'},
+      {id: 3, name: 'Bass'},
+      {id: 4, name: 'Vocals'},
+      {id: 5, name: 'Percussion'}
+    ]);
+    res.status(200).send();
+  });
 };
