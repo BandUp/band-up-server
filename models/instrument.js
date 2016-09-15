@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // schema definition
 let instrument = mongoose.Schema({
   id: int,
-  instrument: String
+  name: String
 });
 
 module.exports = mongoose.model('Instrument', instrument);
