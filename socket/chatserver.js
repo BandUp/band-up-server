@@ -45,6 +45,20 @@ module.exports.setup = function(server){
 			}
 		});
 
+		socket.on('privatemsg', function (msgObj, fn) {
+			console.log("Private Message:");
+			console.log(msgObj);
+			//If user exists in global user list.
+			if(users[msgObj.nick] !== undefined) {
+				//Send the message only to this user.
+				console.log("Sending message '"+ msgObj.message+"' to " + msgObj.nick);
+				users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
+				//Callback recieves true.
+				fn(true);
+			}
+			fn(false);
+		});
+
 		//When a user joins a room this processes the request.
 		socket.on('joinroom', function (joinObj, fn) {
 
@@ -135,21 +149,6 @@ module.exports.setup = function(server){
 				rooms[data.roomName].addMessage(messageObj);
 				io.sockets.emit('updatechat', data.roomName, rooms[data.roomName].messageHistory);
 			}
-		});
-
-		socket.on('privatemsg', function (msgObj, fn) {
-			console.log("Private Message:");
-			console.log(msgObj);
-			//If user exists in global user list.
-			if(users[msgObj.nick] !== undefined) {
-				//Send the message only to this user.
-				console.log("Sending message '"+ msgObj.message+"' to " + msgObj.nick);
-				users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
-				//Callback recieves true.
-				fn(true);
-			}
-			console.log("Sending message failed");
-			fn(false);
 		});
 
 		//When a user leaves a room this gets performed.
