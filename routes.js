@@ -13,18 +13,12 @@ module.exports = function(app, passport){
               res.json({sessionID: req.sessionID}).send(200);
   });
 
-  // google
-  app.get('/login-google',
-            passport.authenticate('google-token'),
-            (req, res) => {
-                res.status(200).json({sessionID: req.sessionID}).send();
-  });
-
   app.post('/signup-local',
             passport.authenticate('local-signup'),
             (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
+    // Rafá was here ;p
     res.status(201).json({id: req.user._id}).send();
   });
 
@@ -98,7 +92,7 @@ module.exports = function(app, passport){
   });
 
   app.post('/instruments', (req, res) => {
-     res.status(501).send("We have not implemented this functionality. Yet.");
+    res.status(501).send("We have not implemented this functionality. Yet.");
   });
 
   app.post('/genres', isLoggedIn, (req, res) => {
