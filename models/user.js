@@ -16,8 +16,13 @@ let userSchema = mongoose.Schema({
     name: String,
     email: String
   },
-  instruments: [String],
-  genres: [String]
+  google: {
+    id: String,
+    token: String,
+    name: String,
+    email: String
+  },
+  instruments: [String]
 });
 
 // methoods

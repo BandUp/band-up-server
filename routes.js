@@ -1,4 +1,3 @@
-const user = require('./models/user');
 const instrument = require('./models/instrument');
 const genre = require('./models/genre');
 
@@ -13,12 +12,18 @@ module.exports = function(app, passport){
               res.json({sessionID: req.sessionID}).send(200);
   });
 
+  // google
+  app.get('/login-google',
+            passport.authenticate('google-token'),
+            (req, res) => {
+                res.status(200).json({sessionID: req.sessionID}).send();
+  });
+
   app.post('/signup-local',
             passport.authenticate('local-signup'),
             (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
-    // Rafá was here ;p
     res.status(201).json({id: req.user._id}).send();
   });
 
@@ -62,10 +67,10 @@ module.exports = function(app, passport){
       return next();
     }
     // user is not authorized send 401 back
-    res.status(401).send("You are not authorized to access this data.");
+    res.status(401).send();
   }
 
-  app.get('/instruments', isLoggedIn, (req, res) => {
+  app.get('/instruments', (req, res) => {
     instrument.find({}, function(err, doc) {
     	if (err) {
     		console.log("Error occurred:");
@@ -78,7 +83,7 @@ module.exports = function(app, passport){
     }).sort({order: 'ascending'});
   });
 
-  app.get('/genres', isLoggedIn, (req, res) => {
+  app.get('/genres', (req, res) => {
     genre.find({}, function(err, doc) {
       if (err) {
         console.log("Error occurred:");
@@ -89,13 +94,5 @@ module.exports = function(app, passport){
       res.type('text/json');
       res.status(200).send(doc);
     }).sort({order: 'ascending'});
-  });
-
-  app.post('/instruments', (req, res) => {
-    res.status(501).send("We have not implemented this functionality. Yet.");
-  });
-
-  app.post('/genres', isLoggedIn, (req, res) => {
-    res.status(501).send("We have not implemented this functionality. Yet.");
   });
 };
