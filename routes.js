@@ -91,11 +91,61 @@ module.exports = function(app, passport){
     }).sort({order: 'ascending'});
   });
 
-  app.post('/instruments', (req, res) => {
-    res.status(501).send("We have not implemented this functionality. Yet.");
+  app.post('/instruments', isLoggedIn, (req, res) => {
+  	user.findOne({_id:req.user._id}, function(err, doc) {
+  		if (err) {
+	        console.log("Error occurred:");
+	        console.log(err);
+	        res.status(500).send("Unknown internal server error occurred.");
+	        return;
+      	}
+      	
+      	if (!doc) {
+      		res.status(500).send("Unknown internal server error occurred.");
+      	}
+
+      	validateSetupSelection(req, res);
+      	doc.instruments = req.body;
+      	doc.save();
+      	res.status(200).send();
+  	});
   });
 
   app.post('/genres', isLoggedIn, (req, res) => {
-    res.status(501).send("We have not implemented this functionality. Yet.");
+      	user.findOne({_id:req.user._id}, function(err, doc) {
+  		if (err) {
+	        console.log("Error occurred:");
+	        console.log(err);
+	        res.status(500).send("Unknown internal server error occurred.");
+	        return;
+      	}
+
+      	if (!doc) {
+      		res.status(500).send("Unknown internal server error occurred.");
+      	}
+
+      	validateSetupSelection(req, res);
+
+      	doc.genres = req.body;
+      	doc.save();
+      	res.status(201).send();
+  	});
   });
+
+  function validateSetupSelection(req, res) {
+		if (!req) {
+			res.status(412).send("Precondition Failed");
+		}
+		if (!req.body) {
+      		res.status(412).send("Precondition Failed");
+      	}
+
+      	if (!Array.isArray(req.body)) {
+      		res.status(412).send("Precondition Failed");
+      	}
+
+      	if (req.body.length === 0) {
+      		res.status(412).send("You need to select at least one genre");
+      	}
+  }
 };
