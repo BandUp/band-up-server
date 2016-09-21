@@ -1,3 +1,4 @@
+const user = require('./models/user');
 const instrument = require('./models/instrument');
 const genre = require('./models/genre');
 
@@ -67,10 +68,10 @@ module.exports = function(app, passport){
       return next();
     }
     // user is not authorized send 401 back
-    res.status(401).send();
+    res.status(401).send("You are not authorized to access this data.");
   }
 
-  app.get('/instruments', (req, res) => {
+  app.get('/instruments', isLoggedIn, (req, res) => {
     instrument.find({}, function(err, doc) {
     	if (err) {
     		console.log("Error occurred:");
@@ -83,7 +84,7 @@ module.exports = function(app, passport){
     }).sort({order: 'ascending'});
   });
 
-  app.get('/genres', (req, res) => {
+  app.get('/genres', isLoggedIn, (req, res) => {
     genre.find({}, function(err, doc) {
       if (err) {
         console.log("Error occurred:");
@@ -94,5 +95,13 @@ module.exports = function(app, passport){
       res.type('text/json');
       res.status(200).send(doc);
     }).sort({order: 'ascending'});
+  });
+
+  app.post('/instruments', (req, res) => {
+     res.status(501).send("We have not implemented this functionality. Yet.");
+  });
+
+  app.post('/genres', isLoggedIn, (req, res) => {
+    res.status(501).send("We have not implemented this functionality. Yet.");
   });
 };

@@ -23,6 +23,7 @@ let userSchema = mongoose.Schema({
     email: String
   },
   instruments: [String]
+  genres: [String]
 });
 
 // methoods
