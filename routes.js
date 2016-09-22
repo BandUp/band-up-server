@@ -7,10 +7,10 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.get('/login-facebook',
+  app.post('/login-facebook',
           passport.authenticate('facebook-token'),
           (req, res) => {
-              res.json({sessionID: req.sessionID}).send(200);
+              res.json({sessionID: req.sessionID});
   });
 
   app.post('/signup-local',
@@ -105,7 +105,7 @@ module.exports = function(app, passport){
       		result = {err:4, msg:"Unknown internal server error occurred."};
 			res.status(500).send(result);
       	}
-		
+
 		if (validateSetupSelection(req, res)) {
 	      	doc.instruments = req.body;
 	      	doc.save();
