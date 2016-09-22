@@ -17,7 +17,9 @@ let userSchema = mongoose.Schema({
     email: String
   },
   instruments: [String],
-  genres: [String]
+  genres: [String],
+  hasFinishedSetup: {type: Boolean, default: false}
+  
 });
 
 // methoods
