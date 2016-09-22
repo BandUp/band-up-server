@@ -7,7 +7,7 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.get('/login-facebook',
+  app.post('/login-facebook',
           passport.authenticate('facebook-token'),
           (req, res) => {
               res.json({sessionID: req.sessionID}).send(200);
