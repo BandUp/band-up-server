@@ -45,7 +45,7 @@ module.exports = function(app, passport){
             (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
-    res.status(200).json({sessionID: req.sessionID}).send();
+    res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
   });
 
   app.post('/email', isLoggedIn, (req, res) => {
@@ -103,18 +103,20 @@ module.exports = function(app, passport){
   		if (err) {
 	        console.log("Error occurred:");
 	        console.log(err);
-	        res.status(500).send("Unknown internal server error occurred.");
-	        return;
+			result = {err:5, msg:"Unknown internal server error occurred."};
+			res.status(500).send(result);
+			return;
       	}
 
       	if (!doc) {
-      		res.status(500).send("Unknown internal server error occurred.");
+      		result = {err:4, msg:"Unknown internal server error occurred."};
+			res.status(500).send(result);
       	}
 
 		if (validateSetupSelection(req, res)) {
 	      	doc.instruments = req.body;
 	      	doc.save();
-	      	res.status(201).send("[]");
+	      	res.status(201).send("{}");
 	    }
   	});
   });
@@ -124,41 +126,49 @@ module.exports = function(app, passport){
   		if (err) {
 	        console.log("Error occurred:");
 	        console.log(err);
-	        res.status(500).send("Unknown internal server error occurred.");
-	        return;
+			result = {err:5, msg:"Unknown internal server error occurred."};
+			res.status(500).send(result);
+			return;
       	}
 
       	if (!doc) {
-      		res.status(500).send("Unknown internal server error occurred.");
+      		result = {err:4, msg:"Unknown internal server error occurred."};
+			res.status(500).send(result);
       	}
 
       	if (validateSetupSelection(req, res)) {
 	      	doc.genres = req.body;
+	      	doc.hasFinishedSetup = true;
 	      	doc.save();
-	      	res.status(201).send("[]");
+	      	res.status(201).send("{}");
       	}
   	});
   });
 
   function validateSetupSelection(req, res) {
+		var result;
 		if (!req) {
-			res.status(412).send("Precondition Failed");
+			result = {err:0, msg:"Precondition Failed"};
+			res.status(412).send(result);
 			return false;
 		}
 		if (!req.body) {
-      		res.status(412).send("Precondition Failed");
-      		return false;
-      	}
+			result = {err:1, msg:"Precondition Failed"};
+	  		res.status(412).send(result);
+	  		return false;
+	  	}
 
-      	if (!Array.isArray(req.body)) {
-      		res.status(412).send("Precondition Failed");
-      		return false;
-      	}
+	  	if (!Array.isArray(req.body)) {
+	  		result = {err:2, msg:"Precondition Failed"};
+	  		res.status(412).send(result);
+	  		return false;
+	  	}
 
-      	if (req.body.length === 0) {
-      		res.status(412).send("You need to select at least one genre");
-      		return false;
-      	}
-      	return true;
+	  	if (req.body.length === 0) {
+	  		result = {err:3, msg:"You need to select at least one item"};
+	  		res.status(412).send(result);
+	  		return false;
+	  	}
+	  	return true;
   }
 };
