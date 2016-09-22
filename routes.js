@@ -131,7 +131,9 @@ module.exports = function(app, passport){
 
       	if (validateSetupSelection(req, res)) {
 	      	doc.genres = req.body;
-	      	doc.hasFinishedSetup = true;
+	      	if (doc.genres.length > 0 && doc.genres.length > 0) {
+				doc.hasFinishedSetup = true;
+	      	}
 	      	doc.save();
 	      	res.status(201).send("{}");
       	}
