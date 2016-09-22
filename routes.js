@@ -13,6 +13,13 @@ module.exports = function(app, passport){
               res.json({sessionID: req.sessionID});
   });
 
+  // google
+  app.get('/login-google',
+            passport.authenticate('google-token'),
+            (req, res) => {
+                res.json({sessionID: req.sessionID});
+  });
+
   app.post('/signup-local',
             passport.authenticate('local-signup'),
             (req, res) => {

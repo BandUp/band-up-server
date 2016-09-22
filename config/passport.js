@@ -16,6 +16,9 @@ module.exports = function(passport){
     });
   });
 
+  // google
+  require('./google-passport')(passport);
+
   // Local Signup
   passport.use('local-signup', new LocalStrategy({
     usernameField: 'username',
