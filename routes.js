@@ -103,11 +103,12 @@ module.exports = function(app, passport){
       	if (!doc) {
       		res.status(500).send("Unknown internal server error occurred.");
       	}
-
-      	validateSetupSelection(req, res);
-      	doc.instruments = req.body;
-      	doc.save();
-      	res.status(200).send();
+		
+		if (validateSetupSelection(req, res)) {
+	      	doc.instruments = req.body;
+	      	doc.save();
+	      	res.status(201).send("[]");
+	    }
   	});
   });
 
@@ -124,28 +125,33 @@ module.exports = function(app, passport){
       		res.status(500).send("Unknown internal server error occurred.");
       	}
 
-      	validateSetupSelection(req, res);
-
-      	doc.genres = req.body;
-      	doc.save();
-      	res.status(201).send();
+      	if (validateSetupSelection(req, res)) {
+	      	doc.genres = req.body;
+	      	doc.save();
+	      	res.status(201).send("[]");
+      	}
   	});
   });
 
   function validateSetupSelection(req, res) {
 		if (!req) {
 			res.status(412).send("Precondition Failed");
+			return false;
 		}
 		if (!req.body) {
       		res.status(412).send("Precondition Failed");
+      		return false;
       	}
 
       	if (!Array.isArray(req.body)) {
       		res.status(412).send("Precondition Failed");
+      		return false;
       	}
 
       	if (req.body.length === 0) {
       		res.status(412).send("You need to select at least one genre");
+      		return false;
       	}
+      	return true;
   }
 };
