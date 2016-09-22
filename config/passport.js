@@ -6,6 +6,7 @@ module.exports = function(passport){
   require('./facebook-passport')(passport);
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
+    console.log('serializing user');
     done(null, user.id);
   });
 
