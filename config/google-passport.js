@@ -1,4 +1,3 @@
-//const GoogleTokenStrategy = require('passport-google-token').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const User = require('../models/user');
 
