@@ -13,9 +13,12 @@ module.exports = function(app, passport){
               res.json({sessionID: req.sessionID});
   });
 
-  // google
+  // send to google to do the authentication
+  // profile gets us their basic information including their name
+  // email gets their emails
+  app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
   app.get('/login-google',
-            passport.authenticate('google-token'),
+            passport.authenticate('google'),
             (req, res) => {
                 res.json({sessionID: req.sessionID});
   });
@@ -25,7 +28,6 @@ module.exports = function(app, passport){
             (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
-    // Rafá was here ;p
     res.status(201).json({id: req.user._id}).send();
   });
 

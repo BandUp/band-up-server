@@ -1,11 +1,12 @@
-const GoogleTokenStrategy = require('passport-google-token').Strategy;
+//const GoogleTokenStrategy = require('passport-google-token').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const User = require('../models/user');
 
 module.exports = function(passport) {
-  passport.use(new GoogleTokenStrategy({
+  passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
-    }, (accessToken, refreshToken, profile, done) => {
+    }, (token, refreshToken, profile, done) => {
           // asynchronous
           process.nextTick(() => {
             // look for pre-existing account
@@ -19,8 +20,8 @@ module.exports = function(passport) {
                else {
                  let newUser = new User();
                  newUser.google.id = profile.id;
-                 newUser.google.token = accessToken;
-                 newUser.google.name = profile.name.givenName;
+                 newUser.google.token = token;
+                 newUser.google.name = profile.displayName;
                  newUser.google.email = profile.emails[0].value;
 
                  newUser.save((err) => {
