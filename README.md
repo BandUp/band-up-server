@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/BandUp/band-up-server.svg?branch=master)](https://travis-ci.org/gardyna/band-up-server)
+[![Build Status](https://travis-ci.org/BandUp/band-up-server.svg?branch=master)](https://travis-ci.org/BandUp/band-up-server)
 # band-up-server
 A backend server for band up
 
