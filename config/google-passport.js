@@ -1,4 +1,4 @@
-//const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const User = require('../models/user');
 const GoogleTokenStrategy = require('passport-google-token').Strategy;
 
@@ -32,7 +32,6 @@ module.exports = function(passport){
 };
 
 
-/* wrong Strategy
 module.exports = function(passport) {
   passport.use(new GoogleStrategy({
       clientID: process.env.GOOGLE_CLIENT_ID,
@@ -66,4 +65,3 @@ module.exports = function(passport) {
           });
         }));
 };
-*/
