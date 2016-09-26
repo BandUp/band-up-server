@@ -37,10 +37,10 @@ module.exports = function(app, passport){
 
   app.get('/nearby-users', (req, res) => {
       res.json([
-        {name: 'Bergþór'},
-        {name: 'Dagur'},
-        {name: 'Elvar'},
-        {name: 'Rafael'}
+        {username: 'Bergþór', instruments:["Piano", "Drums"], genres:["Pop", "Country"], status:"Searching for a band", distance:10, percentage:95},
+        {username: 'Dagur', instruments:["Guitar", "Bass"], genres:["Rock", "Electronic"], status:"Searching for a band", distance:13, percentage:80},
+        {username: 'Elvar', instruments:["Vocals", "Percussion"], genres:["Hip Hop", "Jazz"], status:"Looking for a pianist", distance:15, percentage:75},
+        {username: 'Rafael', instruments:["Harmonica", "Keyboard"], genres:["Indie", "Pop"], status:"Looking for a singer", distance:25, percentage:70}
       ]);
   });
 
