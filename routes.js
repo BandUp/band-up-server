@@ -17,7 +17,7 @@ module.exports = function(app, passport){
   // profile gets us their basic information including their name
   // email gets their emails
   app.post('/login-google',
-          passport.authenticate('google', { scope : ['profile', 'email'] }),
+          passport.authenticate('google-token', { scope : ['profile', 'email'] }),
           (req, res) => {
               res.json({sessionID: req.sessionID});
   });

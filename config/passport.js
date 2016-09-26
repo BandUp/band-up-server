@@ -4,6 +4,9 @@ const User = require('../models/user');
 module.exports = function(passport){
   // facebook authentication
   require('./facebook-passport')(passport);
+  // google
+  require('./google-passport')(passport);
+  
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
     console.log('serializing user');
@@ -16,8 +19,7 @@ module.exports = function(passport){
     });
   });
 
-  // google
-  require('./google-passport')(passport);
+
 
   // Local Signup
   passport.use('local-signup', new LocalStrategy({
