@@ -1,3 +1,4 @@
+const chat = require('../models/chatHistory');
 module.exports.setup = function(server){
 	const socketPort = 8080;
 	console.log("Socket instance for chat starting on port " + socketPort);
@@ -48,6 +49,22 @@ module.exports.setup = function(server){
 		socket.on('privatemsg', function (msgObj, fn) {
 			console.log("Private Message:");
 			console.log(msgObj);
+			mg = {message:msgObj.message, timestamp:Date.now()};
+
+			if (socket.username === undefined) {
+				fn(false);
+			}
+			
+			var userList = [socket.username, msgObj.nick].sort();
+
+			chat.findOneAndUpdate({users:userList}, {$push:{chatHistory:mg}},{safe: true, upsert: true},function(err, doc) {
+			      if (err) {
+			        console.log("Error occurred:");
+			        console.log(err);
+			        return;
+			      }
+			});
+
 			//If user exists in global user list.
 			if(users[msgObj.nick] !== undefined) {
 				//Send the message only to this user.
