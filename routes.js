@@ -14,21 +14,21 @@ module.exports = function(app, passport){
   });
 
   // google
-  /*
+
   app.get('/login-google',
             passport.authenticate('google'),
             (req, res) => {
                 res.json({sessionID: req.sessionID});
   });
-   */
+
   // Storing data of already signed in user
   app.post('/login-google', (req, res) => {
-      User.findOne({'google.id': req.body.userId}, (err, user) => {
+      user.findOne({'google.id': req.body.userId}, (err, doc) => {
         if(err) return done(err);
-        if(user){
-          return done(null, user);
+        if(doc){
+          return done(null, doc);
         }else{
-          let newUser = new User();
+          let newUser = new user();
           newUser.google.id = req.body.userId;
           newUser.google.token = req.body.userToken;
           newUser.google.name = req.body.userName;
@@ -41,7 +41,7 @@ module.exports = function(app, passport){
             return done(null, newUser);
           });
         }
-        res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
+        res.json({sessionID: req.sessionID}).send();
       });
   });
 
