@@ -14,21 +14,46 @@ module.exports = function(app, passport){
   });
 
   // google
+  /*
   app.get('/login-google',
             passport.authenticate('google'),
             (req, res) => {
                 res.json({sessionID: req.sessionID});
   });
+   */
+  // Storing data of already signed in user
+  app.post('/login-google', (req, res) => {
+      User.findOne({'google.id': req.body.userId}, (err, user) => {
+        if(err) return done(err);
+        if(user){
+          return done(null, user);
+        }else{
+          let newUser = new User();
+          newUser.google.id = req.body.userId;
+          newUser.google.token = req.body.userToken;
+          newUser.google.name = req.body.userName;
+          newUser.google.email = req.body.userEmail;
 
+          newUser.save((err) => {
+            if(err) throw err;
+
+            // if succesful return the new user
+            return done(null, newUser);
+          });
+        }
+        res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
+      });
+  });
+
+   /*
   app.post('/login-google-token',
           passport.authenticate('google-token', { scope : ['profile', 'email'] }),
           (req, res) => {
               res.json({sessionID: req.sessionID});
   });
+  */
 
-  app.post('/signup-local',
-            passport.authenticate('local-signup'),
-            (req, res) => {
+  app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     // Rafá was here ;p
