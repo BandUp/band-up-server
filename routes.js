@@ -14,17 +14,43 @@ module.exports = function(app, passport){
   });
 
   // google
+  /*
   app.get('/login-google',
             passport.authenticate('google'),
             (req, res) => {
                 res.json({sessionID: req.sessionID});
   });
+   */
+  // Storing data of already signed in user
+  app.post('/login-google', (req, res) => {
+      User.findOne({'google.id': req.body.userId}, (err, user) => {
+        if(err) return done(err);
+        if(user){
+          return done(null, user);
+        }else{
+          let newUser = new User();
+          newUser.google.id = req.body.userId;
+          newUser.google.token = req.body.userToken;
+          newUser.google.name = req.body.userName;
+          newUser.google.email = req.body.userEmail;
 
+          newUser.save((err) => {
+            if(err) throw err;
+
+            // if succesful return the new user
+            return done(null, newUser);
+          });
+        }
+      });
+  });
+
+   /*
   app.post('/login-google-token',
           passport.authenticate('google-token', { scope : ['profile', 'email'] }),
           (req, res) => {
               res.json({sessionID: req.sessionID});
   });
+  */
 
   app.post('/signup-local',
             passport.authenticate('local-signup'),
