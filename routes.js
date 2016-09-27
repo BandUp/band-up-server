@@ -22,26 +22,24 @@ module.exports = function(app, passport){
   });
 
   // Storing data of already signed in user
-  app.post('/login-google', (req, res) => {
+app.post('/login-google', (req, res) => {
       user.findOne({'google.id': req.body.userId}, (err, doc) => {
-        if(err) return done(err);
-        if(doc){
-          return done(null, doc);
-        }else{
-          let newUser = new user();
-          newUser.google.id = req.body.userId;
-          newUser.google.token = req.body.userToken;
-          newUser.google.name = req.body.userName;
-          newUser.google.email = req.body.userEmail;
-
-          newUser.save((err) => {
-            if(err) throw err;
-
-            // if succesful return the new user
-            return done(null, newUser);
-          });
+        if(err) {
+            res.status(500).send(result);
         }
-        res.json({sessionID: req.sessionID}).send();
+        if(doc) {
+            res.status(200).send();
+        }
+        else {
+            let newUser = new user();
+            newUser.google.id = req.body.userId;
+            newUser.google.token = req.body.userToken;
+            newUser.google.name = req.body.userName;
+            newUser.google.email = req.body.userEmail;
+            newUser.save();
+
+            res.status(200).send();
+        }
       });
   });
 
