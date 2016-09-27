@@ -47,19 +47,21 @@ module.exports.setup = function(server){
 		});
 
 		socket.on('privatemsg', function (msgObj, fn) {
-			console.log("Private Message:");
-			console.log(msgObj);
-			mg = {message:msgObj.message, timestamp:Date.now()};
 
 			if (socket.username === undefined) {
 				// We don't know who this is.
 				fn(false);
 				return;
 			}
-			
+
+			var mg       = {sender:socket.username, message:msgObj.message, timestamp:Date.now()};
 			var userList = [socket.username, msgObj.nick].sort();
 
-			chat.findOneAndUpdate({users:userList}, {$push:{chatHistory:mg}},{safe: true, upsert: true},function(err, doc) {
+			chat.findOneAndUpdate(
+				{users : userList},
+				{$push : {chatHistory:mg}},
+				{safe  : true, upsert: true},
+				function(err, doc) {
 			      if (err) {
 			        console.log("Error occurred:");
 			        console.log(err);
@@ -67,7 +69,7 @@ module.exports.setup = function(server){
 			      }
 			});
 
-			//If user exists in global user list.
+			// If user exists in global user list.
 			if(users[msgObj.nick] !== undefined) {
 				//Send the message only to this user.
 				console.log("Sending message '"+ msgObj.message+"' to " + msgObj.nick);

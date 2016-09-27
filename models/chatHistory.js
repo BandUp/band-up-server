@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 let chatSchema = mongoose.Schema({
   users: [String],
   chatHistory: {
+  	sender: String,
   	message: String,
   	timestamp: {type:Date, default:Date.now, required:true}
   }
