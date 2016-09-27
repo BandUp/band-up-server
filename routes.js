@@ -22,7 +22,7 @@ module.exports = function(app, passport){
   });
 
   // Storing data of already signed in user
-app.post('/login-google', isLoggedIn, (req, res) => {
+app.post('/login-google', (req, res) => {
       user.findOne({'google.id': req.body.userId}, (err, doc) => {
         if(err) {
             res.status(500).send();
