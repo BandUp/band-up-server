@@ -35,6 +35,10 @@ module.exports = function(app, passport){
     res.status(201).json({id: req.user._id}).send();
   });
 
+  app.get('/isloggedIn', (req, res) => {
+    res.json({loggedIn: req.isAuthenticated()}).send();
+  });
+
   app.get('/nearby-users', isLoggedIn, (req, res) => {
       res.json([
         {username: 'Bergþór', instruments:["Piano", "Drums"], genres:["Pop", "Country"], status:"Searching for a band", distance:10, percentage:95, profileImgUrl:"http://placekitten.com/200/200"},
