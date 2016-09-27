@@ -28,7 +28,7 @@ module.exports = function(app, passport){
         if(user){
           return done(null, user);
         }else{
-          let newUser = new User();
+          let newUser = new User(); 
           newUser.google.id = req.body.userId;
           newUser.google.token = req.body.userToken;
           newUser.google.name = req.body.userName;
