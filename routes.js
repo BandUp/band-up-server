@@ -36,7 +36,7 @@ module.exports = function(app, passport){
   });
 
   app.get('/isloggedIn', (req, res) => {
-    res.json({loggedIn: req.isAuthenticated()}).send();
+    res.json({loggedIn: req.isAuthenticated()}).end();
   });
 
   app.get('/nearby-users', isLoggedIn, (req, res) => {
