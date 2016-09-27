@@ -41,6 +41,7 @@ module.exports = function(app, passport){
             return done(null, newUser);
           });
         }
+        res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
       });
   });
 
@@ -52,9 +53,7 @@ module.exports = function(app, passport){
   });
   */
 
-  app.post('/signup-local',
-            passport.authenticate('local-signup'),
-            (req, res) => {
+  app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     // Rafá was here ;p
