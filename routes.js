@@ -28,7 +28,7 @@ app.post('/login-google', (req, res) => {
             res.status(500).send();
         }
         if(doc) {
-            res.status(200).send();
+            res.json({sessionID: req.sessionID}).send();
         }
         else {
             let newUser = new user();
