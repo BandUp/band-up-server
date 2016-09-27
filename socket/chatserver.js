@@ -52,7 +52,9 @@ module.exports.setup = function(server){
 			mg = {message:msgObj.message, timestamp:Date.now()};
 
 			if (socket.username === undefined) {
+				// We don't know who this is.
 				fn(false);
+				return;
 			}
 			
 			var userList = [socket.username, msgObj.nick].sort();
