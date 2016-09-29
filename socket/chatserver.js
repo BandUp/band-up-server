@@ -1,4 +1,5 @@
 const chat = require('../models/chatHistory');
+
 module.exports.setup = function(server){
 	const socketPort = 8080;
 	console.log("Socket instance for chat starting on port " + socketPort);
@@ -13,6 +14,10 @@ module.exports.setup = function(server){
 	rooms.Lobby.setTopic("Welcome to the Lobby!");
 
 	io.on('connection', function (socket) {
+		process.on('SIGINT', function () {
+  socket.server.close();
+  console.log("Closing socket");
+});
 		console.log("Client connected");
 		function getUsers () {
 			var userlist = [];

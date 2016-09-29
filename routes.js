@@ -3,6 +3,9 @@ const instrument = require('./models/instrument');
 const genre = require('./models/genre');
 
 module.exports = function(app, passport){
+
+
+
   app.get('/', (req, res) => {
     res.send('Hello world!');
   });
@@ -143,12 +146,21 @@ app.post('/login-google', (req, res) => {
       		result = {err:4, msg:"Unknown internal server error occurred."};
 			res.status(500).send(result);
       	}
-
-		if (validateSetupSelection(req, res)) {
+      	var result;
+      	instrument.find({}, function(err, instruDoc) {
+	      if (err) {
+	        console.log("Error occurred:");
+	        console.log(err);
+	        res.status(500).send("Unknown internal server error occurred.");
+	        return;
+	      }
+	      result = instruDoc.map(function(a) {return a._id.toString();});
+	      if (validateSetupSelection(req, res, result)) {
 	      	doc.instruments = req.body;
 	      	doc.save();
 	      	res.status(201).send("{}");
-	    }
+	      }
+	    });
   	});
   });
 
@@ -165,34 +177,52 @@ app.post('/login-google', (req, res) => {
       	if (!doc) {
       		result = {err:4, msg:"Unknown internal server error occurred."};
 			res.status(500).send(result);
+			return;
       	}
-
-      	if (validateSetupSelection(req, res)) {
-	      	doc.genres = req.body;
-	      	if (doc.genres.length > 0 && doc.genres.length > 0) {
-				doc.hasFinishedSetup = true;
+      	var result;
+      	genre.find({}, function(err, genreDoc) {
+	      if (err) {
+	        console.log("Error occurred:");
+	        console.log(err);
+	        res.status(500).send("Unknown internal server error occurred.");
+	        return;
+	      }
+	      result = genreDoc.map(function(a) {return a._id.toString();});
+		    if (validateSetupSelection(req, res, result)) {
+		      	doc.genres = req.body;
+		      	if (doc.genres.length > 0 && doc.genres.length > 0) {
+					//doc.hasFinishedSetup = true;
+		      	}
+		      	doc.save();
+		      	res.status(201).send("{}");
 	      	}
-	      	doc.save();
-	      	res.status(201).send("{}");
-      	}
+	    });
   	});
   });
 
-  function validateSetupSelection(req, res) {
+  function validateSetupSelection(req, res, ids) {
 		var result;
+		for (var i = 0; i < req.body.length; i++) {
+			if (ids.indexOf(req.body[i]) === -1) {
+				result = {err:4, msg:"Invalid ID"};
+				res.status(412).send(result);
+				return false;
+			}
+		}
+
 		if (!req) {
 			result = {err:0, msg:"Precondition Failed"};
 			res.status(412).send(result);
 			return false;
 		}
 		if (!req.body) {
-			result = {err:1, msg:"Precondition Failed"};
+			result = {err:1, msg:"The body is empty"};
 	  		res.status(412).send(result);
 	  		return false;
 	  	}
 
 	  	if (!Array.isArray(req.body)) {
-	  		result = {err:2, msg:"Precondition Failed"};
+	  		result = {err:2, msg:"Needs to be an array"};
 	  		res.status(412).send(result);
 	  		return false;
 	  	}
@@ -204,4 +234,25 @@ app.post('/login-google', (req, res) => {
 	  	}
 	  	return true;
   }
+ 
+	app.post('/upload', function(req, res) {
+	    var sampleFile;
+	 
+	    if (!req.files) {
+	        res.send('No files were uploaded.');
+	        return;
+	    }
+	    console.log("sampleFile");
+	 	console.log(req.files.fileUpload);
+	    sampleFile = req.files.fileUpload;
+
+	    sampleFile.mv('img/filename.jpg', function(err) {
+	        if (err) {
+	            res.status(500).send(err);
+	        }
+	        else {
+	            res.send('File uploaded!');
+	        }
+	    });
+	});
 };

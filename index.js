@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
+
 // logging
 const morgan = require('morgan');
 
@@ -29,6 +31,7 @@ app.use(morgan('dev', {
 }));
 app.use(cookieParser()); // need this for auth
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 const port = process.env.PORT || 3000;
 
