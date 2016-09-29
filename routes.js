@@ -21,14 +21,14 @@ module.exports = function(app, passport){
                 res.json({sessionID: req.sessionID});
   });
 
-  // Storing data of already signed in user
+  // Storing data of already signed in user on app
 app.post('/login-google', (req, res) => {
       user.findOne({'google.id': req.body.userId}, (err, doc) => {
         if(err) {
             res.status(500).send();
         }
         if(doc) {
-            res.json({sessionID: req.sessionID, hasFinishedSetup: req.user.hasFinishedSetup}).send();
+            res.json({sessionID: req.sessionID}).send();
         }
         else {
             let newUser = new user();
@@ -38,7 +38,7 @@ app.post('/login-google', (req, res) => {
             newUser.google.email = req.body.userEmail;
             newUser.save();
 
-            res.json({sessionID: req.sessionID, hasFinishedSetup: req.user.hasFinishedSetup}).send();
+            res.json({sessionID: req.sessionID}).send();
         }
       });
   });
