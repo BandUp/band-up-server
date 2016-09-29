@@ -113,8 +113,8 @@ app.post('/login-google', (req, res) => {
     		res.status(500).send("Unknown internal server error occurred.");
     		return;
     	}
-    	res.type('text/json');
-    	res.status(200).send(doc);
+    	//res.type('text/json');
+    	res.status(200).json(doc);
     }).sort({order: 'ascending'});
   });
 

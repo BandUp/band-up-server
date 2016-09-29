@@ -9,7 +9,6 @@ module.exports = function(passport){
   
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
-    console.log('serializing user');
     done(null, user.id);
   });
 
@@ -18,8 +17,6 @@ module.exports = function(passport){
       done(err, user);
     });
   });
-
-
 
   // Local Signup
   passport.use('local-signup', new LocalStrategy({
@@ -50,8 +47,6 @@ module.exports = function(passport){
           newUser.local.password = newUser.generateHash(password);
           newUser.email          = req.body.email;
           newUser.local.age      = req.body.age;
-
-          console.log(newUser.local.email);
 
           // attempt to save user
           newUser.save((err) =>{

@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'test';
 
 const app = require('../index');
 require('./local-passport-test')(app);
+require('./routes-test')(app);
 
 // example test for reference
 describe('Array', function() {

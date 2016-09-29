@@ -105,7 +105,6 @@ module.exports = function(app){
           .send(user)
           .end((err, res) => {
             if(err) throw err;
-
             res.status.should.be.equal(201);
             done();
           });
