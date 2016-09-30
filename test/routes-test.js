@@ -53,7 +53,7 @@ module.exports = function(app) {
     after(() => {
     });
 
-    describe('#getters', () => {
+    describe('#gets and posts', () => {
 	    // create test user
 	    beforeEach((done) => {
 	    	let newUser = new user();
@@ -146,7 +146,6 @@ module.exports = function(app) {
 		* Author: Elvar
 		* Signees: 
 		*/
-		/*
 		it('should post instruments', function(done) {
 			let agent = request.agent(app);
 			agent
@@ -156,22 +155,35 @@ module.exports = function(app) {
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
-						.post('/instruments')
-						.expect(201)
-						.send(["11"])
-						.end((err, res) => {
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							var pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id]
+							agent
+								.post('/instruments')
+								.expect(201)
+								.send(pickedInstruments)
+								.end((err, rPost) => {
+								if (err) throw err;
+								user.findOne({"local.username": "TestPerson"}, function(err, doc) {
+									if (err) throw err;
+									doc.instruments.length.should.equal(pickedInstruments.length);
+
+									for (var i = 0; i < doc.instruments.length; i++) {
+										doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
+									}
+								});
+								done();
+							});
 							if (err) throw err;
-							done();
 						});
 				})
 		});
-		*/
 
 		/*
 		* Author: Elvar
 		* Signees: 
 		*/
-		/*
 		it('should post genres', function(done) {
 			let agent = request.agent(app);
 			agent
@@ -181,17 +193,31 @@ module.exports = function(app) {
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
-						.post('/genres')
-						.expect(201)
-						.send(["11"])
-						.end((err, res) => {
-							if (err) throw err;
+						.get('/genres')
+						.expect(200)
+						.end((err, rGet) => {
+							var pickedGenres = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id]
+							agent
+								.post('/genres')
+								.expect(201)
+								.send(pickedGenres)
+								.end((err, resPost) => {
+								if (err) throw err;
+								user.findOne({"local.username": "TestPerson"}, function(err, doc) {
+									if (err) throw err;
+									doc.genres.length.should.equal(pickedGenres.length);
 
-							done();
+									for (var i = 0; i < doc.genres.length; i++) {
+										doc.genres.indexOf(pickedGenres[i]).should.not.equal(-1);
+									}
+								});
+								done();
+							});
+							if (err) throw err;
 						});
 				})
 		});
-		*/
+
 	});
   });
 };
