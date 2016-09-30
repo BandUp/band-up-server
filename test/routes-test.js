@@ -91,7 +91,7 @@ module.exports = function(app) {
 
 		/*
 		* Author: Elvar
-		* Signees: Dagur
+		* Signees: Dagur, Bergþór
 		*/
 		it('should get instruments', function(done) {
 			let agent = request.agent(app);
@@ -117,7 +117,7 @@ module.exports = function(app) {
 
 		/*
 		* Author: Elvar
-		* Signees: Dagur
+		* Signees: Dagur, Bergþór
 		*/
 		it('should get genres', function(done) {
 			let agent = request.agent(app);
@@ -144,7 +144,7 @@ module.exports = function(app) {
 
 		/*
 		* Author: Elvar
-		* Signees: 
+		* Signees: Bergþór
 		*/
 		it('should post instruments', function(done) {
 			let agent = request.agent(app);
@@ -182,7 +182,7 @@ module.exports = function(app) {
 
 		/*
 		* Author: Elvar
-		* Signees: 
+		* Signees: Bergþór
 		*/
 		it('should post genres', function(done) {
 			let agent = request.agent(app);
