@@ -22,20 +22,6 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.post('/login-facebook',
-          passport.authenticate('facebook-token'),
-          (req, res) => {
-              res.json({sessionID: req.sessionID});
-  });
-
-   /*
-  app.post('/login-google-token',
-          passport.authenticate('google-token', { scope : ['profile', 'email'] }),
-          (req, res) => {
-              res.json({sessionID: req.sessionID});
-  });
-  */
-
   app.get('/nearby-users', (req, res) => {
     /*
     let query = user.find();

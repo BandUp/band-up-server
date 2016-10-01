@@ -25,6 +25,12 @@ module.exports = function(app, passport){
     res.json({loggedIn: req.isAuthenticated()}).end();
   });
 
+  app.post('/login-facebook',
+          passport.authenticate('facebook-token'),
+          (req, res) => {
+              res.json({sessionID: req.sessionID});
+  });
+
   // google
   app.get('/login-google',
             passport.authenticate('google'),
@@ -53,6 +59,14 @@ module.exports = function(app, passport){
         }
       });
   });
+
+  /*
+ app.post('/login-google-token',
+         passport.authenticate('google-token', { scope : ['profile', 'email'] }),
+         (req, res) => {
+             res.json({sessionID: req.sessionID});
+ });
+ */
 };
 
 // route middleware to make sure user is logged in

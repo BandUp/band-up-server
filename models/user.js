@@ -25,7 +25,10 @@ let userSchema = mongoose.Schema({
   location: {
     x: Number,
     y: Number
-  }
+  },
+
+  liked: [String],
+  matched: [String]
 
 });
 
