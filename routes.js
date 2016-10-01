@@ -66,20 +66,21 @@ app.post('/login-google', (req, res) => {
   });
 
   app.get('/nearby-users', (req, res) => {
+    /*
     let query = user.find();
     query.exists('this.location');
     query.exec(function(err, doc){
       console.log(doc);
       res.json(doc).sendStatus(200);
     });
+    */
 
-    /*
       res.json([
         {username: 'Bergþór', instruments:["Piano", "Drums"], genres:["Pop", "Country"], status:"Searching for a band", distance:10, percentage:95, profileImgUrl:"http://placekitten.com/200/200"},
         {username: 'Dagur', instruments:["Guitar", "Bass"], genres:["Rock", "Electronic"], status:"Searching for a band", distance:13, percentage:80, profileImgUrl:"http://placekitten.com/210/210"},
         {username: 'Elvar', instruments:["Vocals", "Percussion"], genres:["Hip Hop", "Jazz"], status:"Looking for a pianist", distance:15, percentage:75, profileImgUrl:"http://placekitten.com/220/220"},
         {username: 'Rafael', instruments:["Harmonica", "Keyboard"], genres:["Indie", "Pop"], status:"Looking for a singer", distance:25, percentage:70, profileImgUrl:"http://placekitten.com/240/240"}
-      ]);*/
+      ]);
   });
 
   app.post('/login-local',
@@ -242,10 +243,10 @@ app.post('/login-google', (req, res) => {
 	  	}
 	  	return true;
   }
- 
+
 	app.post('/upload', function(req, res) {
 	    var sampleFile;
-	 
+
 	    if (!req.files) {
 	        res.send('No files were uploaded.');
 	        return;
