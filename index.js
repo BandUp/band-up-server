@@ -57,7 +57,7 @@ app.use(passport.session());
 app.use(flash());
 
 // =========== app routes ===========
-require('./routes')(app, passport);
+require('./routes/routes')(app, passport);
 
 // =========== app startup ===========
 http.listen(port, () => {

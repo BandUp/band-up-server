@@ -1,10 +1,22 @@
-const user = require('./models/user');
-const instrument = require('./models/instrument');
-const genre = require('./models/genre');
+const user = require('../models/user');
+const instrument = require('../models/instrument');
+const genre = require('../models/genre');
 
 module.exports = function(app, passport){
 
+  require('./login-signup')(app, passport);
 
+  app.post('location', isLoggedIn, (req, res) => {
+    if(!req.body.location){throw "need location info in body";}
+    let currUser = req.user;
+    currUser.location.x = req.body.location.x;
+    currUser.location.y = req.body.location.y;
+
+    currUser.save((err) => {
+      if(err) throw err;
+      res.sendStatus(200);
+    });
+  });
 
   app.get('/', (req, res) => {
     res.send('Hello world!');
@@ -16,36 +28,6 @@ module.exports = function(app, passport){
               res.json({sessionID: req.sessionID});
   });
 
-  // google
-
-  app.get('/login-google',
-            passport.authenticate('google'),
-            (req, res) => {
-                res.json({sessionID: req.sessionID});
-  });
-
-  // Storing data of already signed in user on app
-app.post('/login-google', (req, res) => {
-      user.findOne({'google.id': req.body.userId}, (err, doc) => {
-        if(err) {
-            res.status(500).send();
-        }
-        if(doc) {
-            res.json({sessionID: req.sessionID}).send();
-        }
-        else {
-            let newUser = new user();
-            newUser.google.id = req.body.userId;
-            newUser.google.token = req.body.userToken;
-            newUser.username = req.body.userName;
-            newUser.email = req.body.userEmail;
-            newUser.save();
-
-            res.json({sessionID: req.sessionID}).send();
-        }
-      });
-  });
-
    /*
   app.post('/login-google-token',
           passport.authenticate('google-token', { scope : ['profile', 'email'] }),
@@ -53,17 +35,6 @@ app.post('/login-google', (req, res) => {
               res.json({sessionID: req.sessionID});
   });
   */
-
-  app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
-    // this function only gets called when signup was succesful
-    // req.user contains authenticated user.
-    // Rafá was here ;p
-    res.status(201).json({id: req.user._id}).send();
-  });
-
-  app.get('/isloggedIn', (req, res) => {
-    res.json({loggedIn: req.isAuthenticated()}).end();
-  });
 
   app.get('/nearby-users', (req, res) => {
     /*
@@ -83,16 +54,6 @@ app.post('/login-google', (req, res) => {
       ]);
   });
 
-  app.post('/login-local',
-            passport.authenticate('local-login', {
-              failureFlash: true
-            }),
-            (req, res) => {
-    // this function only gets called when signup was succesful
-    // req.user contains authenticated user.
-    res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
-  });
-
   app.post('/email', isLoggedIn, (req, res) => {
     // get current user into easy to handle variable
     let user = req.user;
@@ -101,11 +62,6 @@ app.post('/login-google', (req, res) => {
     user.save((err) => {
       res.status(200).send();
     });
-  });
-
-  app.get('/logout', (req, res) => {
-    req.logout();
-    res.status(200).send();
   });
 
   // route middleware to make sure user is logged in
