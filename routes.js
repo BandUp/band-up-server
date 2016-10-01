@@ -37,8 +37,8 @@ app.post('/login-google', (req, res) => {
             let newUser = new user();
             newUser.google.id = req.body.userId;
             newUser.google.token = req.body.userToken;
-            newUser.google.name = req.body.userName;
-            newUser.google.email = req.body.userEmail;
+            newUser.username = req.body.userName;
+            newUser.email = req.body.userEmail;
             newUser.save();
 
             res.json({sessionID: req.sessionID}).send();
@@ -65,13 +65,21 @@ app.post('/login-google', (req, res) => {
     res.json({loggedIn: req.isAuthenticated()}).end();
   });
 
-  app.get('/nearby-users', isLoggedIn, (req, res) => {
+  app.get('/nearby-users', (req, res) => {
+    let query = user.find();
+    query.exists('this.location');
+    query.exec(function(err, doc){
+      console.log(doc);
+      res.json(doc).sendStatus(200);
+    });
+
+    /*
       res.json([
         {username: 'Bergþór', instruments:["Piano", "Drums"], genres:["Pop", "Country"], status:"Searching for a band", distance:10, percentage:95, profileImgUrl:"http://placekitten.com/200/200"},
         {username: 'Dagur', instruments:["Guitar", "Bass"], genres:["Rock", "Electronic"], status:"Searching for a band", distance:13, percentage:80, profileImgUrl:"http://placekitten.com/210/210"},
         {username: 'Elvar', instruments:["Vocals", "Percussion"], genres:["Hip Hop", "Jazz"], status:"Looking for a pianist", distance:15, percentage:75, profileImgUrl:"http://placekitten.com/220/220"},
         {username: 'Rafael', instruments:["Harmonica", "Keyboard"], genres:["Indie", "Pop"], status:"Looking for a singer", distance:25, percentage:70, profileImgUrl:"http://placekitten.com/240/240"}
-      ]);
+      ]);*/
   });
 
   app.post('/login-local',

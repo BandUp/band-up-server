@@ -31,9 +31,9 @@ module.exports = function(app){
       // create test user
       beforeEach((done) => {
         let newUser = new user();
-        newUser.local.username = "TestPerson";
+        newUser.username = "TestPerson";
         newUser.local.password = newUser.generateHash("SecretTestPassword");
-        newUser.local.email = 'woo@mail.com';
+        newUser.email = 'woo@mail.com';
         newUser.local.age = 22;
         newUser.save((err) => {
           if(err) throw err;

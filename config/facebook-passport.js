@@ -22,8 +22,8 @@ module.exports = function(passport){
            let newUser = new User();
            newUser.facebook.id = profile.id;
            newUser.facebook.token = token;
-           newUser.facebook.name = profile.name.givenName;
-           newUser.facebook.email = profile.emails[0].value; // facebook returns multiple emails
+           newUser.username = profile.name.givenName;
+           newUser.email = profile.emails[0].value; // facebook returns multiple emails
 
            newUser.save((err) => {
              if(err) throw err;

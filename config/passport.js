@@ -6,7 +6,7 @@ module.exports = function(passport){
   require('./facebook-passport')(passport);
   // google
   require('./google-passport')(passport);
-  
+
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -28,7 +28,7 @@ module.exports = function(passport){
     // User.findOne won't fire unless data is sent back
     process.nextTick(function(){
       // find user with same username (checking if this is a pre-existing user)
-      User.findOne({'local.username': username}, (err, user) => {
+      User.findOne({'username': username}, (err, user) => {
         // if there was an error return it
         if(err){
           console.log(err.message);
@@ -43,7 +43,7 @@ module.exports = function(passport){
           let newUser = new User();
 
           // set local credentials
-          newUser.local.username = username;
+          newUser.username = username;
           newUser.local.password = newUser.generateHash(password);
           newUser.email          = req.body.email;
           newUser.local.age      = req.body.age;
@@ -66,7 +66,7 @@ module.exports = function(passport){
     passwordField: 'password',
     passReqToCallback: true
   }, function(req, username, password, done){
-    User.findOne({'local.username': username}, function(err, user){
+    User.findOne({'username': username}, function(err, user){
       // start with error reporting
       if(err){
         console.log(err.message);

@@ -16,8 +16,8 @@ module.exports = function(passport){
           let newUser = new User();
           newUser.google.id = profile.id;
           newUser.google.token = token;
-          newUser.google.name = profile.displayName;
-          newUser.google.email = profile.emails[0].value;
+          newUser.username     = profile.displayName;
+          newUser.email = profile.emails[0].value;
 
           newUser.save((err) => {
             if(err) throw err;
@@ -51,8 +51,8 @@ module.exports = function(passport) {
                  let newUser = new User();
                  newUser.google.id = profile.id;
                  newUser.google.token = token;
-                 newUser.google.name = profile.displayName;
-                 newUser.google.email = profile.emails[0].value;
+                 newUser.username = profile.displayName;
+                 newUser.email = profile.emails[0].value;
 
                  newUser.save((err) => {
                    if(err) throw err;

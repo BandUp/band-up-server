@@ -4,28 +4,29 @@ const bcrypt = require('bcrypt-nodejs');
 
 // schema definition
 let userSchema = mongoose.Schema({
+  username: String,
+  email: String,
   local: {
-    username: String,
     email: String,
     password: String,
     age: Number
   },
   facebook: {
     id: String,
-    token: String,
-    name: String,
-    email: String
+    token: String
   },
   google: {
     id: String,
-    token: String,
-    name: String,
-    email: String
+    token: String
   },
   instruments: [String],
   genres: [String],
-  hasFinishedSetup: {type: Boolean, default: false}
-  
+  hasFinishedSetup: {type: Boolean, default: false},
+  location: {
+    x: Number,
+    y: Number
+  }
+
 });
 
 // methoods
