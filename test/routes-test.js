@@ -58,9 +58,9 @@ module.exports = function(app) {
 		    // create test user
 		    beforeEach((done) => {
 		    	let newUser = new user();
-		        newUser.local.username = "TestPerson";
+		        newUser.username = "TestPerson";
 		        newUser.local.password = newUser.generateHash("SecretTestPassword");
-		        newUser.local.email = 'test@gmail.com';
+		        newUser.email = 'test@gmail.com';
 		        newUser.local.age = 25;
 		        newUser.save((err) => {
 		        	if(err) throw err;
@@ -69,7 +69,7 @@ module.exports = function(app) {
 		    });
 
 		    beforeEach((done) => {
-		    	for (var i = 0; i < instruments.length; i++) {
+		    	for (let i = 0; i < instruments.length; i++) {
 		    		let ins = new instrument();
 		    		ins.order = instruments[i].order;
 		    		ins.name = instruments[i].name;
@@ -78,7 +78,7 @@ module.exports = function(app) {
 		    		});
 		    	}
 
-		    	for (var i = 0; i < genres.length; i++) {
+		    	for (let i = 0; i < genres.length; i++) {
 		    		let gen = new genre();
 		    		gen.order = genres[i].order;
 		    		gen.name = genres[i].name;
@@ -98,8 +98,8 @@ module.exports = function(app) {
 				let agent = request.agent(app);
 				agent
 					.post('/login-local')
-					.send({ 
-						username: 'TestPerson', 
+					.send({
+						username: 'TestPerson',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						agent
@@ -124,8 +124,8 @@ module.exports = function(app) {
 				let agent = request.agent(app);
 				agent
 					.post('/login-local')
-					.send({ 
-						username: 'TestPerson', 
+					.send({
+						username: 'TestPerson',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						agent
@@ -146,11 +146,11 @@ module.exports = function(app) {
 		// --------------------------------- POSTS ---------------------------------
 		describe('#posts', () => {
 		    // create test user
-		    beforeEach((done) => {
+				beforeEach((done) => {
 		    	let newUser = new user();
-		        newUser.local.username = "TestPerson";
+		        newUser.username = "TestPerson";
 		        newUser.local.password = newUser.generateHash("SecretTestPassword");
-		        newUser.local.email = 'test@gmail.com';
+		        newUser.email = 'test@gmail.com';
 		        newUser.local.age = 25;
 		        newUser.save((err) => {
 		        	if(err) throw err;
@@ -159,7 +159,7 @@ module.exports = function(app) {
 		    });
 
 		    beforeEach((done) => {
-		    	for (var i = 0; i < instruments.length; i++) {
+		    	for (let i = 0; i < instruments.length; i++) {
 		    		let ins = new instrument();
 		    		ins.order = instruments[i].order;
 		    		ins.name = instruments[i].name;
@@ -168,7 +168,7 @@ module.exports = function(app) {
 		    		});
 		    	}
 
-		    	for (var i = 0; i < genres.length; i++) {
+		    	for (let i = 0; i < genres.length; i++) {
 		    		let gen = new genre();
 		    		gen.order = genres[i].order;
 		    		gen.name = genres[i].name;
@@ -187,22 +187,22 @@ module.exports = function(app) {
 				let agent = request.agent(app);
 				agent
 					.post('/login-local')
-					.send({ 
-						username: 'TestPerson', 
+					.send({
+						username: 'TestPerson',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						agent
 							.get('/instruments')
 							.expect(200)
 							.end((err, rGet) => {
-								var pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id]
+								let pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
 								agent
 									.post('/instruments')
 									.expect(201)
 									.send(pickedInstruments)
 									.end((err, rPost) => {
 										if (err) throw err;
-										user.findOne({"local.username": "TestPerson"}, function(err, doc) {
+										user.findOne({"username": "TestPerson"}, function(err, doc) {
 											if (err) throw err;
 											doc.instruments.length.should.equal(pickedInstruments.length);
 
@@ -225,22 +225,22 @@ module.exports = function(app) {
 				let agent = request.agent(app);
 				agent
 					.post('/login-local')
-					.send({ 
-						username: 'TestPerson', 
+					.send({
+						username: 'TestPerson',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						agent
 							.get('/genres')
 							.expect(200)
 							.end((err, rGet) => {
-								var pickedGenres = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id]
+								let pickedGenres = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
 								agent
 									.post('/genres')
 									.expect(201)
 									.send(pickedGenres)
 									.end((err, resPost) => {
 										if (err) throw err;
-										user.findOne({"local.username": "TestPerson"}, function(err, doc) {
+										user.findOne({"username": "TestPerson"}, function(err, doc) {
 											if (err) throw err;
 											doc.genres.length.should.equal(pickedGenres.length);
 
