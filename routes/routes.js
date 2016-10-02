@@ -189,6 +189,7 @@ module.exports = function(app, passport){
 	    
 	 	const supportedFileTypes = ["image/jpeg", "image/png"];
 
+
 	    if (!req.files) {
 	        result = {err:6, msg:"No files uploaded."};
 	  		res.status(412).send(result);
@@ -210,8 +211,10 @@ module.exports = function(app, passport){
 		}
 
 		const imgFolder = "img/";
+		const extension = sampleFile.mimeType.split("/")[1];
+		const imgPath = imgFolder + req.user._id + "." + extension;
 
-	    sampleFile.mv(imgFolder + 'filename.jpg', function(err) {
+	    sampleFile.mv(imgPath, function(err) {
 	        if (err) {
 	            res.status(500).send(err);
 	        }
