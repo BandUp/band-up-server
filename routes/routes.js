@@ -185,18 +185,10 @@ module.exports = function(app, passport){
 	  	}
 	  	return true;
   }
-<<<<<<< Updated upstream:routes/routes.js
-
-	app.post('/upload', function(req, res) {
-	    var sampleFile;
-
-=======
- 
 	app.post('/profile-picture', isLoggedIn, function(req, res) {
 	    
 	 	const supportedFileTypes = ["image/jpeg", "image/png"];
-	    
->>>>>>> Stashed changes:routes.js
+
 	    if (!req.files) {
 	        result = {err:6, msg:"No files uploaded."};
 	  		res.status(412).send(result);
