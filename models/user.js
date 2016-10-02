@@ -19,6 +19,10 @@ let userSchema = mongoose.Schema({
     id: String,
     token: String
   },
+  soundcloud: {
+    id: String,
+    token: String
+  },
   instruments: [String],
   genres: [String],
   hasFinishedSetup: {type: Boolean, default: false},
