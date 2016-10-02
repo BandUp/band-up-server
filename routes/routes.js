@@ -185,19 +185,41 @@ module.exports = function(app, passport){
 	  	}
 	  	return true;
   }
+<<<<<<< Updated upstream:routes/routes.js
 
 	app.post('/upload', function(req, res) {
 	    var sampleFile;
 
+=======
+ 
+	app.post('/profile-picture', isLoggedIn, function(req, res) {
+	    
+	 	const supportedFileTypes = ["image/jpeg", "image/png"];
+	    
+>>>>>>> Stashed changes:routes.js
 	    if (!req.files) {
-	        res.send('No files were uploaded.');
+	        result = {err:6, msg:"No files uploaded."};
+	  		res.status(412).send(result);
 	        return;
 	    }
-	    console.log("sampleFile");
-	 	console.log(req.files.fileUpload);
-	    sampleFile = req.files.fileUpload;
 
-	    sampleFile.mv('img/filename.jpg', function(err) {
+	    if (req.files.length > 1) {
+			result = {err:5, msg:"Only upload one image at a time."};
+	  		res.status(412).send(result);
+	  		return;
+	    }
+
+	    const sampleFile = req.files.fileUpload;
+
+		if (supportedFileTypes.indexOf(sampleFile.mimetype) === -1) {
+			result = {err:7, msg:"File type not supported"};
+	  		res.status(412).send(result);
+	  		return;
+		}
+
+		const imgFolder = "img/";
+
+	    sampleFile.mv(imgFolder + 'filename.jpg', function(err) {
 	        if (err) {
 	            res.status(500).send(err);
 	        }
