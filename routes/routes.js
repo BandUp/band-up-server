@@ -2,6 +2,8 @@ const user = require('../models/user');
 const instrument = require('../models/instrument');
 const genre = require('../models/genre');
 const fs = require('fs');
+const path = require('path');
+const mime = require('mime');
 
 module.exports = function(app, passport){
 
@@ -33,12 +35,105 @@ module.exports = function(app, passport){
     });
     */
 
+    user.find({}, function(err, userDoc) {
+    	if (err) {
+    		console.log("Error occurred:");
+    		console.log(err);
+    		res.status(500).send("Unknown internal server error occurred.");
+    		return;
+    	}
+    	let userList = [];
+
+    	instrument.find({}, (err, insDoc) => {
+    		if (err) {
+	    		console.log("Error occurred:");
+	    		console.log(err);
+	    		res.status(500).send("Unknown internal server error occurred.");
+	    		return;
+    		}
+    		let insMap = {};
+	    		
+    		for (var i = 0; i < insDoc.length; i++) {
+    			insMap[insDoc[i]._id] = insDoc[i].name;
+    		}
+
+	    	genre.find({}, (err, genDoc) => {
+	    		if (err) {
+		    		console.log("Error occurred:");
+		    		console.log(err);
+		    		res.status(500).send("Unknown internal server error occurred.");
+		    		return;
+	    		}
+	    		let genMap = {};
+	    		for (var i = 0; i < genDoc.length; i++) {
+    				genMap[genDoc[i]._id] = genDoc[i].name;
+    			}
+
+		    	for (var i = 0; i < userDoc.length; i++) {
+					let user = {
+						_id: userDoc[i]._id,
+						username: userDoc[i].username,
+						status: "Not Implemented",
+						instruments:[],
+						genres:[],
+						distance:0,
+						percentage:0
+					};
+					for (var j = 0; j < userDoc[i].instruments.length; j++) {
+						user.instruments.push(insMap[userDoc[i].instruments[j]]);
+					}
+					
+					for (var j = 0; j < userDoc[i].genres.length; j++) {
+						user.genres.push(genMap[userDoc[i].genres[j]]);
+					}
+					userList.push(user);
+		    	}
+		    	console.log(userList);
+    			res.status(200).json(userList);
+	    	});
+    	});
+
+    });
+    /*
       res.json([
-        {username: 'Bergþór', instruments:["Piano", "Drums"], genres:["Pop", "Country"], status:"Searching for a band", distance:10, percentage:95, profileImgUrl:"http://placekitten.com/200/200"},
-        {username: 'Dagur', instruments:["Guitar", "Bass"], genres:["Rock", "Electronic"], status:"Searching for a band", distance:13, percentage:80, profileImgUrl:"http://placekitten.com/210/210"},
-        {username: 'Elvar', instruments:["Vocals", "Percussion"], genres:["Hip Hop", "Jazz"], status:"Looking for a pianist", distance:15, percentage:75, profileImgUrl:"http://placekitten.com/220/220"},
-        {username: 'Rafael', instruments:["Harmonica", "Keyboard"], genres:["Indie", "Pop"], status:"Looking for a singer", distance:25, percentage:70, profileImgUrl:"http://placekitten.com/240/240"}
+        {
+        	username:      'Bergþór',
+        	instruments:   ["Piano", "Drums"],
+        	genres:        ["Pop", "Country"],
+        	status:        "Searching for a band",
+        	distance:      10,
+        	percentage:    95,
+        	profileImgUrl: "http://192.168.1.27:3000/profile-picture"
+        },
+        {
+        	username:        'Dagur',
+        	instruments:     ["Guitar", "Bass"],
+        	genres:          ["Rock", "Electronic"],
+        	status:          "Searching for a band",
+        	distance:        13,
+        	percentage:      80,
+        	profileImgUrl:  "http://placekitten.com/210/210"
+        },
+        {
+        	username: 'Elvar',   
+        	instruments:["Vocals", "Percussion"],  
+        	genres:["Hip Hop", "Jazz"],    
+        	status:"Looking for a pianist", 
+        	distance:15, 
+        	percentage:75, profileImgUrl:"http://placekitten.com/220/220"
+        },
+        {
+        	username: 'Rafael',  
+	        instruments:["Harmonica", "Keyboard"], 
+	        genres:["Indie", "Pop"],       
+	        status:"Looking for a singer",  
+	        distance:25, 
+	        percentage:70, 
+	        profileImgUrl:"http://placekitten.com/240/240"
+	    }
+	    
       ]);
+      */
   });
 
   app.post('/email', isLoggedIn, (req, res) => {
@@ -186,7 +281,45 @@ module.exports = function(app, passport){
 	  	}
 	  	return true;
   }
-	app.post('/profile-picture', isLoggedIn, function(req, res) {
+
+  	app.get('/profile-picture', isLoggedIn, function(req,res) {
+  		
+  		const img = "img/" + req.user._id + ".jpg";
+  		if (!fs.existsSync(img)){
+  			result = {err:3, msg:"Image not Found"};
+	  		res.status(404).send(result);
+	  		return;
+		}
+  		
+  		var filename = path.basename(img);
+		var mimetype = mime.lookup(img);
+
+		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+		res.setHeader('Content-type', mimetype);
+
+  		var fileStream = fs.createReadStream(img);
+  		fileStream.pipe(res);
+  	});
+
+  	app.get('/profile-picture/:id', isLoggedIn, function(req,res) {
+  		const img = "img/"+req.params.id+".jpg";
+  		if (!fs.existsSync(img)){
+  			result = {err:3, msg:"Image not Found"};
+	  		res.status(404).send(result);
+	  		return;
+		}
+  		
+  		var filename = path.basename(img);
+		var mimetype = mime.lookup(img);
+
+		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+		res.setHeader('Content-type', mimetype);
+
+  		var fileStream = fs.createReadStream(img);
+  		fileStream.pipe(res);
+  	});
+
+	app.post('/profile-picture', function(req, res) {
 	    const imgFolder = "img/";
 	    if (!fs.existsSync(imgFolder)){
     		fs.mkdirSync(imgFolder);
@@ -232,7 +365,7 @@ module.exports = function(app, passport){
 		}
 		const imgPath = imgFolder + req.user._id + "." + extension;
 
-
+		console.log(sampleFile);
 	    sampleFile.mv(imgPath, function(err) {
 	        if (err) {
 	            res.status(500).send(err);
