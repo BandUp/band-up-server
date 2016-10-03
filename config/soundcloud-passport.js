@@ -7,6 +7,7 @@ module.exports = function(passport){
   passport.use(new SoundCloudStrategy({
     clientID    : process.env.SOUNDCLOUD_CLIENT,
     clientSecret: process.env.SOUNDCLOUD_SECRET,
+    passReqToCallback: true
   }, (token, refreshToken, profile, done) => {
     // asynchronous
     process.nextTick(() => {

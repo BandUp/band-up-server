@@ -30,10 +30,8 @@ let userSchema = mongoose.Schema({
     x: Number,
     y: Number
   },
-
   liked: [String],
   matched: [String]
-
 });
 
 // methoods
