@@ -88,7 +88,6 @@ module.exports = function(app, passport){
 					}
 					userList.push(user);
 		    	}
-		    	console.log(userList);
     			res.status(200).json(userList);
 	    	});
     	});
@@ -325,25 +324,27 @@ module.exports = function(app, passport){
     		fs.mkdirSync(imgFolder);
 		}
 	 	const supportedFileTypes = ["image/jpeg", "image/png", "application/octet-stream"];
-	 	console.log(req.body);
 
 	    if (!req.files) {
 	        result = {err:6, msg:"No files uploaded."};
 	  		res.status(412).send(result);
+	  		console.log(result);
 	        return;
 	    }
 
 	    if (req.files.length > 1) {
 			result = {err:5, msg:"Only upload one image at a time."};
 	  		res.status(412).send(result);
+	  		console.log(result);
 	  		return;
 	    }
 
 	    const sampleFile = req.files.mypicture;
-	    console.log(sampleFile);
+
 		if (supportedFileTypes.indexOf(sampleFile.mimetype.toString()) === -1) {
 			result = {err:7, msg:"File type not supported"};
 	  		res.status(412).send(result);
+	  		console.log(result);
 	  		return;
 		}
 		
@@ -365,7 +366,6 @@ module.exports = function(app, passport){
 		}
 		const imgPath = imgFolder + req.user._id + "." + extension;
 
-		console.log(sampleFile);
 	    sampleFile.mv(imgPath, function(err) {
 	        if (err) {
 	            res.status(500).send(err);
