@@ -339,7 +339,7 @@ module.exports = function(app, passport){
 	  		return;
 	    }
 
-	    const sampleFile = req.files.mypicture;
+		const sampleFile = req.files.mypicture;
 
 		if (supportedFileTypes.indexOf(sampleFile.mimetype.toString()) === -1) {
 			result = {err:7, msg:"File type not supported"};
