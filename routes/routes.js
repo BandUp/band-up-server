@@ -1,6 +1,7 @@
 const user = require('../models/user');
 const instrument = require('../models/instrument');
 const genre = require('../models/genre');
+const fs = require('fs');
 
 module.exports = function(app, passport){
 
@@ -186,7 +187,10 @@ module.exports = function(app, passport){
 	  	return true;
   }
 	app.post('/profile-picture', isLoggedIn, function(req, res) {
-	    
+	    const imgFolder = "img/";
+	    if (!fs.existsSync(imgFolder)){
+    		fs.mkdirSync(imgFolder);
+		}
 	 	const supportedFileTypes = ["image/jpeg", "image/png", "application/octet-stream"];
 	 	console.log(req.body);
 
@@ -209,7 +213,7 @@ module.exports = function(app, passport){
 	  		res.status(412).send(result);
 	  		return;
 		}
-		const imgFolder = "img/";
+		
 		let extension;
 		
 		if (sampleFile.mimetype === "application/octet-stream") {
