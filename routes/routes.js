@@ -142,7 +142,7 @@ module.exports = function(app, passport){
 		    if (validateSetupSelection(req, res, result)) {
 		      	doc.genres = req.body;
 		      	if (doc.genres.length > 0 && doc.genres.length > 0) {
-					//doc.hasFinishedSetup = true;
+					doc.hasFinishedSetup = true;
 		      	}
 		      	doc.save();
 		      	res.status(201).send("{}");
