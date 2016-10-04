@@ -4,6 +4,7 @@ const genre = require('../models/genre');
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
+const cloudinary = require('cloudinary');
 
 module.exports = function(app, passport){
 
@@ -25,7 +26,7 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
-  app.get('/nearby-users', (req, res) => {
+  app.get('/nearby-users', isLoggedIn, (req, res) => {
     /*
     let query = user.find();
     query.exists('this.location');
@@ -35,7 +36,7 @@ module.exports = function(app, passport){
     });
     */
 
-    user.find({}, function(err, userDoc) {
+    user.find({'_id': {$ne: req.user._id}}, function(err, userDoc) {
     	if (err) {
     		console.log("Error occurred:");
     		console.log(err);
@@ -77,8 +78,10 @@ module.exports = function(app, passport){
 						instruments:[],
 						genres:[],
 						distance:0,
-						percentage:0
+						percentage:0,
+						image:userDoc[i].image
 					};
+
 					for (var j = 0; j < userDoc[i].instruments.length; j++) {
 						user.instruments.push(insMap[userDoc[i].instruments[j]]);
 					}
@@ -281,44 +284,7 @@ module.exports = function(app, passport){
 	  	return true;
   }
 
-  	app.get('/profile-picture', isLoggedIn, function(req,res) {
-  		
-  		const img = "img/" + req.user._id + ".jpg";
-  		if (!fs.existsSync(img)){
-  			result = {err:3, msg:"Image not Found"};
-	  		res.status(404).send(result);
-	  		return;
-		}
-  		
-  		var filename = path.basename(img);
-		var mimetype = mime.lookup(img);
-
-		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-		res.setHeader('Content-type', mimetype);
-
-  		var fileStream = fs.createReadStream(img);
-  		fileStream.pipe(res);
-  	});
-
-  	app.get('/profile-picture/:id', isLoggedIn, function(req,res) {
-  		const img = "img/"+req.params.id+".jpg";
-  		if (!fs.existsSync(img)){
-  			result = {err:3, msg:"Image not Found"};
-	  		res.status(404).send(result);
-	  		return;
-		}
-  		
-  		var filename = path.basename(img);
-		var mimetype = mime.lookup(img);
-
-		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-		res.setHeader('Content-type', mimetype);
-
-  		var fileStream = fs.createReadStream(img);
-  		fileStream.pipe(res);
-  	});
-
-	app.post('/profile-picture', function(req, res) {
+	app.post('/profile-picture', isLoggedIn, function(req, res) {
 	    const imgFolder = "img/";
 	    if (!fs.existsSync(imgFolder)){
     		fs.mkdirSync(imgFolder);
@@ -371,7 +337,29 @@ module.exports = function(app, passport){
 	            res.status(500).send(err);
 	        }
 	        else {
-	            res.send('File uploaded!');
+
+	        	console.log("Finding user");
+	        	user.findOne({_id:req.user._id}, function(err, doc) {
+	        		console.log("Found user");
+				  	if (err) throw "err";
+				  	res.status(201).send();
+				  	if (doc.image.public_id) {
+				  		console.log("Deleting previmage");
+					  	cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {
+					  		console.log("Deleted previmage");
+					  	}, {invalidate:true});
+				  	}
+				  	console.log("Uploading new image");
+				  	cloudinary.uploader.upload(imgPath, function(result) { 
+				  		console.log("Uploaded new image");
+						  console.log("SAVE RESULT");
+						  console.log(result);
+						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
+					  		doc.image = imageObject;
+					  		doc.save();
+						});
+				});
+
 	        }
 	    });
 	});

@@ -31,7 +31,8 @@ let userSchema = mongoose.Schema({
     y: Number
   },
   liked: [String],
-  matched: [String]
+  matched: [String],
+  image:{url:String, public_id:String}
 });
 
 // methoods
