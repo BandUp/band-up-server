@@ -27,8 +27,9 @@ let userSchema = mongoose.Schema({
   genres: [String],
   hasFinishedSetup: {type: Boolean, default: false},
   location: {
-    x: Number,
-    y: Number
+    lat:   Number,
+    lon:   Number,
+    valid: false
   },
   liked: [String],
   matched: [String],

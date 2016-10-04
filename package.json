@@ -22,6 +22,7 @@
     "express": "4.13.3",
     "express-fileupload": "0.0.5",
     "express-session": "^1.14.1",
+    "geolib": "^2.0.21",
     "method-override": "^2.3.6",
     "mocha": "*",
     "mocha-mongoose": "^1.2.0",

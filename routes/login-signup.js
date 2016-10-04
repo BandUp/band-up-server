@@ -3,6 +3,15 @@ module.exports = function(app, passport){
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
     // Rafá was here ;p
+    req.user.location = {};
+    req.user.location.lat = 0;
+    req.user.location.lon = 0;
+    req.user.location.valid = false;
+    
+    req.user.image = {};
+    req.user.image.url = "";
+    req.user.image.public_id = "";
+
     res.status(201).json({id: req.user._id}).send();
   });
 

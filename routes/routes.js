@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
 const cloudinary = require('cloudinary');
+const geolib = require('geolib');
 
 module.exports = function(app, passport){
 
@@ -13,8 +14,8 @@ module.exports = function(app, passport){
   app.post('location', isLoggedIn, (req, res) => {
     if(!req.body.location){throw "need location info in body";}
     let currUser = req.user;
-    currUser.location.x = req.body.location.x;
-    currUser.location.y = req.body.location.y;
+    currUser.location.lat = req.body.location.lat;
+    currUser.location.lon = req.body.location.lon;
 
     currUser.save((err) => {
       if(err) throw err;
@@ -71,13 +72,30 @@ module.exports = function(app, passport){
     			}
 
 		    	for (var i = 0; i < userDoc.length; i++) {
+					var distanceToUser;
+					if (req.user.location.valid && userDoc[i].location.valid) {
+						distanceToUser = geolib.getDistance(
+					    {
+					    	latitude: req.user.location.lat,
+					    	longitude:req.user.location.lon
+					    },
+						{
+							latitude: userDoc[i].location.lat,
+							longitude: userDoc[i].location.lon
+						});
+
+						distanceToUser /= 1000;
+	    			} else {
+	    				distanceToUser = null;
+	    			}
+
 					let user = {
 						_id: userDoc[i]._id,
 						username: userDoc[i].username,
 						status: "Not Implemented",
 						instruments:[],
 						genres:[],
-						distance:0,
+						distance: distanceToUser,
 						percentage:0,
 						image:userDoc[i].image
 					};
@@ -96,46 +114,6 @@ module.exports = function(app, passport){
     	});
 
     });
-    /*
-      res.json([
-        {
-        	username:      'Bergþór',
-        	instruments:   ["Piano", "Drums"],
-        	genres:        ["Pop", "Country"],
-        	status:        "Searching for a band",
-        	distance:      10,
-        	percentage:    95,
-        	profileImgUrl: "http://192.168.1.27:3000/profile-picture"
-        },
-        {
-        	username:        'Dagur',
-        	instruments:     ["Guitar", "Bass"],
-        	genres:          ["Rock", "Electronic"],
-        	status:          "Searching for a band",
-        	distance:        13,
-        	percentage:      80,
-        	profileImgUrl:  "http://placekitten.com/210/210"
-        },
-        {
-        	username: 'Elvar',   
-        	instruments:["Vocals", "Percussion"],  
-        	genres:["Hip Hop", "Jazz"],    
-        	status:"Looking for a pianist", 
-        	distance:15, 
-        	percentage:75, profileImgUrl:"http://placekitten.com/220/220"
-        },
-        {
-        	username: 'Rafael',  
-	        instruments:["Harmonica", "Keyboard"], 
-	        genres:["Indie", "Pop"],       
-	        status:"Looking for a singer",  
-	        distance:25, 
-	        percentage:70, 
-	        profileImgUrl:"http://placekitten.com/240/240"
-	    }
-	    
-      ]);
-      */
   });
 
   app.post('/email', isLoggedIn, (req, res) => {
@@ -338,24 +316,17 @@ module.exports = function(app, passport){
 	        }
 	        else {
 
-	        	console.log("Finding user");
 	        	user.findOne({_id:req.user._id}, function(err, doc) {
-	        		console.log("Found user");
 				  	if (err) throw "err";
 				  	res.status(201).send();
 				  	if (doc.image.public_id) {
-				  		console.log("Deleting previmage");
 					  	cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {
-					  		console.log("Deleted previmage");
 					  	}, {invalidate:true});
 				  	}
-				  	console.log("Uploading new image");
 				  	cloudinary.uploader.upload(imgPath, function(result) { 
-				  		console.log("Uploaded new image");
-						  console.log("SAVE RESULT");
-						  console.log(result);
 						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
 					  		doc.image = imageObject;
+					  		console.log("Image successfully uploaded");
 					  		doc.save();
 						}, { width: 512, height: 512, gravity: "face", crop: "thumb"});
 				});
