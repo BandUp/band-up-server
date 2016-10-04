@@ -357,7 +357,7 @@ module.exports = function(app, passport){
 						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
 					  		doc.image = imageObject;
 					  		doc.save();
-						});
+						}, { width: 512, height: 512, gravity: "face", crop: "thumb"});
 				});
 
 	        }
