@@ -29,7 +29,7 @@ let userSchema = mongoose.Schema({
   location: {
     lat:   Number,
     lon:   Number,
-    valid: false
+    valid: Boolean
   },
   liked: [String],
   matched: [String],
