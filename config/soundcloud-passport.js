@@ -9,6 +9,7 @@ module.exports = function(passport){
     clientSecret: process.env.SOUNDCLOUD_SECRET,
     passReqToCallback: true
   }, (token, refreshToken, profile, done) => {
+    console.log(token);
     // asynchronous
     process.nextTick(() => {
       // look for pre-existing account

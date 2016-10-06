@@ -54,7 +54,7 @@ module.exports = function(app, passport){
 	    		return;
     		}
     		let insMap = {};
-	    		
+
     		for (var i = 0; i < insDoc.length; i++) {
     			insMap[insDoc[i]._id] = insDoc[i].name;
     		}
@@ -67,11 +67,11 @@ module.exports = function(app, passport){
 		    		return;
 	    		}
 	    		let genMap = {};
-	    		for (var i = 0; i < genDoc.length; i++) {
+	    		for (let i = 0; i < genDoc.length; i++) {
     				genMap[genDoc[i]._id] = genDoc[i].name;
     			}
 
-		    	for (var i = 0; i < userDoc.length; i++) {
+		    	for (let i = 0; i < userDoc.length; i++) {
 					var distanceToUser;
 					if (req.user.location.valid && userDoc[i].location.valid) {
 						distanceToUser = geolib.getDistance(
@@ -100,11 +100,11 @@ module.exports = function(app, passport){
 						image:userDoc[i].image
 					};
 
-					for (var j = 0; j < userDoc[i].instruments.length; j++) {
+					for (let j = 0; j < userDoc[i].instruments.length; j++) {
 						user.instruments.push(insMap[userDoc[i].instruments[j]]);
 					}
-					
-					for (var j = 0; j < userDoc[i].genres.length; j++) {
+
+					for (let j = 0; j < userDoc[i].genres.length; j++) {
 						user.genres.push(genMap[userDoc[i].genres[j]]);
 					}
 					userList.push(user);
@@ -291,9 +291,9 @@ module.exports = function(app, passport){
 	  		console.log(result);
 	  		return;
 		}
-		
+
 		let extension;
-		
+
 		if (sampleFile.mimetype === "application/octet-stream") {
 			if (!req.body.filename) throw "No filename in body";
 
@@ -323,7 +323,7 @@ module.exports = function(app, passport){
 					  	cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {
 					  	}, {invalidate:true});
 				  	}
-				  	cloudinary.uploader.upload(imgPath, function(result) { 
+				  	cloudinary.uploader.upload(imgPath, function(result) {
 						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
 					  		doc.image = imageObject;
 					  		console.log("Image successfully uploaded");
