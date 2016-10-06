@@ -7,11 +7,11 @@ module.exports = function(passport){
   passport.use(new SoundCloudStrategy({
     clientID    : process.env.SOUNDCLOUD_CLIENT,
     clientSecret: process.env.SOUNDCLOUD_SECRET,
-    passReqToCallback: true
+    passReqToCallback: false
   }, (token, refreshToken, profile, done) => {
-    console.log(token);
     // asynchronous
     process.nextTick(() => {
+      console.log(profile);
       // look for pre-existing account
       User.findOne({'soundcloud.id': profile.id}, (err, user) => {
         if(err) return done(err);
