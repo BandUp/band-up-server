@@ -6,6 +6,8 @@ module.exports = function(passport){
   require('./facebook-passport')(passport);
   // google
   require('./google-passport')(passport);
+  // soundcloud
+  require('./soundcloud-passport')(passport);
 
   // we need the following two functions for session tokens
   passport.serializeUser((user, done) => {
