@@ -9,6 +9,7 @@ module.exports = function(passport){
     clientSecret: process.env.SOUNDCLOUD_SECRET,
     passReqToCallback: false
   }, (token, refreshToken, profile, done) => {
+    profile = profile._json; // why does soundcloud return this wierdness
     // asynchronous
     process.nextTick(() => {
       console.log(profile);
