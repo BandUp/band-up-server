@@ -49,6 +49,7 @@ module.exports = function(app, passport){
   app.get('/login-soundcloud',
             passport.authenticate('soundcloud-token'),
             (req, res) => {
+              req.user.email = req.body.email;
                 res.json({sessionID: req.sessionID});
   });
 
