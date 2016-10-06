@@ -7,7 +7,7 @@ module.exports = function(app, passport){
     req.user.location.lat = 0;
     req.user.location.lon = 0;
     req.user.location.valid = false;
-    
+
     req.user.image = {};
     req.user.image.url = "";
     req.user.image.public_id = "";
@@ -47,7 +47,7 @@ module.exports = function(app, passport){
   });
 
   app.get('/login-soundcloud',
-            passport.authenticate('soundcloud'),
+            passport.authenticate('soundcloud-token'),
             (req, res) => {
                 res.json({sessionID: req.sessionID});
   });
