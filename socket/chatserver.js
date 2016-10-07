@@ -13,19 +13,7 @@ module.exports.setup = function(server) {
 			socket.server.close();
 			console.log("Closing socket");
 		});
-
 		console.log("Client connected");
-
-		function getUsers () {
-			var userlist = [];
-
-			//We need to construct the list since the users in the global user roster have a reference to socket, which has a reference
-			//back to users so the JSON serializer can't serialize them.
-			for(var user in users) {
-				userlist.push(user);
-			}
-			return userlist;
-		}
 
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
@@ -51,7 +39,7 @@ module.exports.setup = function(server) {
 				return;
 			}
 
-			var mg       = {sender:socket.username, message:msgObj.message, timestamp:Date.now()};
+			var mg = {sender: socket.username, message: msgObj.message, timestamp: Date.now()};
 			var userList = [socket.username, msgObj.nick].sort();
 
 			chat.findOneAndUpdate(
@@ -69,7 +57,7 @@ module.exports.setup = function(server) {
 			// If user exists in global user list.
 			if(users[msgObj.nick] !== undefined) {
 				//Send the message only to this user.
-				console.log("Sending message '"+ msgObj.message+"' to " + msgObj.nick);
+				console.log("Sending message '"+ msgObj.message +"' to "+ msgObj.nick);
 				users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
 				//Callback recieves true.
 				fn(true);
