@@ -27,6 +27,21 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
+    // returns user all data to client
+    app.all('/get-user', (req, res) => {
+        //console.log("id is: "+req.body.userId);
+        user.findById(req.body.userId, (err, doc) => {
+        //console.log(doc);
+        if(err || !doc) {
+            res.status(500).send();
+              console.log("error");
+        }
+        else if (doc) {
+          res.json(doc);
+        }
+        });
+    });
+
   app.get('/nearby-users', isLoggedIn, (req, res) => {
     /*
     let query = user.find();
