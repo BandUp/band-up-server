@@ -327,7 +327,7 @@ module.exports = function(app, passport){
 					  		doc.image = imageObject;
 					  		doc.save();
 							res.status(201).json({'url': result.secure_url}).send();
-						}, { width: 512, height: 512, gravity: "face", crop: "fit"});
+						}, { width: 512, height: 512, gravity: "face", crop: "fill"});
 				});
 	        }
 	    });
