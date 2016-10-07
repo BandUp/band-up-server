@@ -55,7 +55,7 @@ module.exports = function(app, passport){
     		}
     		let insMap = {};
 
-    		for (var i = 0; i < insDoc.length; i++) {
+    		for (let i = 0; i < insDoc.length; i++) {
     			insMap[insDoc[i]._id] = insDoc[i].name;
     		}
 
@@ -72,7 +72,7 @@ module.exports = function(app, passport){
     			}
 
 		    	for (let i = 0; i < userDoc.length; i++) {
-					var distanceToUser;
+					let distanceToUser;
 					if (req.user.location.valid && userDoc[i].location.valid) {
 						distanceToUser = geolib.getDistance(
 					    {
@@ -173,7 +173,7 @@ module.exports = function(app, passport){
       		result = {err:4, msg:"Unknown internal server error occurred."};
 			res.status(500).send(result);
       	}
-      	var result;
+      	let result;
       	instrument.find({}, function(err, instruDoc) {
 	      if (err) {
 	        console.log("Error occurred:");
@@ -206,7 +206,7 @@ module.exports = function(app, passport){
 			res.status(500).send(result);
 			return;
       	}
-      	var result;
+      	let result;
       	genre.find({}, function(err, genreDoc) {
 	      if (err) {
 	        console.log("Error occurred:");
@@ -228,7 +228,7 @@ module.exports = function(app, passport){
   });
 
   function validateSetupSelection(req, res, ids) {
-		var result;
+		let result;
 		for (var i = 0; i < req.body.length; i++) {
 			if (ids.indexOf(req.body[i]) === -1) {
 				result = {err:4, msg:"Invalid ID"};
@@ -318,19 +318,17 @@ module.exports = function(app, passport){
 
 	        	user.findOne({_id:req.user._id}, function(err, doc) {
 				  	if (err) throw "err";
-				  	res.status(201).send();
 				  	if (doc.image.public_id) {
 					  	cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {
 					  	}, {invalidate:true});
 				  	}
-				  	cloudinary.uploader.upload(imgPath, function(result) {
+				  	cloudinary.uploader.upload(imgPath, function(result) { 
 						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
 					  		doc.image = imageObject;
-					  		console.log("Image successfully uploaded");
 					  		doc.save();
-						}, { width: 512, height: 512, gravity: "face", crop: "thumb"});
+							res.status(201).json({'url': result.secure_url}).send();
+						}, { width: 512, height: 512, gravity: "face", crop: "fit"});
 				});
-
 	        }
 	    });
 	});
