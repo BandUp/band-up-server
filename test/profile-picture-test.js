@@ -39,7 +39,7 @@ module.exports = function(app) {
 		* Author: Bergþór
 		* Signees:
 		*/
-		it('should fail when no files are attached', function(done) {
+		it('should return 412 with error code 6 when no files are attached', function(done) {
 			let agent = request.agent(app);
 			agent
 				.post('/login-local')
@@ -62,7 +62,7 @@ module.exports = function(app) {
 		* Author: Bergþór
 		* Signees:
 		*/
-		it('should fail when uploading more than one image', function(done) {
+		it('should return 412 with error code 5 when uploading more than one image', function(done) {
 			let agent = request.agent(app);
 			agent
 				.post('/login-local')
@@ -88,7 +88,7 @@ module.exports = function(app) {
 		* Author: Bergþór
 		* Signees:
 		*/
-		it('should fail when uploading a text file', function(done) {
+		it('should return 415 with error code 10 when uploading an unsupported file', function(done) {
 			let agent = request.agent(app);
 			agent
 				.post('/login-local')
@@ -100,7 +100,7 @@ module.exports = function(app) {
 						.post('/profile-picture')
 						.type("multipart/form-data")
 						.attach('file1', 'test/test.js')
-						.expect(412)
+						.expect(415)
 						.end((err, res2) => {
 							if (err) throw err;
 							res2.body.err.should.equal(10);

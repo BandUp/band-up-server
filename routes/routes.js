@@ -284,8 +284,6 @@ module.exports = function(app, passport){
     		fs.mkdirSync(imgFolder);
 		}
 
-	 	const supportedFileTypes = ["image/jpeg", "image/png", "application/octet-stream"];
-
 	    if (!req.files) {
 	        result = {err:6, msg:"No files uploaded."};
 	  		res.status(412).send(result);
@@ -298,10 +296,12 @@ module.exports = function(app, passport){
 	  		return;
 	    }
 
+	 	const supportedFileTypes = ["image/jpeg", "image/png", "application/octet-stream"];
+
 		const sampleFile = req.files[Object.keys(req.files)[0]];
 		if (supportedFileTypes.indexOf(sampleFile.mimetype.toString()) === -1) {
 			result = {err:10, msg:"File type not supported"};
-	  		res.status(412).send(result);
+	  		res.status(415).send(result);
 	  		return;
 		}
 
