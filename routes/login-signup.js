@@ -22,7 +22,12 @@ module.exports = function(app, passport){
             (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
-    res.status(200).json({sessionID: req.sessionID,  hasFinishedSetup: req.user.hasFinishedSetup}).send();
+    let sendObject = {
+    	sessionID: req.sessionID,
+    	hasFinishedSetup: req.user.hasFinishedSetup,
+    	userID: req.user._id
+    }
+    res.status(200).json(sendObject).send();
   });
 
   app.get('/logout', (req, res) => {
@@ -37,20 +42,20 @@ module.exports = function(app, passport){
   app.post('/login-facebook',
           passport.authenticate('facebook-token'),
           (req, res) => {
-              res.json({sessionID: req.sessionID});
+              res.json({sessionID: req.sessionID, userID: req.user._id});
   });
 
   app.get('/login-google',
             passport.authenticate('google'),
             (req, res) => {
-                res.json({sessionID: req.sessionID});
+                res.json({sessionID: req.sessionID, userID: req.user._id});
   });
 
   app.get('/login-soundcloud',
             passport.authenticate('soundcloud-token'),
             (req, res) => {
               req.user.email = req.body.email;
-                res.json({sessionID: req.sessionID});
+                res.json({sessionID: req.sessionID, userID: req.user._id});
   });
 
   // Storing data of already signed in user on app
@@ -70,7 +75,7 @@ module.exports = function(app, passport){
             newUser.email = req.body.userEmail;
             newUser.save();
 
-            res.json({sessionID: req.sessionID}).send();
+            res.json({sessionID: req.sessionID, userID: req.user._id}).send();
         }
       });
   });
