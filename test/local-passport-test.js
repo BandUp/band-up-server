@@ -6,7 +6,7 @@ const request = require('supertest');
 const clearDB = require('mocha-mongoose')(dbURI);
 const user = require('../models/user');
 
-module.exports = function(app){
+module.exports = function(app) {
 
   describe('LocalStrategy', function () {
     // this runs before tests
@@ -135,7 +135,6 @@ module.exports = function(app){
                 done();
               });
           });
-
       });
     });
   });
