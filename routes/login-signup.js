@@ -26,7 +26,7 @@ module.exports = function(app, passport){
     	sessionID: req.sessionID,
     	hasFinishedSetup: req.user.hasFinishedSetup,
     	userID: req.user._id
-    }
+    };
     res.status(200).json(sendObject).send();
   });
 

@@ -175,6 +175,7 @@ module.exports = function(app, passport){
   });
 
   app.post('/instruments', isLoggedIn, (req, res) => {
+    let result;
   	user.findOne({_id:req.user._id}, function(err, doc) {
   		if (err) {
 	        console.log("Error occurred:");
@@ -188,7 +189,7 @@ module.exports = function(app, passport){
       		result = {err:4, msg:"Unknown internal server error occurred."};
 			res.status(500).send(result);
       	}
-      	let result;
+
       	instrument.find({}, function(err, instruDoc) {
 	      if (err) {
 	        console.log("Error occurred:");
@@ -207,6 +208,7 @@ module.exports = function(app, passport){
   });
 
   app.post('/genres', isLoggedIn, (req, res) => {
+    let result;
       	user.findOne({_id:req.user._id}, function(err, doc) {
   		if (err) {
 	        console.log("Error occurred:");
@@ -221,7 +223,7 @@ module.exports = function(app, passport){
 			res.status(500).send(result);
 			return;
       	}
-      	let result;
+
       	genre.find({}, function(err, genreDoc) {
 	      if (err) {
 	        console.log("Error occurred:");
@@ -337,7 +339,7 @@ module.exports = function(app, passport){
 					  	cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {
 					  	}, {invalidate:true});
 				  	}
-				  	cloudinary.uploader.upload(imgPath, function(result) { 
+				  	cloudinary.uploader.upload(imgPath, function(result) {
 						  	let imageObject = {url:result.secure_url, public_id:result.public_id};
 					  		doc.image = imageObject;
 					  		doc.save();
@@ -347,4 +349,17 @@ module.exports = function(app, passport){
 	        }
 	    });
 	});
+
+  app.get('/chat_history', (req, res) => {
+    let result;
+    user.findOne({_id:req.chatSchema}, function(err, doc) {
+      if (err) {
+	        console.log("Error occurred:");
+	        console.log(err);
+          result = {err: 5, msg: "Unknown internal server error occurred."};
+          res.status(500).send(result);
+          return;
+        }
+  	});
+  });
 };

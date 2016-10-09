@@ -6,7 +6,7 @@ let chatSchema = mongoose.Schema({
   chatHistory: {
   	sender: String,
   	message: String,
-  	timestamp: {type:Date, default:Date.now, required:true}
+  	timestamp: { type: Date, default: Date.now, required: true }
   }
 },{ collection: 'chat' });
 
