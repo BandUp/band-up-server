@@ -18,7 +18,7 @@ module.exports.setup = function(server) {
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
 			//Check if username is avaliable.
-			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
+			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 25) {
 				socket.username = username;
 
 				//Store user object in global user roster.
