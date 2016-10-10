@@ -9,16 +9,16 @@ module.exports.setup = function(server) {
 	var users = {};
 
 	io.on('connection', function (socket) {
-		process.on('SIGINT', function () {
-			socket.server.close();
-			console.log("Closing socket");
-		});
 		console.log("Client connected");
 
 		//This gets performed when a user joins the server.
 		socket.on('adduser', function(username, fn) {
 			//Check if username is avaliable.
-			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 25) {
+			console.log(users[username] === undefined);
+			console.log(username.toLowerCase != "server");
+			console.log(username.length < 30);
+			if (users[username] === undefined && username.toLowerCase != "server" && username.length < 30) {
+
 				socket.username = username;
 
 				//Store user object in global user roster.
@@ -41,7 +41,9 @@ module.exports.setup = function(server) {
 
 			var mg = {sender: socket.username, message: msgObj.message, timestamp: Date.now()};
 			var userList = [socket.username, msgObj.nick].sort();
-
+			console.log("USERS");
+			console.log(socket.username);
+			console.log(msgObj.nick);
 			chat.findOneAndUpdate(
 				{users : userList},
 				{$push : {chatHistory:mg}},
@@ -63,6 +65,14 @@ module.exports.setup = function(server) {
 				fn(true);
 			}
 			fn(false);
+		});
+
+		socket.on('disconnect', function() {
+			console.log("Client disconnected");
+			if(socket.username) {
+				//Remove the user from the global user roster.
+				delete users[socket.username];
+			}
 		});
 	});
 	console.log('chat is setup and ready');

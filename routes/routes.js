@@ -143,14 +143,18 @@ module.exports = function(app, passport){
   });
 
   app.get('/chat_history/:id', isLoggedIn, (req, res) => {
-    chatHistory.find({_id: req.user._id, _id: req.params.id}, function(err, doc) {
+    
+    var userList = [req.user._id, req.params.id].sort();
+
+    chatHistory.findOne({"users": userList}, function(err, doc) {
       if (err) {
         console.log("Error occurred:");
         console.log(err);
         res.status(500).send("Unknown internal server error occurred.");
         return;
       }
-      res.status(200).json(doc);
+      console.log(doc);
+      res.status(200).send(doc);
     });
   });
 
