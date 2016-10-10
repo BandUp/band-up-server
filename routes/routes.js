@@ -1,6 +1,7 @@
 const user = require('../models/user');
 const instrument = require('../models/instrument');
 const genre = require('../models/genre');
+const chatHistory = require('../models/chatHistory');
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
@@ -138,6 +139,18 @@ module.exports = function(app, passport){
     user.email = req.body.email;
     user.save((err) => {
       res.status(200).send();
+    });
+  });
+
+  app.get('/chat_history/:id', isLoggedIn, (req, res) => {
+    chatHistory.find({_id: req.user._id, _id: req.params.id}, function(err, doc) {
+      if (err) {
+        console.log("Error occurred:");
+        console.log(err);
+        res.status(500).send("Unknown internal server error occurred.");
+        return;
+      }
+      res.status(200).json(doc);
     });
   });
 
@@ -350,16 +363,4 @@ module.exports = function(app, passport){
 	    });
 	});
 
-  app.get('/chat_history', (req, res) => {
-    let result;
-    user.findOne({_id:req.chatSchema}, function(err, doc) {
-      if (err) {
-	        console.log("Error occurred:");
-	        console.log(err);
-          result = {err: 5, msg: "Unknown internal server error occurred."};
-          res.status(500).send(result);
-          return;
-        }
-  	});
-  });
 };
