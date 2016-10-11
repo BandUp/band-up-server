@@ -4,29 +4,41 @@ module.exports = function(app, passport){
   app.post('/like', isLoggedIn, (req, res) => {
     let user = req.user;
     if(user.liked.indexOf(req.body.userID) === -1){
-      // new like
-      user.liked.push(req.body.userID);
-      // chech matched
-      User.findById(req.body.userID, (err, doc) => {
-        console.log(doc);
-        let isMatch = false;
-        if(err) throw err;
-        if(doc && doc.liked.indexOf(user._id) !== -1){
-          isMatch = true;
-          user.matched.push(doc._id);
-          user.save((err) => {
-            if(err) throw err;
-          });
-          doc.matched.push(user._id);
-          doc.save((err) => {
-            if(err) throw err;
-          });
-        }
-        res.json({'isMatch': isMatch});
+
+      User.findById(user._id, (err, currUserDoc) => {
+        // new like
+        currUserDoc.liked.push(req.body.userID);
+
+        // chech matched
+        User.findById(req.body.userID, (err, doc) => {
+          console.log(doc);
+          let isMatch = false;
+          if(err) throw err;
+          if(doc && doc.liked.indexOf(user._id) !== -1){
+            isMatch = true;
+            currUserDoc.matched.push(doc._id);
+            currUserDoc.save((err) => {
+              if(err) throw err;
+            });
+            doc.matched.push(user._id);
+            doc.save((err) => {
+              if(err) throw err;
+            });
+
+          }
+          res.json({'isMatch': isMatch});
+        });
+        
+        currUserDoc.save((err) => {
+          if (err) throw err;
+        });
+
       });
+      
     } else {
       // already liked let's unlike
       // TODO: check for matches and remove if needed
+      console.log(user.liked);
       user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
       user.save((err) => {
         if (err) throw err;
