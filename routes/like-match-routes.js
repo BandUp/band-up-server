@@ -1,13 +1,14 @@
 const User = require('../models/user');
 
 module.exports = function(app, passport){
-  app.post('/like', isLoggedIn, (res, req) => {
+  app.post('/like', isLoggedIn, (req, res) => {
     let user = req.user;
     if(user.liked.indexOf(req.body.userID) === -1){
       // new like
       user.liked.push(req.body.userID);
       // chech matched
       User.findById(req.body.userID, (err, doc) => {
+        console.log(doc);
         let isMatch = false;
         if(err) throw err;
         if(doc && doc.liked.indexOf(user._id) === -1){
@@ -21,7 +22,7 @@ module.exports = function(app, passport){
             if(err) throw err;
           });
         }
-        res.json({'isMatch': isMatch}).sendStatus(200);
+        res.json({'isMatch': isMatch});
       });
     } else {
       // already liked let's unlike
@@ -29,7 +30,7 @@ module.exports = function(app, passport){
       user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
       user.save((err) => {
         if (err) throw err;
-        res.json({'isMatch': false}).sendStatus(200);
+        res.json({'isMatch': false});
       });
     }
   });
