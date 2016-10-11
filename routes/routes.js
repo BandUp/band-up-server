@@ -12,6 +12,7 @@ module.exports = function(app, passport){
 
   require('./login-signup')(app, passport);
   require('./like-match-routes')(app, passport);
+  require('./user-routes')(app, passport);
 
   app.post('/location', isLoggedIn, (req, res) => {
     if(!req.body.location){throw "need location info in body";}
@@ -28,21 +29,6 @@ module.exports = function(app, passport){
   app.get('/', (req, res) => {
     res.send('Hello world!');
   });
-
-    // returns user all data to client
-    app.all('/get-user', (req, res) => {
-        //console.log("id is: "+req.body.userId);
-        user.findById(req.body.userId, (err, doc) => {
-        //console.log(doc);
-        if(err || !doc) {
-            res.status(500).send();
-              console.log("error");
-        }
-        else if (doc) {
-          res.json(doc);
-        }
-        });
-    });
 
   app.get('/nearby-users', isLoggedIn, (req, res) => {
     user.find({'_id': {$ne: req.user._id}, hasFinishedSetup:true}, function(err, userDoc) {
@@ -121,16 +107,6 @@ module.exports = function(app, passport){
 	    	});
     	});
 
-    });
-  });
-
-  app.post('/email', isLoggedIn, (req, res) => {
-    // get current user into easy to handle variable
-    let user = req.user;
-    // update email
-    user.email = req.body.email;
-    user.save((err) => {
-      res.status(200).send();
     });
   });
 
