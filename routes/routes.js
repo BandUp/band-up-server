@@ -11,8 +11,9 @@ const geolib = require('geolib');
 module.exports = function(app, passport){
 
   require('./login-signup')(app, passport);
+  require('./like-match-routes')(app, passport);
 
-  app.post('location', isLoggedIn, (req, res) => {
+  app.post('/location', isLoggedIn, (req, res) => {
     if(!req.body.location){throw "need location info in body";}
     let currUser = req.user;
     currUser.location.lat = req.body.location.lat;
@@ -361,5 +362,4 @@ module.exports = function(app, passport){
 	        }
 	    });
 	});
-
 };

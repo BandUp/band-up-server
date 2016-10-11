@@ -1,7 +1,7 @@
 const User = require('../models/user');
 
 module.exports = function(app, passport){
-  app.post('like', isLoggedIn, (res,req) => {
+  app.post('/like', isLoggedIn, (res, req) => {
     let user = req.user;
     if(user.liked.indexOf(req.body.userID) === -1){
       // new like
@@ -23,7 +23,7 @@ module.exports = function(app, passport){
         }
         res.json({'isMatch': isMatch}).sendStatus(200);
       });
-    }else{
+    } else {
       // already liked let's unlike
       // TODO: check for matches and remove if needed
       user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
