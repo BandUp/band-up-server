@@ -45,7 +45,7 @@ module.exports = function(app, passport){
     });
 
   app.get('/nearby-users', isLoggedIn, (req, res) => {
-    user.find({'_id': {$ne: req.user._id}}, function(err, userDoc) {
+    user.find({'_id': {$ne: req.user._id}, hasFinishedSetup:true}, function(err, userDoc) {
     	if (err) {
     		console.log("Error occurred:");
     		console.log(err);
