@@ -153,7 +153,11 @@ module.exports = function(app, passport){
         res.status(500).send("Unknown internal server error occurred.");
         return;
       }
-      console.log(doc);
+      if (!doc) {
+        res.status(404).send();
+        return;
+      }
+
       res.status(200).send(doc);
     });
   });
