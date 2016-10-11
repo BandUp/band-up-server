@@ -11,7 +11,7 @@ module.exports = function(app, passport){
         console.log(doc);
         let isMatch = false;
         if(err) throw err;
-        if(doc && doc.liked.indexOf(user._id) === -1){
+        if(doc && doc.liked.indexOf(user._id) !== -1){
           isMatch = true;
           user.matched.push(doc._id);
           user.save((err) => {
