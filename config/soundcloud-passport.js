@@ -25,7 +25,7 @@ module.exports = function(passport){
            let newUser = new User();
            newUser.soundcloud.id = profile.id;
            newUser.soundcloud.token = token;
-           newUser.username = profile.name.username;
+           newUser.username = profile.username;
            //newUser.email = profile.emails[0].value; // soundcloud returns multiple emails
 
            newUser.save((err) => {

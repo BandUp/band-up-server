@@ -44,15 +44,6 @@ module.exports = function(app, passport){
     });
 
   app.get('/nearby-users', isLoggedIn, (req, res) => {
-    /*
-    let query = user.find();
-    query.exists('this.location');
-    query.exec(function(err, doc){
-      console.log(doc);
-      res.json(doc).sendStatus(200);
-    });
-    */
-
     user.find({'_id': {$ne: req.user._id}}, function(err, userDoc) {
     	if (err) {
     		console.log("Error occurred:");
@@ -143,7 +134,7 @@ module.exports = function(app, passport){
   });
 
   app.get('/chat_history/:id', isLoggedIn, (req, res) => {
-    
+
     var userList = [req.user._id, req.params.id].sort();
 
     chatHistory.findOne({"users": userList}, function(err, doc) {
