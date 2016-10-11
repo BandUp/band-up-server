@@ -46,5 +46,8 @@
   },
   "keywords": [],
   "author": "Bad-Melodies",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
 }
