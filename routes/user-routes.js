@@ -6,7 +6,7 @@ module.exports = function(app, passport){
   // returns user all data to client
   app.all('/get-user', (req, res) => {
       //console.log("id is: "+req.body.userId);
-      user.findById(req.body.userId, (err, doc) => {
+      User.findById(req.body.userId, (err, doc) => {
       //console.log(doc);
       if(err || !doc) {
           res.status(500).send();
@@ -19,11 +19,14 @@ module.exports = function(app, passport){
   });
 
   app.get('/matches', isLoggedIn, (req, res) =>{
-    User.find({'_id': req.user.matches}, (err, doc) =>{
-      if(err){
+  	console.log(req.user.matched);
+    User.find({'_id': {$in:req.user.matched}}, (err, doc) =>{
+      if (err) {
         res.sendStatus(500);
+        return;
       }
-      res.json(doc).sendStatus(200);
+
+      res.status(200).send(doc);
     });
   });
 
