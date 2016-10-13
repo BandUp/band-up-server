@@ -4,7 +4,7 @@ const GoogleStrategy = require('passport-google-token').Strategy;
 const User = require('../models/user');
 
 module.exports = function(passport){
-  passport.use(new GoogleTokenStrategy({
+  passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT,
     clientSecret: process.env.GOOGLE_SECRET
   }, (token, refreshToken, profile, done) => {
