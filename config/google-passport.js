@@ -3,7 +3,7 @@ const GoogleStrategy = require('passport-google-token').Strategy;
 // load up user model
 const User = require('../models/user');
 
-module.exports = function(passport) {
+module.exports = function(passport){
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT,
     clientSecret: process.env.GOOGLE_SECRET
@@ -16,7 +16,7 @@ module.exports = function(passport) {
         	console.log("ERROR");
         	return done(err);
         }
-        if(user) {
+        if(user){
         	console.log("USER");
           return done(null, user);
         } else {
