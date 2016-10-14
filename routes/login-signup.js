@@ -1,4 +1,6 @@
-module.exports = function(app, passport){
+const User = require('../models/user');
+
+module.exports = function(app, passport) {
   app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
     // this function only gets called when signup was succesful
     // req.user contains authenticated user.
@@ -58,9 +60,9 @@ module.exports = function(app, passport){
                 res.json({sessionID: req.sessionID, userID: req.user._id});
   });
 
-  // Storing data of already signed in user on app
+ /* // Storing data of already signed in user on app
   app.post('/login-google', (req, res) => {
-      user.findOne({'google.id': req.body.userId}, (err, doc) => {
+      User.findOne({'google.id': req.body.userId}, (err, doc) => {
         if(err) {
             res.status(500).send();
         }
@@ -68,25 +70,24 @@ module.exports = function(app, passport){
             res.json({sessionID: req.sessionID}).send();
         }
         else {
-            let newUser = new user();
+            let newUser = new User();
             newUser.google.id = req.body.userId;
             newUser.google.token = req.body.userToken;
             newUser.username = req.body.userName;
             newUser.email = req.body.userEmail;
             newUser.save();
-
             res.json({sessionID: req.sessionID, userID: req.user._id}).send();
         }
       });
-  });
+  });*/
 
-  /*
- app.post('/login-google-token',
-         passport.authenticate('google-token', { scope : ['profile', 'email'] }),
-         (req, res) => {
-             res.json({sessionID: req.sessionID});
+
+ app.post('/login-google-token', passport.authenticate('google-token', { scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'}), (req, res) => {
+         	console.log("HELLO");
+         	console.log(req.user);
+             res.json({sessionID: req.sessionID,userID: req.user._id});
  });
- */
+
 };
 
 // route middleware to make sure user is logged in

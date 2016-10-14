@@ -9,8 +9,9 @@ module.exports = function(app, passport){
         
         if (!req.body.userID) {
           res.status(412).send({err:1, msg:"Need the user ID that was liked."});
+          return;
         }
-        
+
         // new like
         currUserDoc.liked.push(req.body.userID);
 
