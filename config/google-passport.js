@@ -3,9 +3,6 @@ const GoogleStrategy = require('passport-google-token').Strategy;
 // load up user model
 const User = require('../models/user');
 
-// load up user model
-const User = require('../models/user');
-
 module.exports = function(passport){
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT,
