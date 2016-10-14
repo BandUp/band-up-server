@@ -48,7 +48,7 @@ module.exports = function(app, passport) {
   });
 
   app.get('/login-google',
-            passport.authenticate('google'),
+            passport.authenticate('google-token'),
             (req, res) => {
                 res.json({sessionID: req.sessionID, userID: req.user._id});
   });
@@ -57,6 +57,7 @@ module.exports = function(app, passport) {
             passport.authenticate('soundcloud-token'),
             (req, res) => {
               req.user.email = req.body.email;
+              console.log(req);
                 res.json({sessionID: req.sessionID, userID: req.user._id});
   });
 
