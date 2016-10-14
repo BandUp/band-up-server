@@ -83,7 +83,7 @@ module.exports = function(app, passport) {
   });*/
 
 
- app.post('/login-google-token', passport.authenticate('google-token', { scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'}), (req, res) => {
+ app.post('/login-google', passport.authenticate('google-token', { scope: 'https://www.google.com/m8/feeds https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'}), (req, res) => {
          	console.log("HELLO");
          	console.log(req.user);
              res.json({sessionID: req.sessionID,userID: req.user._id});
