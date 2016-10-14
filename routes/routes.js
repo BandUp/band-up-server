@@ -14,7 +14,7 @@ module.exports = function(app, passport){
   require('./like-match-routes')(app, passport);
   require('./user-routes')(app, passport);
 
-  app.post('/location', isLoggedIn, (req, res) => {
+  app.post('/login-local/location', isLoggedIn, (req, res) => {
     if(!req.body.location){throw "need location info in body";}
     let currUser = req.user;
     currUser.location.lat = req.body.location.lat;
@@ -30,6 +30,28 @@ module.exports = function(app, passport){
     res.send('Hello world!');
   });
 
+  /* 
+   * 
+   * 
+   */
+  function itemNamesToMap(item, callback) {
+    item.find({}, (err, itemDoc) => {
+        if (err) {
+          console.log("Error occurred:");
+          console.log(err);
+          res.status(500).send("Unknown internal server error occurred.");
+          callback(null);
+          return;
+        }
+        let itemMap = {};
+
+        for (let i = 0; i < itemDoc.length; i++) {
+          itemMap[itemDoc[i]._id] = itemDoc[i].name;
+        }
+        callback(itemMap);
+    });
+  }
+
   app.get('/nearby-users', isLoggedIn, (req, res) => {
     user.find({'_id': {$ne: req.user._id}, hasFinishedSetup:true}, function(err, userDoc) {
     	if (err) {
@@ -39,76 +61,57 @@ module.exports = function(app, passport){
     		return;
     	}
     	let userList = [];
+      itemNamesToMap(instrument, (instruMap) => {
+          itemNamesToMap(genre, (genresMap) => {
+            if (!instruMap || !genresMap) {
+              res.status(500).send("Unknown internal server error occurred.");
+              return;
+            }
 
-    	instrument.find({}, (err, insDoc) => {
-    		if (err) {
-	    		console.log("Error occurred:");
-	    		console.log(err);
-	    		res.status(500).send("Unknown internal server error occurred.");
-	    		return;
-    		}
-    		let insMap = {};
+            for (let i = 0; i < userDoc.length; i++) {
+              let distanceToUser;
+              if (req.user.location.valid && userDoc[i].location.valid) {
+                distanceToUser = geolib.getDistance(
+                  {
+                    latitude: req.user.location.lat,
+                    longitude:req.user.location.lon
+                  },
+                {
+                  latitude: userDoc[i].location.lat,
+                  longitude: userDoc[i].location.lon
+                });
 
-    		for (let i = 0; i < insDoc.length; i++) {
-    			insMap[insDoc[i]._id] = insDoc[i].name;
-    		}
+                distanceToUser /= 1000;
+                } else {
+                  distanceToUser = null;
+                }
 
-	    	genre.find({}, (err, genDoc) => {
-	    		if (err) {
-		    		console.log("Error occurred:");
-		    		console.log(err);
-		    		res.status(500).send("Unknown internal server error occurred.");
-		    		return;
-	    		}
-	    		let genMap = {};
-	    		for (let i = 0; i < genDoc.length; i++) {
-    				genMap[genDoc[i]._id] = genDoc[i].name;
-    			}
+              let userDTO = {
+                _id: userDoc[i]._id,
+                username: userDoc[i].username,
+                status: "Not Implemented",
+                instruments:[],
+                genres:[],
+                distance: distanceToUser,
+                percentage:0,
+                image:userDoc[i].image
+              };
+              for (let j = 0; j < userDoc[i].instruments.length; j++) {
+                userDTO.instruments.push(instruMap[userDoc[i].instruments[j]]);
+              }
 
-		    	for (let i = 0; i < userDoc.length; i++) {
-					let distanceToUser;
-					if (req.user.location.valid && userDoc[i].location.valid) {
-						distanceToUser = geolib.getDistance(
-					    {
-					    	latitude: req.user.location.lat,
-					    	longitude:req.user.location.lon
-					    },
-						{
-							latitude: userDoc[i].location.lat,
-							longitude: userDoc[i].location.lon
-						});
+              for (let j = 0; j < userDoc[i].genres.length; j++) {
+                userDTO.genres.push(genresMap[userDoc[i].genres[j]]);
+              }
 
-						distanceToUser /= 1000;
-	    			} else {
-	    				distanceToUser = null;
-	    			}
+              userList.push(userDTO);
+          }
+          res.status(200).send(userList);
+        });
+      });
 
-					let user = {
-						_id: userDoc[i]._id,
-						username: userDoc[i].username,
-						status: "Not Implemented",
-						instruments:[],
-						genres:[],
-						distance: distanceToUser,
-						percentage:0,
-						image:userDoc[i].image
-					};
-
-					for (let j = 0; j < userDoc[i].instruments.length; j++) {
-						user.instruments.push(insMap[userDoc[i].instruments[j]]);
-					}
-
-					for (let j = 0; j < userDoc[i].genres.length; j++) {
-						user.genres.push(genMap[userDoc[i].genres[j]]);
-					}
-					userList.push(user);
-		    	}
-    			res.status(200).json(userList);
-	    	});
-    	});
-
-    });
-  });
+          });
+      });
 
   app.get('/chat_history/:id', isLoggedIn, (req, res) => {
 
