@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt-nodejs');
 let userSchema = mongoose.Schema({
   username: String,
   email: String,
+  age: Number,
   local: {
     email: String,
     password: String,
@@ -35,6 +36,23 @@ let userSchema = mongoose.Schema({
   liked: [String],
   matched: [String],
   image:{url:String, public_id:String}
+}, {
+  toObject: {
+    transform: function(doc, ret){
+      delete ret.facebook;
+      delete ret.google;
+      delete ret.soundcloud;
+      delete ret.local;
+    }
+  },
+  toJSON: {
+    transform: function(doc, ret){
+      delete ret.facebook;
+      delete ret.google;
+      delete ret.soundcloud;
+      delete ret.local;
+    }
+  }
 });
 
 // methoods
