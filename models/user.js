@@ -17,8 +17,7 @@ let userSchema = mongoose.Schema({
     token: String
   },
   google: {
-    id: String,
-    token: String
+    id: String
   },
   soundcloud: {
     id: String,
