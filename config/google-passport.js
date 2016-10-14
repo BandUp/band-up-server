@@ -5,8 +5,8 @@ const User = require('../models/user');
 
 module.exports = function(passport) {
   passport.use(new GoogleTokenStrategy({
-    clientID: process.env.GOOGLE_CLIENT,
-    clientSecret: process.env.GOOGLE_SECRET
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET
   }, (token, refreshToken, profile, done) => {
     process.nextTick(() => {
     	console.log("HAHAH");
