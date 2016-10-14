@@ -44,13 +44,13 @@ module.exports = function(app, passport) {
   app.post('/login-facebook',
           passport.authenticate('facebook-token'),
           (req, res) => {
-              res.json({sessionID: req.sessionID, userID: req.user._id});
+              res.json({sessionID: req.sessionID, userID: req.user._id, hasFinishedSetup: req.user.hasFinishedSetup,});
   });
 
   app.post('/login-google',
             passport.authenticate('google-id-token'),
             (req, res) => {
-                res.json({sessionID: req.sessionID, userID: req.user._id});
+                res.json({sessionID: req.sessionID, userID: req.user._id, hasFinishedSetup: req.user.hasFinishedSetup});
   });
 
   app.get('/login-soundcloud',
@@ -58,7 +58,7 @@ module.exports = function(app, passport) {
             (req, res) => {
               req.user.email = req.body.email;
               console.log(req);
-                res.json({sessionID: req.sessionID, userID: req.user._id});
+                res.json({sessionID: req.sessionID, userID: req.user._id, hasFinishedSetup: req.user.hasFinishedSetup,});
   });
 };
 
