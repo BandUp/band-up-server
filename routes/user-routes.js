@@ -30,8 +30,28 @@ module.exports = function(app, passport){
     });
   });
 
+    app.all('/edit-user', (req, res) => {
+        console.log("ID is: " + req.body.userId);
+        console.log("about user is: " + req.body.aboutMe);
+        User.findById(req.body.userId, (err, doc) => {
+        if(err || !doc) {
+            res.status(500).send();
+              console.log("Error edit-user path");
+        }
+        else if (req.body.aboutMe) {
+            doc.aboutme = req.body.aboutMe;
+            doc.save();
+            res.status(200).send({});   // sending empty JSONObject response to satysfy response 
+        }
+        // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
+        });
+    });
+
+
+
+  /*
   // takes in a user object and modifies current user
-  app.post('/edit-user', isLoggedIn, (req, res) => {
+  app.post('/edit-user', (req, res) => {
     let editedUser = req.body.user;
     let origUser = req.user;
     if(editedUser._id !== origUser._id){
@@ -50,8 +70,9 @@ module.exports = function(app, passport){
       res.json(origUser).sendStatus(200);
     });
   });
-
+  */
 };
+
 
 // route middleware to make sure user is logged in
 function isLoggedIn(req, res, next){
