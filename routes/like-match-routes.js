@@ -42,11 +42,12 @@ module.exports = function(app, passport){
     } else {
       // already liked let's unlike
       // TODO: check for matches and remove if needed
-      user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
-      user.save((err) => {
-        if (err) throw err;
-        res.json({'isMatch': false});
-      });
+      // user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
+      // user.save((err) => {
+      //   if (err) throw err;
+      //   res.json({'isMatch': false});
+      // });
+      res.json({'isMatch': false});
     }
   });
 };

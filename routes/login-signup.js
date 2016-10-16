@@ -34,7 +34,7 @@ module.exports = function(app, passport) {
 
   app.get('/logout', (req, res) => {
     req.logout();
-    res.status(200).send();
+    res.status(200).send("{}");
   });
 
   app.get('/isloggedIn', (req, res) => {
