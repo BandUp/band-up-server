@@ -11,10 +11,56 @@ const genre 		= require('../models/genre');
 module.exports = function(app){
 
   describe('user handling', function(){
+    let _id = 0;
     describe('#editing', function () {
-      it('should return the full user object', function (done) {
-        
-        done();
+      beforeEach((done) => {
+    		// create test user
+	    	let newUser = new user();
+	        newUser.username = "TestPerson";
+	        newUser.local.password = newUser.generateHash("SecretTestPassword");
+	        newUser.email = 'test@gmail.com';
+	        newUser.local.age = 25;
+	        newUser.save((err) => {
+	        	if(err) throw err;
+            _id = newUser._id;
+	        	done();
+	      	});
+	    });
+
+      it('getUser should return the full user object', function (done) {
+        request(app)
+          .get("/login-local")
+          .send({
+            username: "TestPerson",
+            password: "SecretTestPassword"
+          }).end((err, res) => {
+            request(app)
+            .get("/get-user")
+            .send({userId: _id})
+            .end((err, res) => {
+              if(err) throw err;
+              res.body.should.have.property("username").which.is.not.null();
+              res.body.should.have.property("email").which.is.not.null();
+              done();
+            });
+          });
+      });
+
+      it('should add text in about me', function (done) {
+        request(app)
+          .get("/login-local")
+          .send({
+            username: "TestPerson",
+            password: "SecretTestPassword"
+          }).end((err, res) => {
+              if(err) throw err;
+              request(app)
+                .get("/edit-user")
+                .send({
+                  userId: _id,
+                  aboutMe: "trolololoooo"
+                }).expect(200).end(done);
+          });
       });
     });
   });
