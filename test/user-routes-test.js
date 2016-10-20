@@ -47,18 +47,20 @@ module.exports = function(app){
       });
 
       it('should add text in about me', function (done) {
-        request(app)
-          .get("/login-local")
+        let user = request.agent(app);
+
+        user
+          .post('/login-local')
           .send({
             username: "TestPerson",
             password: "SecretTestPassword"
           }).end((err, res) => {
-              if(err) throw err;
-              request(app)
-                .post("/edit-user")
-                .send({
-                  aboutMe: "trolololoooo"
-                }).expect(200).end(done);
+            user.post('/edit-user')
+                .send({aboutme: "trololol"})
+                .end((err, res)=>{
+                  res.body.aboutme.should.be.equal("trololol");
+                  done();
+                }).expect(200);
           });
       });
     });
