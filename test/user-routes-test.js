@@ -55,7 +55,7 @@ module.exports = function(app){
           }).end((err, res) => {
               if(err) throw err;
               request(app)
-                .get("/edit-user")
+                .post("/edit-user")
                 .send({
                   aboutMe: "trolololoooo"
                 }).expect(200).end(done);
