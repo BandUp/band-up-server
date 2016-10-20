@@ -57,7 +57,6 @@ module.exports = function(app){
               request(app)
                 .get("/edit-user")
                 .send({
-                  userId: _id,
                   aboutMe: "trolololoooo"
                 }).expect(200).end(done);
           });
