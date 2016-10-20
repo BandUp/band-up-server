@@ -6,7 +6,7 @@ module.exports = function(app, passport){
     if (user.liked.indexOf(req.body.userID) === -1) {
 
       User.findById(user._id, (err, currUserDoc) => {
-        
+
         if (!req.body.userID) {
           res.status(412).send({err:1, msg:"Need the user ID that was liked."});
           return;
@@ -29,7 +29,7 @@ module.exports = function(app, passport){
             doc.save((err) => {
               if(err) throw err;
             });
-
+            app.gcmSender.sendTestMessage();
           }
           res.json({'isMatch': isMatch});
         });
@@ -38,7 +38,7 @@ module.exports = function(app, passport){
           if (err) throw err;
         });
       });
-      
+
     } else {
       // already liked let's unlike
       // TODO: check for matches and remove if needed

@@ -18,6 +18,10 @@ module.exports = function(app, passport){
       });
   });
 
+  app.get('/isLoggedIn', (req, res) => {
+    res.json({isLoggedIn: req.user.isAuthenticated()});
+  });
+
   app.get('/matches', isLoggedIn, (req, res) =>{
   	console.log(req.user.matched);
     User.find({'_id': {$in:req.user.matched}}, (err, doc) =>{
@@ -29,7 +33,8 @@ module.exports = function(app, passport){
       res.status(200).send(doc);
     });
   });
-
+  
+/*
     app.all('/edit-user', (req, res) => {
         console.log("ID is: " + req.body.userId);
         console.log("about user is: " + req.body.aboutMe);
@@ -41,36 +46,32 @@ module.exports = function(app, passport){
         else if (req.body.aboutMe) {
             doc.aboutme = req.body.aboutMe;
             doc.save();
-            res.status(200).send({});   // sending empty JSONObject response to satysfy response 
+            res.status(200).send({});   // sending empty JSONObject response to satysfy response
         }
         // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
         });
     });
 
+*/
 
 
-  /*
   // takes in a user object and modifies current user
-  app.post('/edit-user', (req, res) => {
-    let editedUser = req.body.user;
+  app.post('/edit-user', isLoggedIn, (req, res) => {
+    let editedUser = req.body;
     let origUser = req.user;
-    if(editedUser._id !== origUser._id){
-      res.status(402);
-      return;
-    }
 
-    for(let attrName in editedUser){
-      if(editedUser[attrName] !== origUser[attrName]){
+    for(let attrName of Object.keys(editedUser)){
+      if(editedUser[attrName] != origUser[attrName]){
         origUser[attrName] = editedUser[attrName];
       }
     }
 
     origUser.save((err) =>{
       if(err) throw err;
-      res.json(origUser).sendStatus(200);
+      res.json(origUser).status(200);
     });
   });
-  */
+
 };
 
 

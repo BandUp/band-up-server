@@ -56,6 +56,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+app.gcmSender = require('./config/gcmSender');
+
 // =========== app routes ===========
 require('./routes/routes')(app, passport);
 

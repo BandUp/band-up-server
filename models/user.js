@@ -4,11 +4,10 @@ const bcrypt = require('bcrypt-nodejs');
 
 // schema definition
 let userSchema = mongoose.Schema({
-  username: String,
-  email: String,
-  age: Number,
+  username: {type: String, default: ""},
+  email: {type: String, default: ""},
+  age: {type: Number, default: 0},
   local: {
-    email: String,
     password: String,
     age: Number
   },
@@ -23,7 +22,7 @@ let userSchema = mongoose.Schema({
     id: String,
     token: String
   },
-  aboutme: String,
+  aboutme: {type: String, default: ""},
   instruments: [String],
   genres: [String],
   hasFinishedSetup: {type: Boolean, default: false},
@@ -32,9 +31,12 @@ let userSchema = mongoose.Schema({
     lon:   Number,
     valid: Boolean
   },
-  liked: [String],
-  matched: [String],
-  image:{url:String, public_id:String}
+  liked: {type: [String], default: []},
+  matched: {type: [String], default: []},
+  image:{url:String, public_id:String},
+
+  //token needed for gcm notifications
+  gcmToken: {type: String, default: ""}
 }, {
   toObject: {
     transform: function(doc, ret){

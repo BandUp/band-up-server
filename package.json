@@ -28,6 +28,7 @@
     "mocha-mongoose": "^1.2.0",
     "mongoose": "4.5.10",
     "morgan": "^1.7.0",
+    "node-gcm": "^0.14.4",
     "passport": "0.3.2",
     "passport-facebook": "^2.1.1",
     "passport-facebook-token": "^3.3.0",
