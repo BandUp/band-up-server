@@ -34,7 +34,7 @@ module.exports = function(app, passport){
     });
   });
 
-
+/*
     app.all('/edit-user', (req, res) => {
         console.log("ID is: " + req.body.userId);
         console.log("about user is: " + req.body.aboutMe);
@@ -51,10 +51,9 @@ module.exports = function(app, passport){
         // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
         });
     });
+*/
 
 
-
-/* NOT WORKING PROPERLY
   // takes in a user object and modifies current user
   app.all('/edit-user', isLoggedIn, (req, res) => {
     let editedUser = req.body;
@@ -68,19 +67,18 @@ module.exports = function(app, passport){
 
     origUser.save((err) =>{
       if(err) throw err;
-      res.json(origUser).status(200).send({});
+      res.json(origUser).status(200).send();
     });
   });
-*/
+
+  app.post('/gcmRegToken', isLoggedIn, (req, res) => {
+    req.user.gcmToken = req.body.regToken;
+
+    req.user.save();
+    res.status(200);
+
+  });
 };
-
-app.post('/gcmRegToken', isLoggedIn, (req, res) => {
-  req.user.gcmToken = req.body.regToken;
-
-  req.user.save();
-  res.status(200);
-
-});
 
 // route middleware to make sure user is logged in
 function isLoggedIn(req, res, next){

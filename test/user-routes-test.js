@@ -59,7 +59,13 @@ module.exports = function(app){
                 .send({aboutme: "trololol"})
                 .end((err, res)=>{
                   res.body.aboutme.should.be.equal("trololol");
-                  done();
+                  user
+                    .get('/get-user')
+                    .send({userId: _id})
+                    .end((err, res) => {
+                      res.body.should.have.property("aboutme").which.is.equal("trololol");
+                      done();
+                    });
                 }).expect(200);
           });
       });
