@@ -74,8 +74,9 @@ module.exports = function(app, passport){
   app.post('/gcmRegToken', isLoggedIn, (req, res) => {
     req.user.gcmToken = req.body.regToken;
 
-    req.user.save();
-    res.status(200);
+    req.user.save((err) => {
+      res.status(200).send();
+    });
 
   });
 };

@@ -27,12 +27,13 @@ module.exports = function(app, passport){
   });
 
   app.get('/', (req, res) => {
+    app.gcmSender.sendTestMessage(req.user.gcmToken);
     res.send('Hello world!');
   });
 
-  /* 
-   * 
-   * 
+  /*
+   *
+   *
    */
   function itemNamesToMap(item, callback) {
     item.find({}, (err, itemDoc) => {
