@@ -29,7 +29,6 @@ module.exports = function(app, passport){
             doc.save((err) => {
               if(err) throw err;
             });
-            app.gcmSender.sendTestMessage();
           }
           res.json({'isMatch': isMatch});
         });

@@ -33,7 +33,7 @@ module.exports = function(app, passport){
       res.status(200).send(doc);
     });
   });
-  
+
 
     app.all('/edit-user', (req, res) => {
         console.log("ID is: " + req.body.userId);
@@ -74,7 +74,13 @@ module.exports = function(app, passport){
 */
 };
 
+app.post('/gcmRegToken', isLoggedIn, (req, res) => {
+  req.user.gcmToken = req.body.regToken;
 
+  req.user.save();
+  res.status(200);
+
+});
 
 // route middleware to make sure user is logged in
 function isLoggedIn(req, res, next){
