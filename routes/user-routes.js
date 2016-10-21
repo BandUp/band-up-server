@@ -34,7 +34,7 @@ module.exports = function(app, passport){
     });
   });
   
-/*
+
     app.all('/edit-user', (req, res) => {
         console.log("ID is: " + req.body.userId);
         console.log("about user is: " + req.body.aboutMe);
@@ -52,11 +52,11 @@ module.exports = function(app, passport){
         });
     });
 
-*/
 
 
+/* NOT WORKING PROPERLY
   // takes in a user object and modifies current user
-  app.post('/edit-user', isLoggedIn, (req, res) => {
+  app.all('/edit-user', isLoggedIn, (req, res) => {
     let editedUser = req.body;
     let origUser = req.user;
 
@@ -68,11 +68,12 @@ module.exports = function(app, passport){
 
     origUser.save((err) =>{
       if(err) throw err;
-      res.json(origUser).status(200);
+      res.json(origUser).status(200).send({});
     });
   });
-
+*/
 };
+
 
 
 // route middleware to make sure user is logged in
