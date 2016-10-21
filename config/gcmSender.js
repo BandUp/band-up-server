@@ -7,7 +7,7 @@ class gcmSender{
 
   sendTestMessage(regTokens){
     let message = new gcm.Message({
-      data: {key1: "Hello world!"},
+      data: {key1: "Hello world!", message: "this should work"},
       notification: {
         title: "Hello world!",
         icon: "ic_launcher",
