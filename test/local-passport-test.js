@@ -23,7 +23,6 @@ module.exports = function(app) {
             });
         });
 
-
         after(() => {});
 
         describe('#local-login', () => {
@@ -42,7 +41,7 @@ module.exports = function(app) {
 
             /*
              * Author: Dagur
-             * Signees:
+             * Signees: Elvar
              */
             it('should return 200 on succesful login', function(done) {
                 request(app) // make a request to app
@@ -59,7 +58,7 @@ module.exports = function(app) {
 
             /*
              * Author: Dagur
-             * Signees:
+             * Signees: Elvar
              */
             it('should return token on succesful login', function(done) {
                 request(app)
@@ -76,7 +75,7 @@ module.exports = function(app) {
 
             /*
              * Author: Dagur
-             * Signees:
+             * Signees: Elvar
              */
             it('should return 401 on unsuccesful login', function(done) {
                 request(app)
@@ -111,7 +110,7 @@ module.exports = function(app) {
 
             /*
              * Author: Dagur
-             * Signees:
+             * Signees: Elvar
              */
             it('should return 401 on trying to use duplicate usernames', function(done) {
                 let user = {
