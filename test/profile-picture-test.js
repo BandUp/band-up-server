@@ -37,7 +37,7 @@ module.exports = function(app) {
 
         /*
          * Author: Bergþór
-         * Signees:
+         * Signees: Elvar
          */
         it('should return 412 with error code 6 when no files are attached', function(done) {
             let agent = request.agent(app);
@@ -60,7 +60,7 @@ module.exports = function(app) {
 
         /*
          * Author: Bergþór
-         * Signees:
+         * Signees: Elvar
          */
         it('should return 412 with error code 5 when uploading more than one image', function(done) {
             let agent = request.agent(app);
@@ -86,7 +86,7 @@ module.exports = function(app) {
 
         /*
          * Author: Bergþór
-         * Signees:
+         * Signees: Elvar
          */
         it('should return 415 with error code 10 when uploading an unsupported file', function(done) {
             let agent = request.agent(app);

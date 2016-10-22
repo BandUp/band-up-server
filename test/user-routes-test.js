@@ -27,6 +27,10 @@ module.exports = function(app) {
                 });
             });
 
+            /*
+             * Author: Dagur
+             * Signees: Elvar
+             */
             it('getUser should return the full user object', function(done) {
                 request(app)
                     .get("/login-local")
@@ -48,6 +52,10 @@ module.exports = function(app) {
                     });
             });
 
+            /*
+             * Author: Dagur
+             * Signees: Elvar
+             */
             it('should add text in about me', function(done) {
                 let user = request.agent(app);
 
