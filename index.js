@@ -4,7 +4,7 @@ const expressSession = require('express-session');
 const app = express();
 // http object required for chat application
 const http = require('http').createServer(app);
-const flash    = require('connect-flash');
+const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const bodyParser = require('body-parser');
@@ -26,8 +26,10 @@ var env = process.env.NODE_ENV || 'dev';
 require('dotenv').config();
 
 app.use(morgan('dev', {
-  // skip logs in tests else log everything to console
-  skip: function(req, res) {return process.env.NODE_ENV === 'test';}
+    // skip logs in tests else log everything to console
+    skip: function(req, res) {
+        return process.env.NODE_ENV === 'test';
+    }
 }));
 app.use(cookieParser()); // need this for auth
 app.use(bodyParser.json());
@@ -36,10 +38,10 @@ app.use(fileUpload());
 const port = process.env.PORT || 3000;
 
 mongoose.Promise = global.Promise;
-if(process.env.NODE_ENV === 'test'){
-  mongoose.connect(process.env.MONGO_TEST);
-}else{
-  mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
+if (process.env.NODE_ENV === 'test') {
+    mongoose.connect(process.env.MONGO_TEST);
+} else {
+    mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 }
 
 chat.setup(http);
@@ -47,9 +49,9 @@ chat.setup(http);
 // authentication setup
 require('./config/passport')(passport);
 app.use(expressSession({
-  secret: 'mySecretKey',
-  resave: true,
-  saveUninitialized: true
+    secret: 'mySecretKey',
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use(passport.initialize());
@@ -63,5 +65,5 @@ require('./routes/routes')(app, passport);
 
 // =========== app startup ===========
 http.listen(port, () => {
-  console.log('Example app listening on port:' + port);
+    console.log('Example app listening on port:' + port);
 });
