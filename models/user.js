@@ -58,8 +58,6 @@ let userSchema = mongoose.Schema({
         url: String,
         public_id: String
     },
-
-    //token needed for gcm notifications
     gcmToken: {
         type: String,
         default: ""
