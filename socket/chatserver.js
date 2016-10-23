@@ -1,9 +1,9 @@
 const chat = require('../models/chatHistory');
 
-module.exports.setup = function(server) {
-    const socketPort = 8080;
-    console.log("Socket instance for chat starting on port " + socketPort);
-    var io = require('socket.io').listen(server);
+module.exports.setup = function(server, app) {
+	const socketPort = 8080;
+	console.log("Socket instance for chat starting on port " + socketPort);
+	var io = require('socket.io').listen(server);
 
     //Global user object, since we want to know what rooms each user is in etc.
     var users = {};
@@ -69,16 +69,18 @@ module.exports.setup = function(server) {
                     }
                 });
 
-            // If user exists in global user list.
-            if (users[msgObj.nick] !== undefined) {
-                //Send the message only to this user.
-                console.log("Sending message '" + msgObj.message + "' to " + msgObj.nick);
-                users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
-                //Callback recieves true.
-                fn(true);
-            }
-            fn(false);
-        });
+			// If user exists in global user list.
+			if(users[msgObj.nick] !== undefined) {
+				//Send the message only to this user.
+				console.log("Sending message '"+ msgObj.message +"' to "+ msgObj.nick);
+				users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
+				//Callback recieves true.
+				fn(true);
+			} else {
+				//app.gcmSender.sendMsgNotification(socket.username, msgObj.nick, msgObj.message);
+			}
+			fn(false);
+		});
 
         socket.on('disconnect', function() {
             console.log("Client disconnected");

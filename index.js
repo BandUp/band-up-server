@@ -44,7 +44,9 @@ if (process.env.NODE_ENV === 'test') {
     mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 }
 
-chat.setup(http);
+app.gcmSender = require('./config/gcmSender');
+
+chat.setup(http, app);
 
 // authentication setup
 require('./config/passport')(passport);
@@ -57,8 +59,6 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
-app.gcmSender = require('./config/gcmSender');
 
 // =========== app routes ===========
 require('./routes/routes')(app, passport);
