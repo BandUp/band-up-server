@@ -35,6 +35,11 @@ class gcmSender {
             data: {
                 key1: "Hello world!"
             },
+            notification: {
+              title: "hello world",
+              icon: "ic_launcher",
+              body: "this is a test message"
+            }
         });
 
         this.sender.send(message, {

@@ -24,7 +24,7 @@ module.exports = function(app, passport) {
 
         currUser.save((err) => {
             if (err) throw err;
-            res.sendStatus(200);
+            res.json({}).sendStatus(200);
         });
     });
 
