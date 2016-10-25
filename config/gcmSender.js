@@ -18,7 +18,8 @@ class gcmSender {
                     title: "you have a new message from someone",
                     icon: "ic_launcher",
                     body: msg
-                }
+                },
+                message: msg
             });
 
             this.sender.send(message, {
@@ -31,10 +32,17 @@ class gcmSender {
     }
 
     sendTestMessage(regTokens) {
+      console.log("sending test message");
         let message = new gcm.Message({
             data: {
                 key1: "Hello world!"
             },
+            notification: {
+              title: "hello world",
+              icon: "ic_band_up_logo_notification",
+              body: "this is a test message"
+            },
+            message: "here is a test message"
         });
 
         this.sender.send(message, {

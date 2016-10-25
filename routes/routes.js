@@ -24,12 +24,15 @@ module.exports = function(app, passport) {
 
         currUser.save((err) => {
             if (err) throw err;
-            res.sendStatus(200);
+            res.status(200).send({});
         });
     });
 
     app.get('/', (req, res) => {
-        app.gcmSender.sendTestMessage(req.user.gcmToken);
+        if(req.user){
+            console.log(req.user.gcmToken);
+            app.gcmSender.sendTestMessage([req.user.gcmToken]);
+        }
         res.send('Hello world!');
     });
 
