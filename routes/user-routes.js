@@ -3,8 +3,10 @@ const instrument = require('../models/instrument');
 const genre = require('../models/genre');
 
 module.exports = function(app, passport) {
+
+  
     // returns user all data to client
-    app.all('/get-user', (req, res) => {
+    app.all('/get-user',  (req, res) => {
         //console.log("id is: "+req.body.userId);
         User.findById(req.body.userId, (err, doc) => {
             //console.log(doc);
@@ -35,32 +37,46 @@ module.exports = function(app, passport) {
                 return;
             }
 
-            res.status(200).send(doc);
+            res.status(200).send(doc.instrument.name);
         });
     });
 
     /*
-        app.all('/edit-user', (req, res) => {
-            console.log("ID is: " + req.body.userId);
-            console.log("about user is: " + req.body.aboutMe);
-            User.findById(req.body.userId, (err, doc) => {
-            if(err || !doc) {
-                res.status(500).send();
-                  console.log("Error edit-user path");
-            }
-            else if (req.body.aboutMe) {
-                doc.aboutme = req.body.aboutMe;
-                doc.save();
-                res.status(200).send({});   // sending empty JSONObject response to satysfy response
-            }
-            // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
-            });
-        });
+      app.all('/edit-user', (req, res) => {
+          console.log("ID is: " + req.body.userId);
+          console.log("about user is: " + req.body.aboutMe);
+          User.findById(req.body.userId, (err, doc) => {
+          if(err || !doc) {
+              res.status(500).send();
+                console.log("Error edit-user path");
+          }
+          else if (req.body.aboutMe) {
+              doc.aboutme = req.body.aboutMe;
+              doc.save();
+              res.status(200).send({});   // sending empty JSONObject response to satysfy response
+          }
+          // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
+          });
+      });
     */
+    app.all('/get-instrument', (req, res) => {
+      console.log(req.body.id);
+      instrument.findById(req.body.id, (err, doc) => {
+        if (err) {
+            res.sendStatus(500);
+            return;
+        }
+        else {
+          res.status(200).send(doc);
+        }
+      });
+    });   
 
 
     // takes in a user object and modifies current user
     app.all('/edit-user', isLoggedIn, (req, res) => {
+        console.log("ID is: " + req.body.userId);
+        console.log("about user is: " + req.body.aboutMe);
         let editedUser = req.body;
         let origUser = req.user;
 
@@ -72,7 +88,7 @@ module.exports = function(app, passport) {
 
         origUser.save((err) => {
             if (err) throw err;
-            res.json(origUser).status(200).send();
+            res.json(origUser).status(200).send({});
         });
     });
 
@@ -80,10 +96,11 @@ module.exports = function(app, passport) {
         req.user.gcmToken = req.body.regToken;
 
         req.user.save((err) => {
-            res.status(200).send();
+            res.status(200).send({});
         });
 
     });
+    
 };
 
 // route middleware to make sure user is logged in

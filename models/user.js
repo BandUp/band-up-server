@@ -35,6 +35,10 @@ let userSchema = mongoose.Schema({
         type: String,
         default: ""
     },
+    searchradius: {
+        type: Number,
+        default: 5
+    },
     instruments: [String],
     genres: [String],
     hasFinishedSetup: {
