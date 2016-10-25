@@ -31,6 +31,7 @@ class gcmSender {
     }
 
     sendTestMessage(regTokens) {
+      console.log("sending test message");
         let message = new gcm.Message({
             data: {
                 key1: "Hello world!"
