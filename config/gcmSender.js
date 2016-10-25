@@ -39,7 +39,7 @@ class gcmSender {
             },
             notification: {
               title: "hello world",
-              icon: "ic_launcher",
+              icon: "ic_band_up_logo_notification",
               body: "this is a test message"
             },
             message: "here is a test message"
