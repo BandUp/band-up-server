@@ -88,7 +88,7 @@ module.exports = function(app, passport) {
 
         origUser.save((err) => {
             if (err) throw err;
-            res.json(origUser).status(200).send({});
+            res.json(origUser).status(200).send();
         });
     });
 
@@ -96,7 +96,7 @@ module.exports = function(app, passport) {
         req.user.gcmToken = req.body.regToken;
 
         req.user.save((err) => {
-            res.status(200).send({});
+            res.status(200).send();
         });
 
     });
