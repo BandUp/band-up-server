@@ -18,7 +18,8 @@ class gcmSender {
                     title: "you have a new message from someone",
                     icon: "ic_launcher",
                     body: msg
-                }
+                },
+                message: msg
             });
 
             this.sender.send(message, {
@@ -40,7 +41,8 @@ class gcmSender {
               title: "hello world",
               icon: "ic_launcher",
               body: "this is a test message"
-            }
+            },
+            message: "here is a test message"
         });
 
         this.sender.send(message, {
