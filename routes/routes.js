@@ -29,7 +29,7 @@ module.exports = function(app, passport) {
     });
 
     app.get('/', (req, res) => {
-        app.gcmSender.sendTestMessage(req.user.gcmToken);
+        app.gcmSender.sendTestMessage([req.user.gcmToken]);
         res.send('Hello world!');
     });
 
