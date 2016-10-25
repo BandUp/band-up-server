@@ -37,7 +37,7 @@ module.exports = function(app, passport) {
                 return;
             }
 
-            res.status(200).send(doc.instrument.name);
+            res.status(200).send(doc);
         });
     });
 
