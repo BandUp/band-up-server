@@ -10,6 +10,9 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const socketIo = require('socket.io').listen(http);
+const passportSocketIo = require('passport.socketio');
+const MongoStore = require('connect-mongo')(expressSession);
 
 // logging
 const morgan = require('morgan');
@@ -44,16 +47,28 @@ if (process.env.NODE_ENV === 'test') {
     mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 }
 
+// Store sessions in the database
+const mongoStore = new MongoStore({ mongooseConnection: mongoose.connection });
+
+// Use passport for socket.io authentication.
+socketIo.use(passportSocketIo.authorize({
+  cookieParser: cookieParser,
+  key:          'connect.sid',
+  secret:       'mySecretKey',
+  store:        mongoStore,
+}));
+
 app.gcmSender = require('./config/gcmSender');
 
-chat.setup(http, app);
+chat.setup(http, app, socketIo);
 
 // authentication setup
 require('./config/passport')(passport);
 app.use(expressSession({
     secret: 'mySecretKey',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: mongoStore
 }));
 
 app.use(passport.initialize());
