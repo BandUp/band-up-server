@@ -1,23 +1,20 @@
 const chat = require('../models/chatHistory');
 
 module.exports.setup = function socketioApp(server, app, io) {
-	const socketPort = 8080;
-	console.log("Socket instance for chat starting on port " + socketPort);
-
-    //Global user object, since we want to know what rooms each user is in etc.
+    // Global user object, since we want to know what rooms each user is in etc.
     var users = {};
 
     io.on('connection', function(socket) {
         console.log("Client connected");
 
-        //This gets performed when a user joins the server.
+        // This gets performed when a user joins the server.
         socket.on('adduser', function(username, fn) {
         	// user data from the socket.io passport middleware
 		    if (socket.request.user && socket.request.user.logged_in) {
-	            // Set the username as the ID of the user.
+				// Set the username as the ID of the user.
 	            socket.username = socket.request.user._id;
 
-	            //Store user object in global user roster.
+	            // Store user object in global user roster.
 	            users[username] = {
 	                username: socket.username,
 	                socket: this
@@ -85,5 +82,5 @@ module.exports.setup = function socketioApp(server, app, io) {
             }
         });
     });
-    console.log('chat is setup and ready');
+    console.log('Socket.IO for chat ready.');
 };
