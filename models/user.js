@@ -83,7 +83,7 @@ let userSchema = mongoose.Schema({
 			delete ret.google;
 			delete ret.soundcloud;
 			delete ret.local;
-			// fetch instr list
+			/*// fetch instr list
 			Instrument.find({'_id': { $in: ret.instruments }}, (err, doc) => {
 				ret.instruments = doc;
 				// to make hting moce linearly
@@ -91,7 +91,7 @@ let userSchema = mongoose.Schema({
 					ret.genres = doc;
 					return ret;
 				});
-			});
+			});//*/
 		}
 	}
 });
