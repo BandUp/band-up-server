@@ -75,6 +75,12 @@ module.exports = function(app, passport) {
 						return;
 					}
 
+					function makeFilter(user){
+						return function(val){
+							return user.genres.indexOf(val) !== -1;
+						};
+					}
+
 					for (let i = 0; i < userDoc.length; i++) {
 						let distanceToUser;
 						if (req.user.location.valid && userDoc[i].location.valid) {
@@ -91,6 +97,9 @@ module.exports = function(app, passport) {
 							distanceToUser = null;
 						}
 
+						let numGenres = Math.max(req.user.genres.length, userDoc[i].genres.length);
+						let perc = (req.user.genres.filter(makeFilter(userDoc[i])).length / numGenres) * 100;
+
 						let userDTO = {
 							_id: userDoc[i]._id,
 							username: userDoc[i].username,
@@ -98,7 +107,7 @@ module.exports = function(app, passport) {
 							instruments: [],
 							genres: [],
 							distance: distanceToUser,
-							percentage: 0,
+							percentage: perc,
 							image: userDoc[i].image
 						};
 						for (let j = 0; j < userDoc[i].instruments.length; j++) {
