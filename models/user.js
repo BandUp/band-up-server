@@ -83,15 +83,15 @@ let userSchema = mongoose.Schema({
 			delete ret.google;
 			delete ret.soundcloud;
 			delete ret.local;
-			/*// fetch instr list
-			Instrument.find({'_id': { $in: ret.instruments }}, (err, doc) => {
-				ret.instruments = doc;
-				// to make hting moce linearly
-				Genres.find({'_id': { $in: ret.genres}}, (err, doc) => {
-					ret.genres = doc;
-					return ret;
-				});
-			});//*/
+			// fetch instr list
+			Instrument.find({'_id': { $in: ret.instruments }}).exec()
+								.then((instrumentList) => {
+									ret.instruments = instrumentList;
+								});
+			Genres.find({'_id': { $in: ret.genres }}).exec()
+						.then((genreList) => {
+							ret.genres = genreList;
+						});
 		}
 	}
 });
