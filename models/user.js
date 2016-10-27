@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 const Instrument = require('./instrument');
-const Genres = requie('./genre');
+const Genres = require('./genre');
 
 // schema definition
 let userSchema = mongoose.Schema({
@@ -88,7 +88,7 @@ let userSchema = mongoose.Schema({
 				ret.instruments = doc;
 			});
 
-			Genre.find({'_id': { $in: ret.genres}}, (err, doc) => {
+			Genres.find({'_id': { $in: ret.genres}}, (err, doc) => {
 				ret.genres = doc;
 			});
 		}
