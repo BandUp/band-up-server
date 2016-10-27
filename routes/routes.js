@@ -97,7 +97,9 @@ module.exports = function(app, passport) {
 							distanceToUser = null;
 						}
 
+						// get total number of genres for user with longer list
 						let numGenres = Math.max(req.user.genres.length, userDoc[i].genres.length);
+						// filter call returns list shared genres 
 						let perc = (req.user.genres.filter(makeFilter(userDoc[i])).length / numGenres) * 100;
 
 						let userDTO = {

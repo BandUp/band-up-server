@@ -1,6 +1,8 @@
 // load things we need
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
+const Instrument = require('./instrument');
+const Genres = requie('./genre');
 
 // schema definition
 let userSchema = mongoose.Schema({
@@ -81,6 +83,14 @@ let userSchema = mongoose.Schema({
 			delete ret.google;
 			delete ret.soundcloud;
 			delete ret.local;
+			// fetch instr list
+			Instrument.find({'_id': { $in: ret.instruments }}, (err, doc) => {
+				ret.instruments = doc;
+			});
+
+			Genre.find({'_id': { $in: ret.genres}}, (err, doc) => {
+				ret.genres = doc;
+			});
 		}
 	}
 });
