@@ -86,10 +86,10 @@ let userSchema = mongoose.Schema({
 			// fetch instr list
 			Instrument.find({'_id': { $in: ret.instruments }}, (err, doc) => {
 				ret.instruments = doc;
-			});
-
-			Genres.find({'_id': { $in: ret.genres}}, (err, doc) => {
-				ret.genres = doc;
+				Genres.find({'_id': { $in: ret.genres}}, (err, doc) => {
+					ret.genres = doc;
+					return ret;
+				});
 			});
 		}
 	}
