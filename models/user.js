@@ -92,6 +92,7 @@ let userSchema = mongoose.Schema({
 						.then((genreList) => {
 							ret.genres = genreList;
 						});
+			return ret;
 		}
 	}
 });
