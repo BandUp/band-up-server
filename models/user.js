@@ -92,6 +92,8 @@ let userSchema = mongoose.Schema({
 						.then((genreList) => {
 							ret.genres = genreList;
 						});
+
+			ret.instruments = ["asdf"];
 			return ret;
 		}
 	}
