@@ -1,3 +1,5 @@
+const geolib = require('geolib');
+
 module.exports = {
 	itemNamesToMap: function (item, callback) {
 		item.find({}, (err, itemDoc) => {
@@ -23,19 +25,33 @@ module.exports = {
 	userToDTO: function (currUser, targUser, instruMap, genresMap) {
 		//console.log(currUser);
 		//console.log(targUser);
+		let distanceToUser;
 		if (currUser.location.valid && targUser.location.valid) {
-			let distanceToUser = geolib.getDistance({
+			distanceToUser = geolib.getDistance({
 				latitude: currUser.location.lat,
 				longitude: currUser.location.lon
 			}, {
 				latitude: targUser.location.lat,
 				longitude: targUser.location.lon
 			});
-
 			distanceToUser /= 1000;
+
 		} else {
 			distanceToUser = null;
 		}
+		
+		function makeFilter(user){
+			return function(val){
+				return user.genres.indexOf(val) !== -1;
+			};
+		}
+
+		// get total number of genres for user with longer list
+		let numGenres = Math.max(currUser.genres.length, targUser.genres.length);
+		
+		// filter call returns list shared genres 
+		let perc = (currUser.genres.filter(makeFilter(targUser)).length / numGenres) * 100;
+
 
 		let userDTO = {
 			_id: targUser._id,
@@ -44,11 +60,12 @@ module.exports = {
 			instruments: [],
 			genres: [],
 			distance: distanceToUser,
-			percentage: 0,
-			image: targUser.image
+			percentage: perc,
+			image: targUser.image,
+			age: 100,
+			aboutme:targUser.aboutme
 		};
-		console.log("TARGUSER");
-		console.log(targUser);
+		console.log(userDTO)
 		for (let j = 0; j < targUser.instruments.length; j++) {
 			userDTO.instruments.push(instruMap[targUser.instruments[j]]);
 		}
