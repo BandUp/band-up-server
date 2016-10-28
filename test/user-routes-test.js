@@ -30,23 +30,25 @@ module.exports = function(app) {
             /*
              * Author: Dagur
              * Signees: Elvar
+             * Edited by: Bergþór
              */
-            it('getUser should return the full user object', function(done) {
-                request(app)
-                    .get("/login-local")
+            it('getUser should return a user DTO', function(done) {
+                let user = request.agent(app);
+                user
+                    .post("/login-local")
                     .send({
                         username: "TestPerson",
                         password: "SecretTestPassword"
                     }).end((err, res) => {
-                        request(app)
-                            .get("/user")
+                        user
+                            .get('/user')
                             .send({
                                 userId: _id
                             })
                             .end((err, res) => {
                                 if (err) throw err;
                                 res.body.should.have.property("username").which.is.not.null();
-                                res.body.should.have.property("email").which.is.not.null();
+                                res.body.should.have.property("aboutme").which.is.not.null();
                                 done();
                             });
                     });

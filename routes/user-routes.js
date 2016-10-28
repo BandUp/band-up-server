@@ -8,7 +8,6 @@ module.exports = function(app, passport) {
 	// returns user all data to client
 	app.all('/user', isLoggedIn, (req, res) => {
 		User.findById(req.body.userId, (err, userDoc) => {
-			console.log(userDoc);
 			if (err || !userDoc) {
 				res.status(500).send();
 				console.log("error");
@@ -85,8 +84,8 @@ module.exports = function(app, passport) {
 
 	// takes in a user object and modifies current user
 	app.all('/edit-user', isLoggedIn, (req, res) => {
-		console.log("ID is: " + req.body.userId);
-		console.log("about user is: " + req.body.aboutMe);
+		//console.log("ID is: " + req.body.userId);
+		//console.log("about user is: " + req.body.aboutMe);
 		let editedUser = req.body;
 		let origUser = req.user;
 

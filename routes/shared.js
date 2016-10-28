@@ -65,7 +65,6 @@ module.exports = {
 			age: 100,
 			aboutme:targUser.aboutme
 		};
-		console.log(userDTO)
 		for (let j = 0; j < targUser.instruments.length; j++) {
 			userDTO.instruments.push(instruMap[targUser.instruments[j]]);
 		}
