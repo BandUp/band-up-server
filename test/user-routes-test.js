@@ -39,7 +39,7 @@ module.exports = function(app) {
                         password: "SecretTestPassword"
                     }).end((err, res) => {
                         request(app)
-                            .get("/get-user")
+                            .get("/user")
                             .send({
                                 userId: _id
                             })
@@ -72,7 +72,7 @@ module.exports = function(app) {
                             .end((err, res) => {
                                 res.body.aboutme.should.be.equal("trololol");
                                 user
-                                    .get('/get-user')
+                                    .get('/user')
                                     .send({
                                         userId: _id
                                     })
