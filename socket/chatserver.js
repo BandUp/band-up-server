@@ -34,7 +34,7 @@ module.exports.setup = function socketioApp(server, app, io) {
 					return;
 				}
 
-				const mg = {
+				const msg = {
 					sender: socket.username,
 					message: msgObj.message,
 					timestamp: Date.now()
@@ -45,7 +45,7 @@ module.exports.setup = function socketioApp(server, app, io) {
 					users: userList
 				}, {
 					$push: {
-						chatHistory: mg
+						chatHistory: msg
 					}
 				}, {
 					safe: true,

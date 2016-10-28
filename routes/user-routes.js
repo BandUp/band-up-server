@@ -1,26 +1,37 @@
 const User = require('../models/user');
 const instrument = require('../models/instrument');
 const genre = require('../models/genre');
+const shared = require('./shared');
 
 module.exports = function(app, passport) {
 
 	// returns user all data to client
-	app.all('/get-user',  (req, res) => {
-		//console.log("id is: "+req.body.userId);
-		User.findById(req.body.userId, (err, doc) => {
-			//console.log(doc);
-			if (err || !doc) {
+	app.all('/user', isLoggedIn, (req, res) => {
+		User.findById(req.body.userId, (err, userDoc) => {
+			console.log(userDoc);
+			if (err || !userDoc) {
 				res.status(500).send();
 				console.log("error");
-			} else if (doc) {
-				res.json(doc);
+			} else if (userDoc) {
+				let userList = [];
+				shared.itemNamesToMap(instrument, (instruMap) => {
+					shared.itemNamesToMap(genre, (genresMap) => {
+						if (!instruMap || !genresMap) {
+							res.status(500).send("Unknown internal server error occurred.");
+							return;
+						}
+						let dto = shared.userToDTO(req.user, userDoc, instruMap, genresMap);
+						res.status(200).send(dto);
+					});
+				});
 			}
 		});
 	});
 
 	app.get('/isLoggedIn', (req, res) => {
 		res.json({
-			isLoggedIn: req.user.isAuthenticated()
+			isLoggedIn: req.user.isAuthenticated(),
+			hasFinishedSetup: req.user.hasFinishedSetup
 		});
 	});
 

@@ -7,6 +7,8 @@ const path = require('path');
 const mime = require('mime');
 const cloudinary = require('cloudinary');
 const geolib = require('geolib');
+// Functions that are shared between route files.
+const shared = require('./shared');
 
 module.exports = function(app, passport) {
 
@@ -36,24 +38,6 @@ module.exports = function(app, passport) {
 		res.send('Hello world!');
 	});
 
-	function itemNamesToMap(item, callback) {
-		item.find({}, (err, itemDoc) => {
-			if (err) {
-				console.log("Error occurred:");
-				console.log(err);
-				res.status(500).send("Unknown internal server error occurred.");
-				callback(null);
-				return;
-			}
-			let itemMap = {};
-
-			for (let i = 0; i < itemDoc.length; i++) {
-				itemMap[itemDoc[i]._id] = itemDoc[i].name;
-			}
-			callback(itemMap);
-		});
-	}
-
 	app.get('/nearby-users', isLoggedIn, (req, res) => {
 		user.find({
 			'_id': {
@@ -68,48 +52,15 @@ module.exports = function(app, passport) {
 				return;
 			}
 			let userList = [];
-			itemNamesToMap(instrument, (instruMap) => {
-				itemNamesToMap(genre, (genresMap) => {
+			shared.itemNamesToMap(instrument, (instruMap) => {
+				shared.itemNamesToMap(genre, (genresMap) => {
 					if (!instruMap || !genresMap) {
 						res.status(500).send("Unknown internal server error occurred.");
 						return;
 					}
 
 					for (let i = 0; i < userDoc.length; i++) {
-						let distanceToUser;
-						if (req.user.location.valid && userDoc[i].location.valid) {
-							distanceToUser = geolib.getDistance({
-								latitude: req.user.location.lat,
-								longitude: req.user.location.lon
-							}, {
-								latitude: userDoc[i].location.lat,
-								longitude: userDoc[i].location.lon
-							});
-
-							distanceToUser /= 1000;
-						} else {
-							distanceToUser = null;
-						}
-
-						let userDTO = {
-							_id: userDoc[i]._id,
-							username: userDoc[i].username,
-							status: "Not Implemented",
-							instruments: [],
-							genres: [],
-							distance: distanceToUser,
-							percentage: 0,
-							image: userDoc[i].image
-						};
-						for (let j = 0; j < userDoc[i].instruments.length; j++) {
-							userDTO.instruments.push(instruMap[userDoc[i].instruments[j]]);
-						}
-
-						for (let j = 0; j < userDoc[i].genres.length; j++) {
-							userDTO.genres.push(genresMap[userDoc[i].genres[j]]);
-						}
-
-						userList.push(userDTO);
+						userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
 					}
 					res.status(200).send(userList);
 				});
