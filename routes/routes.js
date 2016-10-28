@@ -59,8 +59,19 @@ module.exports = function(app, passport) {
 						return;
 					}
 
+					function makeFilter(user){
+						return function(val){
+							return user.genres.indexOf(val) !== -1;
+						};
+					}
+
 					for (let i = 0; i < userDoc.length; i++) {
+						let perc = (req.user.genres.filter(makeFilter(userDoc[i])).length / numGenres) * 100;
+							percentage: perc,
 						userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
+						// filter call returns list shared genres 
+						// get total number of genres for user with longer list
+						let numGenres = Math.max(req.user.genres.length, userDoc[i].genres.length);
 					}
 					res.status(200).send(userList);
 				});
