@@ -38,10 +38,14 @@ module.exports = function(app, passport) {
         res.send('Hello world!');
     });
 
+    /**
+    * get x many user nearby that are not already liked  
+    */
     app.get('/nearby-users', isLoggedIn, (req, res) => {
         user.find({
             '_id': {
-                $ne: req.user._id
+                $ne: req.user._id,
+                $nin: req.user.liked
             },
             hasFinishedSetup: true
         }, function(err, userDoc) {

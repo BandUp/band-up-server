@@ -39,10 +39,11 @@ module.exports = function(app, passport) {
         res.status(200).send("{}");
     });
 
-    app.get('/isloggedIn', (req, res) => {
+    app.get('/isLoggedIn', (req, res) => {
         res.json({
-            loggedIn: req.isAuthenticated()
-        }).end();
+            isLoggedIn: req.user.isAuthenticated(),
+            hasFinishedSetup: req.user.hasFinishedSetup
+        });
     });
 
     app.post('/login-facebook',

@@ -27,13 +27,6 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/isLoggedIn', (req, res) => {
-        res.json({
-            isLoggedIn: req.user.isAuthenticated(),
-            hasFinishedSetup: req.user.hasFinishedSetup
-        });
-    });
-
     app.get('/matches', isLoggedIn, (req, res) => {
         console.log(req.user.matched);
         User.find({
