@@ -1,19 +1,19 @@
 // ========== Package import ==========
-const express        = require('express');
+const express = require('express');
 const expressSession = require('express-session');
 const app = express();
 
 // HTTP object required for chat application
-const http             = require('http').createServer(app);
-const flash            = require('connect-flash');
-const mongoose         = require('mongoose');
-const passport         = require('passport');
-const bodyParser       = require('body-parser');
-const cookieParser     = require('cookie-parser');
-const fileUpload       = require('express-fileupload');
-const socketIo         = require('socket.io').listen(http);
+const http = require('http').createServer(app);
+const flash = require('connect-flash');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
+const socketIo = require('socket.io').listen(http);
 const passportSocketIo = require('passport.socketio');
-const MongoStore       = require('connect-mongo')(expressSession);
+const MongoStore = require('connect-mongo')(expressSession);
 
 // logging
 const morgan = require('morgan');
@@ -30,10 +30,10 @@ var env = process.env.NODE_ENV || 'dev';
 require('dotenv').config();
 
 app.use(morgan('dev', {
-	// skip logs in tests else log everything to console
-	skip: function(req, res) {
-		return process.env.NODE_ENV === 'test';
-	}
+    // skip logs in tests else log everything to console
+    skip: function(req, res) {
+        return process.env.NODE_ENV === 'test';
+    }
 }));
 
 app.use(cookieParser()); // need this for auth
@@ -45,20 +45,22 @@ const port = process.env.PORT || 3000;
 
 mongoose.Promise = global.Promise;
 if (process.env.NODE_ENV === 'test') {
-	mongoose.connect(process.env.MONGO_TEST);
+    mongoose.connect(process.env.MONGO_TEST);
 } else {
-	mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
+    mongoose.connect(process.env.MONGO_CONNECTION); // IMPORTANT! set up .env file
 }
 
 // Session store for storing sessions in the database.
-const mongoStore = new MongoStore({ mongooseConnection: mongoose.connection });
+const mongoStore = new MongoStore({
+    mongooseConnection: mongoose.connection
+});
 
 // Use passport for socket.io authentication.
 socketIo.use(passportSocketIo.authorize({
-	cookieParser: cookieParser,
-	key:          'connect.sid',
-	secret:       process.env.LOCAL_SECRET_KEY,
-	store:        mongoStore
+    cookieParser: cookieParser,
+    key: 'connect.sid',
+    secret: process.env.LOCAL_SECRET_KEY,
+    store: mongoStore
 }));
 
 app.gcmSender = require('./config/gcmSender');
@@ -68,10 +70,10 @@ chat.setup(http, app, socketIo);
 // authentication setup
 require('./config/passport')(passport);
 app.use(expressSession({
-	secret: process.env.LOCAL_SECRET_KEY,
-	resave: true,
-	saveUninitialized: true,
-	store: mongoStore
+    secret: process.env.LOCAL_SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+    store: mongoStore
 }));
 
 app.use(passport.initialize());
@@ -83,5 +85,5 @@ require('./routes/routes')(app, passport);
 
 // =========== app startup ===========
 http.listen(port, () => {
-	console.log('BandUp server listening on port ' + port + '.');
+    console.log('BandUp server listening on port ' + port + '.');
 });
