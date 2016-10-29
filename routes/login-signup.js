@@ -40,8 +40,9 @@ module.exports = function(app, passport) {
     });
 
     app.get('/isLoggedIn', (req, res) => {
+    	console.log(req.user);
         res.json({
-            isLoggedIn: req.user.isAuthenticated(),
+            isLoggedIn: req.isAuthenticated(),
             hasFinishedSetup: req.user.hasFinishedSetup
         });
     });
