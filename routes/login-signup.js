@@ -40,15 +40,15 @@ module.exports = function(app, passport) {
 	});
 
 	app.get('/isLoggedIn', (req, res) => {
-		if (req.isAuthenticated()) {
+		if (!req.user) {
 			res.json({
-				isLoggedIn: req.isAuthenticated(),
-				hasFinishedSetup: req.user.hasFinishedSetup
+				isLoggedIn: false,
+				hasFinishedSetup: false
 			});
 		} else {
 			res.json({
 				isLoggedIn: req.isAuthenticated(),
-				hasFinishedSetup: false
+				hasFinishedSetup: req.user.hasFinishedSetup
 			});
 		}
 
