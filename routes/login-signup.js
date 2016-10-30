@@ -40,10 +40,19 @@ module.exports = function(app, passport) {
 	});
 
 	app.get('/isLoggedIn', (req, res) => {
-		res.json({
-			isLoggedIn: req.user.isAuthenticated(),
-			hasFinishedSetup: req.user.hasFinishedSetup
-		});
+		if (!req.user) {
+			res.json({
+				isLoggedIn: false,
+				hasFinishedSetup: false
+			});
+		} else {
+			res.json({
+				isLoggedIn: req.isAuthenticated(),
+				hasFinishedSetup: req.user.hasFinishedSetup
+			});
+		}
+
+		
 	});
 
 	app.post('/login-facebook',
