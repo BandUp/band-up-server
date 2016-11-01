@@ -6,6 +6,7 @@
 * {
 *   data: {
 *       // all metadata for notification handling, for instance in the case of match notification
+*       type: "match"
 *       from_id: "89jafnn043jkldfasdfasdf" // an example userID
 *       from_name: "ExampleName"
 *   }
@@ -31,7 +32,8 @@ class gcmSender {
         }, (err, doc) => {
             let message = new gcm.Message({
                 data: {
-                    from: senderid
+                    from: senderid,
+                    type: "message"
                 },
                 notification: {
                     title: "you have a new message from someone",
@@ -53,7 +55,7 @@ class gcmSender {
         console.log("sending test message");
         let message = new gcm.Message({
             data: {
-                key1: "Hello world!"
+                type: "test"
             },
             notification: {
                 title: "hello world",
