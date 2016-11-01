@@ -1,3 +1,22 @@
+/**
+* a wraper class for GCM sender used for notifications
+*
+* all notification must follow the bellow chema
+* 
+* {
+*   data: {
+*       // all metadata for notification handling, for instance in the case of match notification
+*       from_id: "89jafnn043jkldfasdfasdf" // an example userID
+*       from_name: "ExampleName"
+*   }
+*   notification: {
+*       title: "an example title for notification"
+*       icon: "ic_name_of_icon" // this field is not currently used on android side
+*       body: "message text" 
+*   }    
+* }
+*/
+
 const gcm = require('node-gcm');
 const Users = require('../models/user');
 
@@ -18,8 +37,7 @@ class gcmSender {
                     title: "you have a new message from someone",
                     icon: "ic_launcher",
                     body: msg
-                },
-                message: msg
+                }
             });
 
             this.sender.send(message, {
@@ -41,8 +59,7 @@ class gcmSender {
                 title: "hello world",
                 icon: "ic_band_up_logo_notification",
                 body: "this is a test message"
-            },
-            message: "here is a test message"
+            }
         });
 
         this.sender.send(message, {
