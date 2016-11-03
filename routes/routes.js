@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
     app.get('/', (req, res) => {
         if (req.user) {
             console.log(req.user.gcmToken);
-            app.gcmSender.sendTestMessage(req.user.gcmToken);
+            app.gcmSender.sendTestMessage([req.user.gcmToken]);
         }
         res.send('Hello world!');
     });
