@@ -33,13 +33,13 @@ module.exports = function(app, passport) {
     app.get('/', (req, res) => {
         if (req.user) {
             console.log(req.user.gcmToken);
-            app.gcmSender.sendTestMessage([req.user.gcmToken]);
+            app.gcmSender.sendTestMessage(req.user.gcmToken);
         }
         res.send('Hello world!');
     });
 
     /**
-    * get x many user nearby that are not already liked  
+    * get x many user nearby that are not already liked
     */
     app.get('/nearby-users', isLoggedIn, (req, res) => {
         user.find({

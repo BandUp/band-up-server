@@ -2,7 +2,7 @@
 * a wraper class for GCM sender used for notifications
 *
 * all notification must follow the bellow chema
-* 
+*
 * {
 *   data: {
 *       // all metadata for notification handling, for instance in the case of match notification
@@ -13,8 +13,8 @@
 *   notification: {
 *       title: "an example title for notification"
 *       icon: "ic_name_of_icon" // this field is not currently used on android side
-*       body: "message text" 
-*   }    
+*       body: "message text"
+*   }
 * }
 */
 
@@ -51,7 +51,7 @@ class gcmSender {
         });
     }
 
-    sendTestMessage(regTokens) {
+    sendTestMessage(regToken) {
         console.log("sending test message");
         let message = new gcm.Message({
             data: {
@@ -65,7 +65,7 @@ class gcmSender {
         });
 
         this.sender.send(message, {
-            registrationTokens: regTokens
+            registrationToken: regToken
         }, (err, response) => {
             if (err) console.error(err);
             else console.log(response);
