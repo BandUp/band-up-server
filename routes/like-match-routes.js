@@ -18,7 +18,7 @@ module.exports = function(app, passport) {
                 // new like
                 currUserDoc.liked.push(req.body.userID);
 
-                // chech matched
+                // check matched
                 User.findById(req.body.userID, (err, doc) => {
                     let isMatch = false;
                     if (err) throw err;
@@ -31,6 +31,7 @@ module.exports = function(app, passport) {
                         doc.matched.push(user._id);
                         doc.save((err) => {
                             if (err) throw err;
+                            app.gcmSender.sendMatchNotification(req.user, doc);
                         });
                     }
                     res.json({

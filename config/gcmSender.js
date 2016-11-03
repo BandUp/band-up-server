@@ -6,20 +6,41 @@ class gcmSender {
         this.sender = new gcm.Sender(process.env.GOOGLE_SERVER_KEY);
     }
 
+    sendMatchNotification(senderDoc, recieverDoc){
+        let message = new gcm.Message({
+            data: {
+                from: senderid,
+                type: "matchNotification"
+            },
+            notification: {
+                title: "you have a new match!!!",
+                icon: "ic_launcher",
+                body: "user: " + senderDoc.username + "also likes your style"
+            }
+        });
+
+        this.sender.send(message, {
+            registrationToken: recieverDoc.gcmToken
+        }, (err, response) => {
+            if (err) console.log(err);
+            else console.log(response);
+        });
+    }
+
     sendMsgNotification(senderid, recieverid, msg) {
         User.findOne({
             _id: recieverid
         }, (err, doc) => {
             let message = new gcm.Message({
                 data: {
-                    from: senderid
+                    from: senderid,
+                    type: "msgNotification"
                 },
                 notification: {
                     title: "you have a new message from someone",
                     icon: "ic_launcher",
                     body: msg
-                },
-                message: msg
+                }
             });
 
             this.sender.send(message, {
@@ -35,7 +56,8 @@ class gcmSender {
         console.log("sending test message");
         let message = new gcm.Message({
             data: {
-                key1: "Hello world!"
+                key1: "Hello world!",
+                type: "testNotification"
             },
             notification: {
                 title: "hello world",
