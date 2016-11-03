@@ -62,7 +62,7 @@ module.exports = {
 			distance: distanceToUser,
 			percentage: perc,
 			image: targUser.image,
-			age: targUser.age,
+			dateOfBirth: targUser.dateOfBirth,
 			aboutme: targUser.aboutme
 		};
 

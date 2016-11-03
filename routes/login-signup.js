@@ -51,8 +51,6 @@ module.exports = function(app, passport) {
 				hasFinishedSetup: req.user.hasFinishedSetup
 			});
 		}
-
-
 	});
 
 	app.post('/login-facebook',

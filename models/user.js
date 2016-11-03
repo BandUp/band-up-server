@@ -14,7 +14,7 @@ let userSchema = mongoose.Schema({
 		type: String,
 		default: ""
 	},
-	age: {
+	dateOfBirth: {
 		type: Date
 	},
 	local: {
@@ -81,24 +81,6 @@ let userSchema = mongoose.Schema({
 			delete ret.google;
 			delete ret.soundcloud;
 			delete ret.local;
-
-			instrument.find({
-					'_id': {
-						$in: ret.instruments
-					}
-				}).exec()
-				.then((instrumentList) => {
-					ret.instruments = instrumentList;
-				});
-
-			genres.find({
-					'_id': {
-						$in: ret.genres
-					}
-				}).exec()
-				.then((genreList) => {
-					ret.genres = genreList;
-				});
 		}
 	}
 });
