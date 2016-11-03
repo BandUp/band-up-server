@@ -97,7 +97,7 @@ module.exports = function(app, passport) {
         req.user.gcmToken = req.body.regToken;
 
         req.user.save((err) => {
-            res.status(200).send();
+            res.status(200).json({}).send();
         });
 
     });
