@@ -56,6 +56,24 @@ module.exports = function(passport) {
 					newUser.email = req.body.email;
 					newUser.dateOfBirth = req.body.dateOfBirth;
 
+					// Check if dateOfBirth is valid
+					var birthday = new Date(req.body.dateOfBirth);
+					var today = new Date();
+					var thisYear = 0;
+					if (today.getMonth() < birthday.getMonth()) {
+						thisYear = 1;
+					} else if ((today.getMonth() == birthday.getMonth()) &&
+						today.getDate() < birthday.getDate()) {
+						thisYear = 1;
+					}
+					var age = today.getFullYear() - birthday.getFullYear() - thisYear;
+
+					console.log(age);
+
+					if (age < 13 || age > 99) {
+						return done("Invalid age!");
+					}
+
 					// attempt to save user
 					newUser.save((err) => {
 						if (err) {
