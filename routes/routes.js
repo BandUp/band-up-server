@@ -21,8 +21,15 @@ module.exports = function(app, passport) {
             throw "need location info in body";
         }
         let currUser = req.user;
+        console.log(req.body);
         currUser.location.lat = req.body.location.lat;
         currUser.location.lon = req.body.location.lon;
+
+        if (currUser.location.lat === 0 && currUser.location.lon === 0) {
+        	currUser.location.valid = false;
+        } else {
+        	currUser.location.valid = true;
+        }
 
         currUser.save((err) => {
             if (err) throw err;
@@ -356,8 +363,8 @@ module.exports = function(app, passport) {
                             'url': result.secure_url
                         }).send();
                     }, {
-                        width: 512,
-                        height: 512,
+                        width: 1024,
+                        height: 1024,
                         gravity: "face",
                         crop: "fill"
                     });

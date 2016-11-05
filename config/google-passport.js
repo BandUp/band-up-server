@@ -19,13 +19,14 @@ module.exports = function(passport) {
                 if (user) {
                     return done(null, user);
                 } else {
+                	console.log(parsedToken);
                     let newUser = new User();
                     // googleId is to authenticate a user to google.
                     newUser.google.id = googleId;
                     // parsedToken has all the information about the user.
-                    newUser.username = parsedToken.name;
-                    newUser.email = parsedToken.email;
-                    newUser.image.url = parsedToken.picture;
+                    newUser.username = parsedToken.payload.name;
+                    newUser.email = parsedToken.payload.email;
+                    newUser.image.url = parsedToken.payload.picture;
                     newUser.image.public_id = null;
 
                     newUser.save((err) => {
