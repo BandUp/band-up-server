@@ -64,7 +64,7 @@ module.exports = {
 			image: targUser.image,
 			dateOfBirth: targUser.dateOfBirth,
 			aboutme: targUser.aboutme,
-			soundCloudId: targUser.soundCloudId;
+			soundCloudId: targUser.soundCloudId
 		};
 
 		for (let i = 0; i < targUser.instruments.length; i++) {
