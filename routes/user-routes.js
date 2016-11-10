@@ -73,6 +73,13 @@ module.exports = function(app, passport) {
         });
     });
 
+    app.post("/soundcloudid", isLoggedIn, (req, res) => {
+        req.user.soundCloudId = req.body.soundCloudId;
+        req.user.save((err) => {
+            req.status(200).json({}).send();
+        })
+    });
+
 
     // takes in a user object and modifies current user
     app.all('/edit-user', isLoggedIn, (req, res) => {
