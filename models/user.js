@@ -65,7 +65,7 @@ let userSchema = mongoose.Schema({
 	gcmToken: {
 		type: String,
 		default: ""
-	}
+	},
 	soundCloudId: {
 		type: Number,
 		default: 0
