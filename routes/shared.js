@@ -63,7 +63,8 @@ module.exports = {
 			percentage: perc,
 			image: targUser.image,
 			dateOfBirth: targUser.dateOfBirth,
-			aboutme: targUser.aboutme
+			aboutme: targUser.aboutme,
+			soundCloudId: targUser.soundCloudId;
 		};
 
 		for (let i = 0; i < targUser.instruments.length; i++) {
