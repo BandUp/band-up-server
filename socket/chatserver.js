@@ -84,3 +84,4 @@ module.exports.setup = function socketioApp(server, app, io) {
     });
     console.log('Socket.IO for chat ready.');
 };
+
