@@ -31,7 +31,7 @@ module.exports = function(app, passport) {
                         doc.matched.push(user._id);
                         doc.save((err) => {
                             if (err) throw err;
-                            app.gcmSender.sendMatchNotification(req.user, doc);
+                            //app.gcmSender.sendMatchNotification(req.user, doc);
                         });
                     }
                     res.json({
