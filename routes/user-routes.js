@@ -110,7 +110,7 @@ module.exports = function(app, passport) {
     });
 
     app.post("/soundcloudurl", isLoggedIn, (req, res) => {
-        req.user.soundcloudurl = req.body.soundcloudurl;
+        req.user.soundcloudURL = req.body.soundcloudurl;
 
         req.user.save((err) => {
             if (err) throw err;
