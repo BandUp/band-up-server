@@ -109,6 +109,15 @@ module.exports = function(app, passport) {
 
     });
 
+    app.post("/soundcloudurl", isLoggedIn, (req, res) => {
+        req.user.soundcloudurl = req.body.soundcloudurl;
+
+        req.user.save((err) => {
+            if (err) throw err;
+            res.status(200).json({}).send();
+        })
+    });
+
 };
 
 // route middleware to make sure user is logged in

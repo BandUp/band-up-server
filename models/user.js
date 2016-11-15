@@ -69,6 +69,10 @@ let userSchema = mongoose.Schema({
 	soundCloudId: {
 		type: Number,
 		default: 0
+	},
+	soundcloudURL: {
+		type: String,
+		default: ""
 	}
 }, {
 	toObject: {
