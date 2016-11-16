@@ -7,6 +7,7 @@ const path = require('path');
 const mime = require('mime');
 const cloudinary = require('cloudinary');
 const geolib = require('geolib');
+const nudity = require('nudity-filter');
 // Functions that are shared between route files.
 const shared = require('./shared');
 
@@ -343,33 +344,61 @@ module.exports = function(app, passport) {
                 console.log("ERR");
                 res.status(500).send(err);
             } else {
-                user.findOne({
-                    _id: req.user._id
-                }, function(err, doc) {
-                    if (err) throw "err";
-                    if (doc.image.public_id) {
-                        cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {}, {
-                            invalidate: true
+                checkNudity(imgPath, (nude) => {
+                    if (nude) {
+                        res.status(406).send({err: 11, msg: "nudity detected"})
+                    }else{
+                        user.findOne({
+                            _id: req.user._id
+                        }, function(err, doc) {
+                            if (err) throw "err";
+                            if (doc.image.public_id) {
+                                cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {}, {
+                                    invalidate: true
+                                });
+                            }
+                            cloudinary.uploader.upload(imgPath, function(result) {
+                                let imageObject = {
+                                    url: result.secure_url,
+                                    public_id: result.public_id
+                                };
+                                doc.image = imageObject;
+                                doc.save();
+                                res.status(201).json({
+                                    'url': result.secure_url
+                                }).send();
+                            }, {
+                                width: 1024,
+                                height: 1024,
+                                gravity: "face",
+                                crop: "fill"
+                            });
                         });
                     }
-                    cloudinary.uploader.upload(imgPath, function(result) {
-                        let imageObject = {
-                            url: result.secure_url,
-                            public_id: result.public_id
-                        };
-                        doc.image = imageObject;
-                        doc.save();
-                        res.status(201).json({
-                            'url': result.secure_url
-                        }).send();
-                    }, {
-                        width: 1024,
-                        height: 1024,
-                        gravity: "face",
-                        crop: "fill"
-                    });
                 });
             }
         });
     });
+    function checkNudity(path, done) {
+        try{
+            let API_USER = process.env.SIGHTENGINE_USER;
+            let API_SECRET = process.env.SIGHTENGINE_SECRET;
+            let sightEngine = new nudity(API_USER, API_SECRET);
+
+            sightEngine.checkNudityForFile(path, (err, result) => {
+                if (err) console.log(err);
+                if (result.safe > 0.5) {
+                    done(false);
+                }else{
+                    done(true);
+                }
+            });
+        }catch(err){
+            console.log(err.message);
+            done(false);
+        }
+        
+    }
 };
+
+
