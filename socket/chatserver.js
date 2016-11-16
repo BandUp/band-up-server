@@ -66,7 +66,7 @@ module.exports.setup = function socketioApp(server, app, io) {
                     // Callback recieves true.
                     fn(true);
                 } else {
-                    //app.gcmSender.sendMsgNotification(socket.username, msgObj.nick, msgObj.message);
+                    app.gcmSender.sendMsgNotification(socket.username, msgObj.nick, msgObj.message);
                 }
                 fn(false);
             } else {

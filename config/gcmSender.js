@@ -6,10 +6,14 @@ class gcmSender {
         this.sender = new gcm.Sender(process.env.GOOGLE_SERVER_KEY);
     }
 
+    /**
+    * takes in sender user doc and reciever user doc
+    * and sends match notification to reciever
+    */
     sendMatchNotification(senderDoc, recieverDoc){
         let message = new gcm.Message({
             data: {
-                from: senderid,
+                from: senderDoc._id,
                 type: "matchNotification"
             },
             notification: {
@@ -27,6 +31,10 @@ class gcmSender {
         });
     }
 
+    /**
+    * takes in sender user id, reciever user id and a message string
+    * finds reciever user doc and sends message to it
+    */
     sendMsgNotification(senderid, recieverid, msg) {
         User.findOne({
             _id: recieverid
