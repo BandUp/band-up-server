@@ -84,6 +84,26 @@ module.exports = function(app, passport) {
 				hasFinishedSetup: req.user.hasFinishedSetup,
 			});
 		});
+	app.post('/email', (req, res) => {
+		if (!req.body.email) {
+			res.status(412).send("{}");
+			return;
+		}
+
+		User.findOne({'email': req.body.email}, (err, user) => {
+			if (err) {
+				console.log(err.message);
+				res.status(500).send("{}");
+				return;
+			}
+
+			if (user) {
+				res.json({emailInUse:true});
+			} else {
+				res.json({emailInUse:false});
+			}
+		});
+	});
 };
 
 // route middleware to make sure user is logged in
