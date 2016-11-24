@@ -38,6 +38,22 @@ module.exports = function(app, passport) {
         });
     });
 
+    /**
+     * a searchpath taking in a mongodb search object
+     * as req.body
+     * only searches in the users collection
+     */
+    app.get('/search', isLoggedIn, (req, res) => {
+        user.find(req.body, (err, doc) => {
+            if(err) throw err;
+            res.json(doc).status(200);
+        });
+    });
+
+
+    /**
+     * index function also used to quickly test various featuress
+     */
     app.get('/', (req, res) => {
         if (req.user) {
             console.log(req.user.gcmToken);
@@ -346,7 +362,7 @@ module.exports = function(app, passport) {
             } else {
                 checkNudity(imgPath, (nude) => {
                     if (nude) {
-                        res.status(406).send({err: 11, msg: "nudity detected"})
+                        res.status(406).send({err: 11, msg: "nudity detected"});
                     }else{
                         user.findOne({
                             _id: req.user._id
@@ -397,8 +413,6 @@ module.exports = function(app, passport) {
             console.log(err.message);
             done(false);
         }
-        
+
     }
 };
-
-
