@@ -40,6 +40,11 @@ module.exports = {
 			distanceToUser = null;
 		}
 
+		// skip users not in searchrange
+        if (distanceToUser > currUser.searchradius) {
+            return;
+        }
+
 		function makeFilter(user) {
 			return function(val) {
 				return user.genres.indexOf(val) !== -1;
