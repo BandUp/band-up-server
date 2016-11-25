@@ -46,7 +46,7 @@ module.exports = function(app, passport) {
     app.get('/search', isLoggedIn, (req, res) => {
         user.find(req.body, (err, doc) => {
             if(err) throw err;
-            res.json(doc).status(200);
+            res.json({result:doc}).status(200);
         });
     });
 
