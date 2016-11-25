@@ -49,15 +49,17 @@ module.exports = function(app, passport) {
             let userList = [];
             shared.itemNamesToMap(instruments, (instruMap) => {
                 shared.itemNamesToMap(genres, (genresMap) => {
+                    console.log("maps created");
                     if (!instruMap || !genresMap) {
                         res.status(500).send("Unknown internal server error occurred.");
                         return;
                     }
+                    console.log("iterating through users");
                     for (let i = 0; i < userDoc.length; i++) {
                         userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
                     }
-
-                    res.status(200).json({result: userList});
+                    console.log("sending results");
+                    res.status(200).json({result: userList}).send();
                 });
             });
         });
