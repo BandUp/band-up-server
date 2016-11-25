@@ -43,8 +43,7 @@ module.exports = function(app, passport) {
      * as req.body
      * only searches in the users collection
      */
-    app.get('/search', isLoggedIn, (req, res) => {
-        console.log(req.body);
+    app.post('/search', isLoggedIn, (req, res) => {
         user.find(req.body, (err, userDoc) => {
             if(err) throw err;
             let userList = [];
@@ -55,7 +54,10 @@ module.exports = function(app, passport) {
                         return;
                     }
                     for (let i = 0; i < userDoc.length; i++) {
-                        userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
+                        let userDTO = shared.userToDTO(req.user, userDoc[i], instruMap, genresMap);
+                        if (userDTO) {
+                            userList.push(userDTO);
+                        }
                     }
                     res.status(200).json({result: userList});
                 });
@@ -101,7 +103,11 @@ module.exports = function(app, passport) {
                     }
 
                     for (let i = 0; i < userDoc.length; i++) {
-                        userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
+                        let userDTO = shared.userToDTO(req.user, userDoc[i], instruMap, genresMap);
+                        if (userDTO) {
+                            userList.push(userDTO);
+                        }
+
                     }
                     res.status(200).send(userList);
                 });
