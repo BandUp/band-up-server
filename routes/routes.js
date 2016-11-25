@@ -44,9 +44,22 @@ module.exports = function(app, passport) {
      * only searches in the users collection
      */
     app.get('/search', isLoggedIn, (req, res) => {
-        user.find(req.body, (err, doc) => {
+        user.find(req.body, (err, userDoc) => {
             if(err) throw err;
-            res.json({result:doc}).status(200);
+            let userList = [];
+            shared.itemNamesToMap(instruments, (instruMap) => {
+                shared.itemNamesToMap(genres, (genresMap) => {
+                    if (!instruMap || !genresMap) {
+                        res.status(500).send("Unknown internal server error occurred.");
+                        return;
+                    }
+                    for (let i = 0; i < userDoc.length; i++) {
+                        userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
+                    }
+
+                    res.status(200).json({result: userList});
+                });
+            });
         });
     });
 
