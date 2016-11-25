@@ -47,8 +47,8 @@ module.exports = function(app, passport) {
         user.find(req.body, (err, userDoc) => {
             if(err) throw err;
             let userList = [];
-            shared.itemNamesToMap(instruments, (instruMap) => {
-                shared.itemNamesToMap(genres, (genresMap) => {
+            shared.itemNamesToMap(instrument, (instruMap) => {
+                shared.itemNamesToMap(genre, (genresMap) => {
                     console.log("maps created");
                     if (!instruMap || !genresMap) {
                         res.status(500).send("Unknown internal server error occurred.");
