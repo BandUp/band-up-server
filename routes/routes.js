@@ -59,7 +59,7 @@ module.exports = function(app, passport) {
                         userList.push(shared.userToDTO(req.user, userDoc[i], instruMap, genresMap));
                     }
                     console.log("sending results");
-                    res.status(200).json({result: userList}).send();
+                    res.status(200).json({result: userList});
                 });
             });
         });
