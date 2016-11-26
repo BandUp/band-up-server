@@ -107,7 +107,6 @@ module.exports = function(app, passport) {
                         if (userDTO) {
                             userList.push(userDTO);
                         }
-
                     }
                     res.status(200).send(userList);
                 });
@@ -117,7 +116,6 @@ module.exports = function(app, passport) {
     });
 
     app.get('/chat_history/:id', isLoggedIn, (req, res) => {
-
         var userList = [req.user._id, req.params.id].sort();
 
         chatHistory.findOne({
@@ -133,7 +131,6 @@ module.exports = function(app, passport) {
                 res.status(404).send();
                 return;
             }
-
             res.status(200).send(doc);
         });
     });
@@ -414,6 +411,7 @@ module.exports = function(app, passport) {
             }
         });
     });
+
     function checkNudity(path, done) {
         try{
             let API_USER = process.env.SIGHTENGINE_USER;

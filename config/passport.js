@@ -68,8 +68,6 @@ module.exports = function(passport) {
 					}
 					var age = today.getFullYear() - birthday.getFullYear() - thisYear;
 
-					console.log(age);
-
 					if (age < 13 || age > 99) {
 						return done("Invalid age!");
 					}

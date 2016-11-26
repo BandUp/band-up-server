@@ -23,8 +23,6 @@ module.exports = {
 	// instruMap: A map with key-value pairs of IDs and names of instruments.
 	// genresMap: A map with key-value pairs of IDs and names of genres.
 	userToDTO: function(currUser, targUser, instruMap, genresMap) {
-		//console.log(currUser);
-		//console.log(targUser);
 		let distanceToUser;
 		if (currUser.location.valid && targUser.location.valid) {
 			distanceToUser = geolib.getDistance({
@@ -56,7 +54,6 @@ module.exports = {
 
 		// filter call returns list shared genres
 		let perc = (currUser.genres.filter(makeFilter(targUser)).length / numGenres) * 100;
-
 
 		let userDTO = {
 			_id: targUser._id,

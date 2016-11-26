@@ -43,24 +43,6 @@ module.exports = function(app, passport) {
         });
     });
 
-    /*
-      app.all('/edit-user', (req, res) => {
-    	  console.log("ID is: " + req.body.userId);
-    	  console.log("about user is: " + req.body.aboutMe);
-    	  User.findById(req.body.userId, (err, doc) => {
-    	  if(err || !doc) {
-    		  res.status(500).send();
-    			console.log("Error edit-user path");
-    	  }
-    	  else if (req.body.aboutMe) {
-    		  doc.aboutme = req.body.aboutMe;
-    		  doc.save();
-    		  res.status(200).send({});   // sending empty JSONObject response to satysfy response
-    	  }
-    	  // add another update ex. else if (req.body.instr) {doc.instruments = req.body.instr}
-    	  });
-      });
-      */
     app.all('/get-instrument', (req, res) => {
         console.log(req.body.id);
         instrument.findById(req.body.id, (err, doc) => {
@@ -80,11 +62,8 @@ module.exports = function(app, passport) {
         })
     });
 
-
     // takes in a user object and modifies current user
     app.all('/edit-user', isLoggedIn, (req, res) => {
-        //console.log("ID is: " + req.body.userId);
-        //console.log("about user is: " + req.body.aboutMe);
         let editedUser = req.body;
         let origUser = req.user;
 

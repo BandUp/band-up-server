@@ -12,8 +12,6 @@ let chatSchema = mongoose.Schema({
             required: true
         }
     }
-}, {
-    collection: 'chat'
 });
 
 module.exports = mongoose.model('Chat', chatSchema);

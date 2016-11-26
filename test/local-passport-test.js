@@ -49,7 +49,7 @@ module.exports = function(app) {
                     .send({ // send this object
                         username: 'TestPerson',
                         password: 'SecretTestPassword'
-                    }).end((err, res) => { // callback with resukts
+                    }).end((err, res) => { // callback with results
                         if (err) throw err;
                         res.status.should.be.equal(200);
                         done();
