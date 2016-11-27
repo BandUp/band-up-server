@@ -6,3 +6,4 @@ require('./local-passport-test')(app);
 require('./routes-test')(app);
 require('./profile-picture-test')(app);
 require('./user-routes-test')(app);
+require('./like-match-routes-test')(app);

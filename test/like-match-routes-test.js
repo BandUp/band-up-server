@@ -8,25 +8,16 @@ const user = require('../models/user');
 
 module.exports = function(app) {
 
-    describe('User liking another user', function() {
+    describe('User like', function() {
         describe('#like', function() {
             beforeEach((done) => {
                 // create test user
-                let newUser1 = new user();
-                newUser1.username = "TestPerson1";
-                newUser1.local.password = newUser.generateHash("SecretTestPassword");
-                newUser1.email = 'test1@gmail.com';
-                newUser1.dateOfBirth = "Sun Nov 18 1990 15:20:58 GMT+0000 (Greenwich Standard Time)";
-                newUser1.save((err) => {
-                    if (err) throw err;
-                });
-
-                let newUser2 = new user();
-                newUser2.username = "TestPerson2";
-                newUser2.local.password = newUser.generateHash("SecretTestPassword");
-                newUser2.email = 'test2@gmail.com';
-                newUser2.dateOfBirth = "Sun Nov 18 1990 15:20:58 GMT+0000 (Greenwich Standard Time)";
-                newUser2.save((err) => {
+                let newUser = new user();
+                newUser.username = "TestPerson";
+                newUser.local.password = newUser.generateHash("SecretTestPassword");
+                newUser.email = 'test@gmail.com';
+                newUser.dateOfBirth = "Sun Nov 18 1990 15:20:58 GMT+0000 (Greenwich Standard Time)";
+                newUser.save((err) => {
                     if (err) throw err;
                     done();
                 });
@@ -41,10 +32,12 @@ module.exports = function(app) {
                 agent
                     .post('/login-local')
                     .send({
-                        username: 'TestPerson1',
+                        username: 'TestPerson',
                         password: 'SecretTestPassword'
                     }).end((err, res) => {
-                      /* Work in progress.. */
+                        if (err) throw err;
+                        /* Work in progress */
+                        done();
                     });
             });
         });
