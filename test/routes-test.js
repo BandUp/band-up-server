@@ -130,7 +130,7 @@ describe('Instruments and Genres', function() {
                         .get('/instruments')
                         .expect(200)
                         .end((err, rGet) => {
-							if (err) throw err;
+                            if (err) throw err;
                             let pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
                             agent
                                 .post('/instruments')
@@ -147,7 +147,7 @@ describe('Instruments and Genres', function() {
                                         for (var i = 0; i < doc.instruments.length; i++) {
                                             doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
                                         }
-										done();
+                                        done();
                                     });
                                 });
                         });
@@ -186,7 +186,7 @@ describe('Instruments and Genres', function() {
                                         for (var i = 0; i < doc.instruments.length; i++) {
                                             doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
                                         }
-										done();
+                                        done();
                                     });
                                 });
                         });
@@ -205,7 +205,7 @@ describe('Instruments and Genres', function() {
                     username: 'TestPerson',
                     password: 'SecretTestPassword'
                 }).end((err, res) => {
-					if (err) throw err;
+                    if (err) throw err;
                     agent
                         .get('/instruments')
                         .expect(200)

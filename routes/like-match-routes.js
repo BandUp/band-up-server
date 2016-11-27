@@ -5,6 +5,7 @@ module.exports = function(app, passport) {
         let user = req.user;
         if (user.liked.indexOf(req.body.userID) === -1) {
 
+            // find user by id
             User.findById(user._id, (err, currUserDoc) => {
 
                 if (!req.body.userID) {

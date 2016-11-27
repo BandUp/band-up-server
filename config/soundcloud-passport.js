@@ -12,7 +12,6 @@ module.exports = function(passport) {
         profile = profile._json; // why does soundcloud return this wierdness
         // asynchronous
         process.nextTick(() => {
-            console.log(profile);
             // look for pre-existing account
             User.findOne({
                 'soundcloud.id': profile.id
@@ -28,7 +27,7 @@ module.exports = function(passport) {
                     newUser.soundcloud.id = profile.id;
                     newUser.soundcloud.token = token;
                     newUser.username = profile.username;
-                    //newUser.email = profile.emails[0].value; // soundcloud returns multiple emails
+                    newUser.email = profile.emails[0].value; // soundcloud returns multiple emails
                     newUser.soundCloudId = profile.id;
 
                     newUser.save((err) => {

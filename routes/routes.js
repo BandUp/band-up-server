@@ -27,9 +27,9 @@ module.exports = function(app, passport) {
         currUser.location.lon = req.body.location.lon;
 
         if (currUser.location.lat === 0 && currUser.location.lon === 0) {
-        	currUser.location.valid = false;
+            currUser.location.valid = false;
         } else {
-        	currUser.location.valid = true;
+            currUser.location.valid = true;
         }
 
         currUser.save((err) => {
@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
      */
     app.post('/search', isLoggedIn, (req, res) => {
         user.find(req.body, (err, userDoc) => {
-            if(err) throw err;
+            if (err) throw err;
             let userList = [];
             shared.itemNamesToMap(instrument, (instruMap) => {
                 shared.itemNamesToMap(genre, (genresMap) => {
@@ -59,7 +59,9 @@ module.exports = function(app, passport) {
                             userList.push(userDTO);
                         }
                     }
-                    res.status(200).json({result: userList});
+                    res.status(200).json({
+                        result: userList
+                    });
                 });
             });
         });
@@ -78,8 +80,8 @@ module.exports = function(app, passport) {
     });
 
     /**
-    * get x many user nearby that are not already liked
-    */
+     * get x many user nearby that are not already liked
+     */
     app.get('/nearby-users', isLoggedIn, (req, res) => {
         user.find({
             '_id': {
@@ -378,8 +380,11 @@ module.exports = function(app, passport) {
             } else {
                 checkNudity(imgPath, (nude) => {
                     if (nude) {
-                        res.status(406).send({err: 11, msg: "nudity detected"});
-                    }else{
+                        res.status(406).send({
+                            err: 11,
+                            msg: "nudity detected"
+                        });
+                    } else {
                         user.findOne({
                             _id: req.user._id
                         }, function(err, doc) {
@@ -413,7 +418,7 @@ module.exports = function(app, passport) {
     });
 
     function checkNudity(path, done) {
-        try{
+        try {
             let API_USER = process.env.SIGHTENGINE_USER;
             let API_SECRET = process.env.SIGHTENGINE_SECRET;
             let sightEngine = new nudity(API_USER, API_SECRET);
@@ -422,11 +427,11 @@ module.exports = function(app, passport) {
                 if (err) console.log(err);
                 if (result.safe > 0.5) {
                     done(false);
-                }else{
+                } else {
                     done(true);
                 }
             });
-        }catch(err){
+        } catch (err) {
             console.log(err.message);
             done(false);
         }

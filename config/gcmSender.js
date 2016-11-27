@@ -7,10 +7,10 @@ class gcmSender {
     }
 
     /**
-    * takes in sender user doc and reciever user doc
-    * and sends match notification to reciever
-    */
-    sendMatchNotification(senderDoc, recieverDoc){
+     * takes in sender user doc and reciever user doc
+     * and sends match notification to reciever
+     */
+    sendMatchNotification(senderDoc, recieverDoc) {
         let message = new gcm.Message({
             data: {
                 from: senderDoc._id,
@@ -32,9 +32,9 @@ class gcmSender {
     }
 
     /**
-    * takes in sender user id, reciever user id and a message string
-    * finds reciever user doc and sends message to it
-    */
+     * takes in sender user id, reciever user id and a message string
+     * finds reciever user doc and sends message to it
+     */
     sendMsgNotification(senderid, recieverid, msg) {
         User.findOne({
             _id: recieverid

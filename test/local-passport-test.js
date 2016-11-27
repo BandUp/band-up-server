@@ -32,7 +32,7 @@ module.exports = function(app) {
                 newUser.username = "TestPerson";
                 newUser.local.password = newUser.generateHash("SecretTestPassword");
                 newUser.email = 'woo@mail.com';
-                newUser.local.age = 22;
+                newUser.dateOfBirth = "Sun Nov 18 1990 15:20:58 GMT+0000 (Greenwich Standard Time)";
                 newUser.save((err) => {
                     if (err) throw err;
                     done();

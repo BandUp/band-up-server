@@ -19,7 +19,6 @@ module.exports = function(passport) {
                 if (user) {
                     return done(null, user);
                 } else {
-                	console.log(parsedToken);
                     let newUser = new User();
                     // googleId is to authenticate a user to google.
                     newUser.google.id = googleId;

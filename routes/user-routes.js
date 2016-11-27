@@ -59,7 +59,7 @@ module.exports = function(app, passport) {
         req.user.soundCloudId = req.body.soundCloudId;
         req.user.save((err) => {
             res.status(200).json({}).send();
-        })
+        });
     });
 
     // takes in a user object and modifies current user
@@ -94,7 +94,7 @@ module.exports = function(app, passport) {
         req.user.save((err) => {
             if (err) throw err;
             res.status(200).json({}).send();
-        })
+        });
     });
 
 };
