@@ -77,6 +77,10 @@ module.exports = function(app) {
 					});
 			});
 
+			/*
+			 * Author: Elvar
+			 * Signees:
+			 */
 			it('user1 should match user2', function(done) {
 				let agent1 = request.agent(app);
 				let agent2 = request.agent(app);
