@@ -52,7 +52,7 @@ module.exports = function(app) {
 			 * Author: Elvar
 			 * Signees: Dagur
 			 */
-			it('user1 should be able to like like user2', function(done) {
+			it('user1 should be able to like user2', function(done) {
 				let agent = request.agent(app);
 				agent
 					.post('/login-local')
@@ -77,7 +77,7 @@ module.exports = function(app) {
 					});
 			});
 
-            /*
+			/*
 			 * Author: Elvar
 			 * Signees: Dagur
 			 */
