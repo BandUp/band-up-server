@@ -50,7 +50,7 @@ module.exports = function(app) {
 
 			/*
 			 * Author: Elvar
-			 * Signees:
+			 * Signees: Dagur
 			 */
 			it('user1 should be able to like like user2', function(done) {
 				let agent = request.agent(app);
@@ -77,6 +77,10 @@ module.exports = function(app) {
 					});
 			});
 
+            /*
+			 * Author: Elvar
+			 * Signees: Dagur
+			 */
 			it('user1 should match user2', function(done) {
 				let agent1 = request.agent(app);
 				let agent2 = request.agent(app);
