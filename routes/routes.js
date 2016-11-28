@@ -76,7 +76,7 @@ module.exports = function(app, passport) {
             console.log(req.user.gcmToken);
             app.gcmSender.sendTestMessage([req.user.gcmToken]);
         }
-        res.send('Hello world!');
+        res.sendFile(path.join(__dirname + '/../static/index.html'));
     });
 
     /**

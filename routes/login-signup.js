@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const guid = require("node-uuid");
 
 module.exports = function(app, passport) {
     app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
@@ -13,7 +14,8 @@ module.exports = function(app, passport) {
         req.user.image = {};
         req.user.image.url = "";
         req.user.image.public_id = "";
-
+        // send validation e-mail
+		//app.Mailer.sendValidationEmail(req.user);
         res.status(201).json({
             id: req.user._id
         }).send();
@@ -111,10 +113,44 @@ module.exports = function(app, passport) {
         });
     });
 
+    /**
+     * send an email to user with coresponding email address
+     * to allow him to reset his/her password
+     */
 	app.post('/reset-password', (req, res) =>{
 		User.findOne({email: req.body.email}, (err, doc) =>{
 			if(err) throw err;
-			res.json({succesfull: true});
+			doc.resetToken = uuid.v4();
+			app.mailer.sendPaswordReset(doc);
+			setTimeOut(() => {
+				doc.resetToken = "";
+			}, 86400000); // wait for 24 hours
+			res.json({succesfull: true}).status(200);
+		});
+	});
+
+    /**
+     * create webpage to allow the user to reset his/her password
+     */
+	app.get('/reset-password/:token', (req, res) =>{
+		User.findOne({resetToken: req.params.token}, (err, doc) =>{
+			// todo: render html to allow user to create new password
+		});
+	});
+
+    /**
+     * resets the password of user with the corresponding resetToken
+     * to the password provided in req.body.password
+     */
+	app.post('/reset-password/:token', (req, res) =>{
+		User.findOne({resetToken: req.params.token}, (err, doc) =>{
+			doc.local.password = doc.generateHash(req.body.password);
+			doc.resetToken = "";
+			doc.save((err) =>{
+				if (err) throw err;
+				// todo: send a nice html page
+				res.status(200);
+			});
 		});
 	});
 };

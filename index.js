@@ -67,6 +67,9 @@ app.gcmSender = require('./config/gcmSender');
 
 chat.setup(http, app, socketIo);
 
+// setup nodemailer
+app.mailer = require('./config/mailer');
+
 // authentication setup
 require('./config/passport')(passport);
 app.use(expressSession({

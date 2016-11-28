@@ -73,7 +73,11 @@ let userSchema = mongoose.Schema({
     soundcloudURL: {
         type: String,
         default: ""
-    }
+    },
+	resetToken:{
+		type: String,
+		default: ""
+	}
 }, {
     toObject: {
         transform: function(doc, ret) {
