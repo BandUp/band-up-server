@@ -110,6 +110,13 @@ module.exports = function(app, passport) {
             }
         });
     });
+
+	app.post('/reset-password', (req, res) =>{
+		User.findOne({email: req.body.email}, (err, doc) =>{
+			if(err) throw err;
+			res.json({succesfull: true});
+		});
+	});
 };
 
 // route middleware to make sure user is logged in
