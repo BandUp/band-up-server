@@ -36,489 +36,489 @@ module.exports = function(app) {
 	];
 
 describe('Instruments and Genres', function() {
-    // this runs before tests
-    before((done) => {
-        if (mongoose.connection.db) return done();
-        mongoose.connect(dbURI, done);
-    });
+	// this runs before tests
+	before((done) => {
+		if (mongoose.connection.db) return done();
+		mongoose.connect(dbURI, done);
+	});
 
-    beforeEach((done) => {
-        // create test user
-        let newUser = new user();
-        newUser.username = "TestPerson";
-        newUser.local.password = newUser.generateHash("SecretTestPassword");
-        newUser.email = 'test@gmail.com';
-        newUser.local.age = 25;
-        newUser.save((err) => {
-            if (err) throw err;
-            done();
-        });
-    });
+	beforeEach((done) => {
+		// create test user
+		let newUser = new user();
+		newUser.username = "TestPerson";
+		newUser.local.password = newUser.generateHash("SecretTestPassword");
+		newUser.email = 'test@gmail.com';
+		newUser.local.age = 25;
+		newUser.save((err) => {
+			if (err) throw err;
+			done();
+		});
+	});
 
-    beforeEach((done) => {
-        for (let i = 0; i < instruments.length; i++) {
-            let ins = new instrument();
-            ins.order = instruments[i].order;
-            ins.name = instruments[i].name;
-            ins.save((err) => {
-                if (err) throw err;
-            });
-        }
+	beforeEach((done) => {
+		for (let i = 0; i < instruments.length; i++) {
+			let ins = new instrument();
+			ins.order = instruments[i].order;
+			ins.name = instruments[i].name;
+			ins.save((err) => {
+				if (err) throw err;
+			});
+		}
 
-        for (let i = 0; i < genres.length; i++) {
-            let gen = new genre();
-            gen.order = genres[i].order;
-            gen.name = genres[i].name;
-            gen.save((err) => {
-                if (err) throw err;
-            });
-        }
-        done();
-    });
+		for (let i = 0; i < genres.length; i++) {
+			let gen = new genre();
+			gen.order = genres[i].order;
+			gen.name = genres[i].name;
+			gen.save((err) => {
+				if (err) throw err;
+			});
+		}
+		done();
+	});
 
-    // clean out database before every test
-    afterEach(function(done) {
-        clearDB((err) => {
-            if (err) throw err;
-            done();
-        });
-    });
+	// clean out database before every test
+	afterEach(function(done) {
+		clearDB((err) => {
+			if (err) throw err;
+			done();
+		});
+	});
 
-    after(() => {});
+	after(() => {});
 
-    // --------------------------------- INSTRUMENTS -----------------------
-    describe('Instruments', () => {
-        /*
-         * Author: Elvar
-         * Signees: Dagur, Bergþór
-         */
-        it('should succeed when GETting', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, res) => {
-                            if (err) throw err;
-                            for (var i = 0; i < res.body.length; i++) {
-                                res.body[i].should.have.property('order').which.is.equal(instruments[i].order);
-                                res.body[i].should.have.property('name').which.is.equal(instruments[i].name);
-                            }
-                            done();
-                        });
-                });
-        });
+	// --------------------------------- INSTRUMENTS -----------------------
+	describe('Instruments', () => {
+		/*
+		 * Author: Elvar
+		 * Signees: Dagur, Bergþór
+		 */
+		it('should succeed when GETting', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, res) => {
+							if (err) throw err;
+							for (var i = 0; i < res.body.length; i++) {
+								res.body[i].should.have.property('order').which.is.equal(instruments[i].order);
+								res.body[i].should.have.property('name').which.is.equal(instruments[i].name);
+							}
+							done();
+						});
+				});
+		});
 
-        /*
-         * Author: Elvar
-         * Signees: Bergþór
-         */
-        it('should succeed when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            if (err) throw err;
-                            let pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
-                            agent
-                                .post('/instruments')
-                                .expect(201)
-                                .send(pickedInstruments)
-                                .end((err, resPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.instruments.length.should.equal(pickedInstruments.length);
+		/*
+		 * Author: Elvar
+		 * Signees: Bergþór
+		 */
+		it('should succeed when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							if (err) throw err;
+							let pickedInstruments = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
+							agent
+								.post('/instruments')
+								.expect(201)
+								.send(pickedInstruments)
+								.end((err, resPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.instruments.length.should.equal(pickedInstruments.length);
 
-                                        for (var i = 0; i < doc.instruments.length; i++) {
-                                            doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
-                                        }
-                                        done();
-                                    });
-                                });
-                        });
-                });
-        });
+										for (var i = 0; i < doc.instruments.length; i++) {
+											doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
+										}
+										done();
+									});
+								});
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not allow empty lists when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            let pickedInstruments = [];
-                            agent
-                                .post('/instruments')
-                                .expect(412)
-                                .send(pickedInstruments)
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.instruments.length.should.equal(pickedInstruments.length);
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not allow empty lists when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							let pickedInstruments = [];
+							agent
+								.post('/instruments')
+								.expect(412)
+								.send(pickedInstruments)
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.instruments.length.should.equal(pickedInstruments.length);
 
-                                        for (var i = 0; i < doc.instruments.length; i++) {
-                                            doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
-                                        }
-                                        done();
-                                    });
-                                });
-                        });
-                });
-        });
+										for (var i = 0; i < doc.instruments.length; i++) {
+											doc.instruments.indexOf(pickedInstruments[i]).should.not.equal(-1);
+										}
+										done();
+									});
+								});
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept empty body when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    if (err) throw err;
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/instruments')
-                                .expect(412)
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.instruments.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                        });
-                });
-        });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept empty body when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					if (err) throw err;
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/instruments')
+								.expect(412)
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.instruments.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept an object when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/instruments')
-                                .expect(412)
-                                .send({
-                                    asdf: "Hello"
-                                })
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.instruments.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept an object when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/instruments')
+								.expect(412)
+								.send({
+									asdf: "Hello"
+								})
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.instruments.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept a string when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/instruments')
-                                .expect(412)
-                                .send("TestingTheServer")
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.instruments.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
-    });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept a string when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/instruments')
+								.expect(412)
+								.send("TestingTheServer")
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.instruments.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
+	});
 
-    // --------------------------------- GENRES ----------------------------
-    describe('Genres', () => {
-        /*
-         * Author: Elvar
-         * Signees: Dagur, Bergþór
-         */
-        it('should succeed when GETting', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/genres')
-                        .expect(200)
-                        .end((err, res) => {
-                            if (err) throw err;
-                            for (var i = 0; i < res.body.length; i++) {
-                                res.body[i].should.have.property('order').which.is.equal(genres[i].order);
-                                res.body[i].should.have.property('name').which.is.equal(genres[i].name);
-                            }
-                            done();
-                        });
-                });
-        });
+	// --------------------------------- GENRES ----------------------------
+	describe('Genres', () => {
+		/*
+		 * Author: Elvar
+		 * Signees: Dagur, Bergþór
+		 */
+		it('should succeed when GETting', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/genres')
+						.expect(200)
+						.end((err, res) => {
+							if (err) throw err;
+							for (var i = 0; i < res.body.length; i++) {
+								res.body[i].should.have.property('order').which.is.equal(genres[i].order);
+								res.body[i].should.have.property('name').which.is.equal(genres[i].name);
+							}
+							done();
+						});
+				});
+		});
 
-        /*
-         * Author: Elvar
-         * Signees: Bergþór
-         */
-        it('should succeed when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/genres')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            let pickedGenres = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
-                            agent
-                                .post('/genres')
-                                .expect(201)
-                                .send(pickedGenres)
-                                .end((err, resPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.genres.length.should.equal(pickedGenres.length);
+		/*
+		 * Author: Elvar
+		 * Signees: Bergþór
+		 */
+		it('should succeed when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/genres')
+						.expect(200)
+						.end((err, rGet) => {
+							let pickedGenres = [rGet.body[0]._id, rGet.body[1]._id, rGet.body[2]._id];
+							agent
+								.post('/genres')
+								.expect(201)
+								.send(pickedGenres)
+								.end((err, resPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.genres.length.should.equal(pickedGenres.length);
 
-                                        for (var i = 0; i < doc.genres.length; i++) {
-                                            doc.genres.indexOf(pickedGenres[i]).should.not.equal(-1);
-                                        }
-                                    });
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
+										for (var i = 0; i < doc.genres.length; i++) {
+											doc.genres.indexOf(pickedGenres[i]).should.not.equal(-1);
+										}
+									});
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not allow empty lists when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            let pickedGenres = [];
-                            agent
-                                .post('/genres')
-                                .expect(412)
-                                .send(pickedGenres)
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.genres.length.should.equal(pickedGenres.length);
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not allow empty lists when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							let pickedGenres = [];
+							agent
+								.post('/genres')
+								.expect(412)
+								.send(pickedGenres)
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.genres.length.should.equal(pickedGenres.length);
 
-                                        for (var i = 0; i < doc.genres.length; i++) {
-                                            doc.genres.indexOf(pickedGenres[i]).should.not.equal(-1);
-                                        }
-                                    });
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
+										for (var i = 0; i < doc.genres.length; i++) {
+											doc.genres.indexOf(pickedGenres[i]).should.not.equal(-1);
+										}
+									});
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept empty body when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/genres')
-                                .expect(412)
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.genres.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept empty body when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/genres')
+								.expect(412)
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.genres.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept an object when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/genres')
-                                .expect(412)
-                                .send({
-                                    asdf: "Hello"
-                                })
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.genres.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept an object when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/genres')
+								.expect(412)
+								.send({
+									asdf: "Hello"
+								})
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.genres.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
 
-        /*
-         * Author: Bergþór
-         * Signees: Elvar
-         */
-        it('should not accept a string when POSTing', function(done) {
-            let agent = request.agent(app);
-            agent
-                .post('/login-local')
-                .send({
-                    username: 'TestPerson',
-                    password: 'SecretTestPassword'
-                }).end((err, res) => {
-                    agent
-                        .get('/instruments')
-                        .expect(200)
-                        .end((err, rGet) => {
-                            agent
-                                .post('/genres')
-                                .expect(412)
-                                .send("TestingTheServer")
-                                .end((err, rPost) => {
-                                    if (err) throw err;
-                                    user.findOne({
-                                        "username": "TestPerson"
-                                    }, function(err, doc) {
-                                        if (err) throw err;
-                                        doc.genres.length.should.equal(0);
-                                    });
-                                    rPost.body.err.should.equal(2);
-                                    done();
-                                });
-                            if (err) throw err;
-                        });
-                });
-        });
-    });
+		/*
+		 * Author: Bergþór
+		 * Signees: Elvar
+		 */
+		it('should not accept a string when POSTing', function(done) {
+			let agent = request.agent(app);
+			agent
+				.post('/login-local')
+				.send({
+					username: 'TestPerson',
+					password: 'SecretTestPassword'
+				}).end((err, res) => {
+					agent
+						.get('/instruments')
+						.expect(200)
+						.end((err, rGet) => {
+							agent
+								.post('/genres')
+								.expect(412)
+								.send("TestingTheServer")
+								.end((err, rPost) => {
+									if (err) throw err;
+									user.findOne({
+										"username": "TestPerson"
+									}, function(err, doc) {
+										if (err) throw err;
+										doc.genres.length.should.equal(0);
+									});
+									rPost.body.err.should.equal(2);
+									done();
+								});
+							if (err) throw err;
+						});
+				});
+		});
+	});
 });
 };

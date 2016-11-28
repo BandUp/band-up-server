@@ -79,31 +79,31 @@ let userSchema = mongoose.Schema({
 		default: ""
 	}
 }, {
-    toObject: {
-        transform: function(doc, ret) {
-            delete ret.facebook;
-            delete ret.google;
-            delete ret.soundcloud;
-            delete ret.local;
-        }
-    },
-    toJSON: {
-        transform: function(doc, ret) {
-            delete ret.facebook;
-            delete ret.google;
-            delete ret.soundcloud;
-            delete ret.local;
-        }
-    }
+	toObject: {
+		transform: function(doc, ret) {
+			delete ret.facebook;
+			delete ret.google;
+			delete ret.soundcloud;
+			delete ret.local;
+		}
+	},
+	toJSON: {
+		transform: function(doc, ret) {
+			delete ret.facebook;
+			delete ret.google;
+			delete ret.soundcloud;
+			delete ret.local;
+		}
+	}
 });
 
 // methoods
 userSchema.methods.generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+	return bcrypt.compareSync(password, this.local.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
