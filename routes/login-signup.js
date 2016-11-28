@@ -99,15 +99,22 @@ module.exports = function(app, passport) {
 				return;
 			}
 
-			if (user) {
-				res.json({
-					emailInUse: true
-				});
-			} else {
-				res.json({
-					emailInUse: false
-				});
-			}
+            if (user) {
+                res.json({
+                    emailInUse: true
+                });
+            } else {
+                res.json({
+                    emailInUse: false
+                });
+            }
+        });
+    });
+
+	app.post('/reset-password', (req, res) =>{
+		User.findOne({email: req.body.email}, (err, doc) =>{
+			if(err) throw err;
+			res.json({succesfull: true});
 		});
 	});
 };
