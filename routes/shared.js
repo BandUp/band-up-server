@@ -66,6 +66,7 @@ module.exports = {
 			image: targUser.image,
 			dateOfBirth: targUser.dateOfBirth,
 			aboutme: targUser.aboutme,
+			favoriteinstrument: targUser.favoriteinstrument,
 			soundCloudId: targUser.soundCloudId,
 			soundcloudurl: targUser.soundcloudURL
 		};
