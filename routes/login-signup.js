@@ -134,6 +134,12 @@ module.exports = function(app, passport) {
 	app.get('/reset-password/:token', (req, res) =>{
 		User.findOne({resetToken: req.params.token}, (err, doc) =>{
 			// todo: render html to allow user to create new password
+			if (err) {
+				console.log(err);
+				res.status(404);
+				return;
+			}
+			
 		});
 	});
 
