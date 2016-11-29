@@ -83,6 +83,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+app.use(express.static(__dirname + '/static'));
+
 // =========== app routes ===========
 require('./routes/routes')(app, passport);
 
