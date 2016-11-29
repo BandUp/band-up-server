@@ -4,10 +4,8 @@ module.exports = function(app, passport) {
 	app.post('/like', isLoggedIn, (req, res) => {
 		let user = req.user;
 		if (user.liked.indexOf(req.body.userID) === -1) {
-
 			// find user by id
 			User.findById(user._id, (err, currUserDoc) => {
-
 				if (!req.body.userID) {
 					res.status(412).send({
 						err: 1,
@@ -44,15 +42,7 @@ module.exports = function(app, passport) {
 					if (err) throw err;
 				});
 			});
-
 		} else {
-			// already liked let's unlike
-			// TODO: check for matches and remove if needed
-			// user.liked = user.liked.filter((item) => {return (item !== req.body.userID);});
-			// user.save((err) => {
-			//   if (err) throw err;
-			//   res.json({'isMatch': false});
-			// });
 			res.json({
 				'isMatch': false
 			});
