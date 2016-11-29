@@ -1,4 +1,6 @@
 const nodemailer = require("nodemailer");
+const xoauth2 = require("xoauth2");
+
 
 class Mailer{
 
@@ -10,17 +12,18 @@ class Mailer{
      * reset connection to google to elimate lost connections
      */
     startTransporter(){
-        this.transporter = nodemailer.createTransport("SMTP", {
-            service: "Gmail",
-            auth: {
-                user: process.env.GMAIL_EMAIL,
-                pass: process.env.GMAIL_PASSWORD
-            }
+        this.transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: xoauth2.createXOAuth2Generator({
+                user: "dagurdan2@gmail.com",
+                clientId: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_ID_SECRET
+            })
         });
     }
 
     sendPaswordReset(user){
-        startTransporter();
+        this.startTransporter();
         let url = "http://band-up-server.herokuapp.com/reset-password/" + user.resetToken;
         let mailOptions = {
             from: "Bad melody <support@badmelody.com>",
@@ -37,7 +40,7 @@ class Mailer{
     }
 
     sendValidationEmail(user){
-        startTransporter();
+        this.startTransporter();
         let url = "http://band-up-server.herokuapp.com/validate/" + user.resetToken;
         let mailOptions = {
             from: "Bad melody <support@badmelody.com>",

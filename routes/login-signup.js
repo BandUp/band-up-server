@@ -180,17 +180,19 @@ module.exports = function(app, passport) {
 			});
 		});
 	});
-};
 
-app.get('/validate/:token', (req, res) =>{
-	User.findOne({validToken: req.params.token}, (err, doc) => {
-		doc.validToken = "";
-		doc.save((err) => {
-			if(err) throw err;
-			res.sendFile(path.join(__dirname + '/../static/validate.html'));
+	app.get('/validate/:token', (req, res) =>{
+		User.findOne({validToken: req.params.token}, (err, doc) => {
+			doc.validToken = "";
+			doc.save((err) => {
+				if(err) throw err;
+				res.sendFile(path.join(__dirname + '/../static/validate.html'));
+			});
 		});
 	});
-});
+};
+
+
 
 // route middleware to make sure user is logged in
 function isLoggedIn(req, res, next) {
