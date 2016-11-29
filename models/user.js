@@ -84,7 +84,6 @@ let userSchema = mongoose.Schema({
 			delete ret.facebook;
 			delete ret.google;
 			delete ret.soundcloud;
-			delete ret.local;
 		}
 	},
 	toJSON: {

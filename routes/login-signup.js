@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const guid = require("node-uuid");
+const path = require("path");
 
 module.exports = function(app, passport) {
 	app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
@@ -119,12 +120,15 @@ module.exports = function(app, passport) {
 	app.post('/reset-password', (req, res) =>{
 		User.findOne({email: req.body.email}, (err, doc) =>{
 			if(err) throw err;
-			doc.resetToken = uuid.v4();
-			app.mailer.sendPaswordReset(doc);
-			setTimeOut(() => {
+			doc.resetToken = guid.v4();
+			//app.mailer.sendPaswordReset(doc);
+			setTimeout(() => {
 				doc.resetToken = "";
 			}, 86400000); // wait for 24 hours
-			res.json({succesfull: true}).status(200);
+			doc.save((err) =>{
+				if(err) throw err;
+				res.json({succesfull: true, token: doc.resetToken}).status(200);
+			});
 		});
 	});
 
@@ -138,8 +142,12 @@ module.exports = function(app, passport) {
 				console.log(err);
 				res.status(404);
 				return;
+			}else if(doc){
+				res.sendFile(path.join(__dirname + '/../static/reset-password.html'));
+			}else{
+				res.sendFile(path.join(__dirname + '/../static/404.html'));
 			}
-			
+
 		});
 	});
 
@@ -147,14 +155,17 @@ module.exports = function(app, passport) {
      * resets the password of user with the corresponding resetToken
      * to the password provided in req.body.password
      */
-	app.post('/reset-password/:token', (req, res) =>{
-		User.findOne({resetToken: req.params.token}, (err, doc) =>{
+	app.post('/reset-password/send', (req, res) =>{
+		console.log(req.body);
+		User.findOne({resetToken: req.body.token}, (err, doc) =>{
+			console.log(doc);
 			doc.local.password = doc.generateHash(req.body.password);
 			doc.resetToken = "";
 			doc.save((err) =>{
+				console.log("saved");
 				if (err) throw err;
 				// todo: send a nice html page
-				res.status(200);
+				res.status(200).send();
 			});
 		});
 	});

@@ -14,6 +14,7 @@ const fileUpload = require('express-fileupload');
 const socketIo = require('socket.io').listen(http);
 const passportSocketIo = require('passport.socketio');
 const MongoStore = require('connect-mongo')(expressSession);
+const path = require('path');
 
 // logging
 const morgan = require('morgan');
@@ -87,6 +88,11 @@ app.use(express.static(__dirname + '/static'));
 
 // =========== app routes ===========
 require('./routes/routes')(app, passport);
+
+// 404 page
+app.use(function (req, res, next) {
+  res.status(404).sendFile(path.join(__dirname + '/static/404.html'));
+});
 
 // =========== app startup ===========
 http.listen(port, () => {
