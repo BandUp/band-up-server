@@ -74,10 +74,14 @@ let userSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-	resetToken:{
+	resetToken: {
 		type: String,
 		default: ""
-	}
+	},
+    validToken: {
+        type: String,
+        default: ""
+    }
 }, {
 	toObject: {
 		transform: function(doc, ret) {

@@ -16,6 +16,17 @@ module.exports = function(app, passport) {
 		req.user.image.url = "";
 		req.user.image.public_id = "";
 
+		/*/ set validation token (if it is not empty in a week we remove the user)
+		req.user.validToken = guid.v4();
+		app.mailer.sendValidationEmail(req.user);
+		setTimeout(function(){
+			User.findById(req.user._id, (err, doc) =>{
+				if(doc.validToken){
+					doc.remove();
+				}
+			});
+		}, 7 * 86400000);//*/
+
 		res.status(201).json({
 			id: req.user._id
 		}).send();
@@ -170,6 +181,16 @@ module.exports = function(app, passport) {
 		});
 	});
 };
+
+app.get('/validate/:token', (req, res) =>{
+	User.findOne({validToken: req.params.token}, (err, doc) => {
+		doc.validToken = "";
+		doc.save((err) => {
+			if(err) throw err;
+			res.sendFile(path.join(__dirname + '/../static/validate.html'));
+		});
+	});
+});
 
 // route middleware to make sure user is logged in
 function isLoggedIn(req, res, next) {

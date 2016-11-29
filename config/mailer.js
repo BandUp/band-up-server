@@ -13,8 +13,8 @@ class Mailer{
         this.transporter = nodemailer.createTransport("SMTP", {
             service: "Gmail",
             auth: {
-                user: "gmailID",
-                pass: "password"
+                user: process.env.GMAIL_EMAIL,
+                pass: process.env.GMAIL_PASSWORD
             }
         });
     }
@@ -38,12 +38,13 @@ class Mailer{
 
     sendValidationEmail(user){
         startTransporter();
+        let url = "http://band-up-server.herokuapp.com/validate/" + user.resetToken;
         let mailOptions = {
             from: "Bad melody <support@badmelody.com>",
             to: user.email,
             subject: "Password reset",
-            text: "Plaintext body",
-            html: "<p>html body</p>"
+            text: "please go to this address to validate your account: " + url,
+            html: '<p>please click <a href="' + url + '">this</a> to validate your account</p>'
         };
 
         this.transporter.sendMail(mailOptions, (err, info) =>{
