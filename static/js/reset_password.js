@@ -24,7 +24,6 @@ $(document).ready(function(){
                 password: pass1
             })
         }).done(function(data){
-            console.log(data);
             $("#successMessage").show();
             $("#resetForm").hide();
         });
