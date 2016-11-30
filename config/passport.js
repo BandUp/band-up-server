@@ -33,7 +33,7 @@ module.exports = function(passport) {
 		process.nextTick(function() {
 			// find user with same username (checking if this is a pre-existing user)
 			User.findOne({
-				'username': username
+				'email': username
 			}, (err, user) => {
 				// if there was an error return it
 				if (err) {
@@ -51,9 +51,9 @@ module.exports = function(passport) {
 					let newUser = new User();
 
 					// set local credentials
-					newUser.username = username;
-					newUser.local.password = newUser.generateHash(password);
 					newUser.email = req.body.email;
+					newUser.local.password = newUser.generateHash(password);
+					newUser.username = req.body.username;
 					newUser.dateOfBirth = req.body.dateOfBirth;
 
 					// Check if dateOfBirth is valid
