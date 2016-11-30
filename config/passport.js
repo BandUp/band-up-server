@@ -91,7 +91,7 @@ module.exports = function(passport) {
 		passReqToCallback: true
 	}, function(req, username, password, done) {
 		User.findOne({
-			'username': username
+			'email': username
 		}, function(err, user) {
 			// start with error reporting
 			if (err) {
@@ -104,7 +104,7 @@ module.exports = function(passport) {
 					message: 'No such user registered'
 				});
 			}
-			// check wether the password is incorrect
+			// check whether the password is incorrect
 			if (!user.validPassword(password)) {
 				return done(null, false, {
 					message: 'incorrect password'
