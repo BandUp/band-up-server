@@ -33,7 +33,7 @@ module.exports = function(passport) {
 		process.nextTick(function() {
 			// find user with same username (checking if this is a pre-existing user)
 			User.findOne({
-				'email': username
+				'email': req.body.email
 			}, (err, user) => {
 				// if there was an error return it
 				if (err) {

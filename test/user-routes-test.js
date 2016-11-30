@@ -37,7 +37,7 @@ module.exports = function(app) {
 				user
 					.post("/login-local")
 					.send({
-						username: "TestPerson",
+						username: "test@gmail.com",
 						password: "SecretTestPassword"
 					}).end((err, res) => {
 						user
@@ -64,7 +64,7 @@ module.exports = function(app) {
 				user
 					.post('/login-local')
 					.send({
-						username: "TestPerson",
+						username: "test@gmail.com",
 						password: "SecretTestPassword"
 					}).end((err, res) => {
 						user.post('/edit-user')

@@ -97,7 +97,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -123,7 +123,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -163,7 +163,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -202,7 +202,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					if (err) throw err;
@@ -237,7 +237,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -275,7 +275,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -314,7 +314,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -340,7 +340,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -380,7 +380,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -420,7 +420,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -455,7 +455,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent
@@ -493,7 +493,7 @@ describe('Instruments and Genres', function() {
 			agent
 				.post('/login-local')
 				.send({
-					username: 'TestPerson',
+					username: 'test@gmail.com',
 					password: 'SecretTestPassword'
 				}).end((err, res) => {
 					agent

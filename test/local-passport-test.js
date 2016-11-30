@@ -43,11 +43,11 @@ module.exports = function(app) {
 			 * Author: Dagur
 			 * Signees: Elvar
 			 */
-			it('should return 200 on succesful login', function(done) {
+			it('should return 200 on successful login', function(done) {
 				request(app) // make a request to app
 					.post('/login-local') // this path
 					.send({ // send this object
-						username: 'TestPerson',
+						username: 'woo@mail.com',
 						password: 'SecretTestPassword'
 					}).end((err, res) => { // callback with results
 						if (err) throw err;
@@ -64,7 +64,7 @@ module.exports = function(app) {
 				request(app)
 					.post('/login-local')
 					.send({
-						username: 'TestPerson',
+						username: 'woo@mail.com',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						if (err) throw err;
@@ -81,7 +81,7 @@ module.exports = function(app) {
 				request(app)
 					.post('/login-local')
 					.send({
-						username: 'TestPerson',
+						username: 'woo@mail.com',
 						password: 'WrongSecretTestPassword'
 					}).end((err, res) => {
 						if (err) throw err;
@@ -95,7 +95,8 @@ module.exports = function(app) {
 			it('should return 201 on new user', function(done) {
 				let user = {
 					username: "newTest",
-					password: "SuperSecurePassword"
+					password: "SuperSecurePassword",
+					email: "example@example.com"
 				};
 
 				request(app)
@@ -115,7 +116,8 @@ module.exports = function(app) {
 			it('should return 401 on trying to use duplicate usernames', function(done) {
 				let user = {
 					username: "testPerson",
-					password: "wowSuchSecret"
+					password: "wowSuchSecret",
+					email: "example@example.com"
 				};
 				request(app)
 					.post('/signup-local')

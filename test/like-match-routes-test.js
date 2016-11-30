@@ -57,7 +57,7 @@ module.exports = function(app) {
 				agent
 					.post('/login-local')
 					.send({
-						username: 'TestPerson',
+						username: 'test@gmail.com',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						if (err) throw err;
@@ -87,7 +87,7 @@ module.exports = function(app) {
 				agent1
 					.post('/login-local')
 					.send({
-						username: 'TestPerson',
+						username: 'test@gmail.com',
 						password: 'SecretTestPassword'
 					}).end((err, res) => {
 						if (err) throw err;
@@ -100,7 +100,7 @@ module.exports = function(app) {
 								agent2
 									.post('/login-local')
 									.send({
-										username: 'TestPerson2',
+										username: 'test@test.is',
 										password: 'SecretTestPassword2'
 									}).end((err, res) => {
 										if (err) throw err;
