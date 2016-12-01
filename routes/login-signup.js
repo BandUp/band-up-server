@@ -16,7 +16,7 @@ module.exports = function(app, passport) {
 		req.user.image.url = "";
 		req.user.image.public_id = "";
 
-		/*/ set validation token (if it is not empty in a week we remove the user)
+		//*/ set validation token (if it is not empty in a week we remove the user)
 		req.user.validToken = guid.v4();
 		app.mailer.sendValidationEmail(req.user);
 		setTimeout(function(){
@@ -132,7 +132,7 @@ module.exports = function(app, passport) {
 		User.findOne({email: req.body.email}, (err, doc) =>{
 			if(err) throw err;
 			doc.resetToken = guid.v4();
-			//app.mailer.sendPaswordReset(doc);
+			app.mailer.sendPaswordReset(doc);
 			setTimeout(() => {
 				doc.resetToken = "";
 			}, 86400000); // wait for 24 hours
