@@ -28,9 +28,6 @@ $(document).ready(function(){
                 $("#successMessage").show();
                 $("#resetForm").hide();
             }
-        }).done(function(data){
-            $("#successMessage").show();
-            $("#resetForm").hide();
         });
     });
 });
