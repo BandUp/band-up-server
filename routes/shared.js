@@ -68,7 +68,8 @@ module.exports = {
 			aboutme: targUser.aboutme,
 			favoriteinstrument: targUser.favoriteinstrument,
 			soundCloudId: targUser.soundCloudId,
-			soundcloudurl: targUser.soundcloudURL
+			soundcloudurl: targUser.soundcloudURL,
+			soundCloudSongName: targUser.soundCloudSongName
 		};
 
 		for (let i = 0; i < targUser.instruments.length; i++) {
