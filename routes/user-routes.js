@@ -90,7 +90,7 @@ module.exports = function(app, passport) {
 
 	app.post("/soundcloudurl", isLoggedIn, (req, res) => {
 		req.user.soundcloudURL = req.body.soundcloudurl;
-
+		req.user.soundCloudSongName = req.body.soundcloudsongname;
 		req.user.save((err) => {
 			if (err) throw err;
 			res.status(200).json({}).send();
