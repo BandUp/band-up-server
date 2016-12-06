@@ -27,9 +27,16 @@ module.exports = function(passport) {
 					newUser.soundcloud.id = profile.id;
 					newUser.soundcloud.token = token;
 					newUser.username = profile.username;
-					if (profile.emails.value) {
-						newUser.email = profile.emails[0].value; // soundcloud returns multiple emails
+					try {
+						console.log(profile);
+						if (profile.emails) {
+							newUser.email = profile.emails[0].value; // soundcloud returns multiple emails
+						}
+					} catch (e) {
+						console.log("could not get e-mail");
 					}
+
+
 					newUser.soundCloudId = profile.id;
 
 					newUser.save((err) => {

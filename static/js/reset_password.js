@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var myToken = window.location.href.split("/").pop();
-    var baseUrl = "http://localhost:3000";
+    var baseUrl = "http://band-up-server.herokuapp.com";
 
     $("form").submit(function(event){
         event.preventDefault();
@@ -18,14 +18,17 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: myUrl,
+            crossDomain: true,
             contentType: 'application/json',
             data: JSON.stringify({
                 token: myToken,
                 password: pass1
             })
-        }).done(function(data){
+        }).done(function(resp){
             $("#successMessage").show();
             $("#resetForm").hide();
+        }).error(function(jqXHR, err, type){
+            console.log(err);
         });
     });
 });

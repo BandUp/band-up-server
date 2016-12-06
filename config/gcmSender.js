@@ -36,7 +36,7 @@ class gcmSender {
 	 * finds reciever user doc and sends message to it
 	 */
 	sendMsgNotification(senderid, recieverid, msg) {
-		User.findOne({
+		Users.findOne({
 			_id: recieverid
 		}, (err, doc) => {
 			let message = new gcm.Message({

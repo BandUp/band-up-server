@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const xoauth2 = require("xoauth2");
 
 
 class Mailer{
@@ -13,12 +12,13 @@ class Mailer{
      */
     startTransporter(){
         this.transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: xoauth2.createXOAuth2Generator({
-                user: "dagurdan2@gmail.com",
-                clientId: process.env.GOOGLE_CLIENT_ID,
-                clientSecret: process.env.GOOGLE_CLIENT_ID_SECRET
-            })
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth:{
+                user: process.env.GMAIL_EMAIL,
+                pass: process.env.GMAIL_PASSWORD
+            }
         });
     }
 
