@@ -16,14 +16,18 @@ $(document).ready(function(){
 
         // send a confirmed password to server using ajax
         $.ajax({
-            dataType: "jsonp"
+            dataType: "jsonp",
             type: "POST",
             url: myUrl,
             contentType: 'application/json',
             data: JSON.stringify({
                 token: myToken,
                 password: pass1
-            })
+            }),
+            success: function(response){
+                $("#successMessage").show();
+                $("#resetForm").hide();
+            }
         }).done(function(data){
             $("#successMessage").show();
             $("#resetForm").hide();
