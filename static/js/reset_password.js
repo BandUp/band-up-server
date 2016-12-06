@@ -16,6 +16,7 @@ $(document).ready(function(){
 
         // send a confirmed password to server using ajax
         $.ajax({
+            dataType: "jsonp"
             type: "POST",
             url: myUrl,
             contentType: 'application/json',
