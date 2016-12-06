@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var myToken = window.location.href.split("/").pop();
-    var baseUrl = "http://localhost:3000";
+    var baseUrl = "http://band-up-server.herokuapp.com/";
 
     $("form").submit(function(event){
         event.preventDefault();
