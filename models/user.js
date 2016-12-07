@@ -78,6 +78,10 @@ let userSchema = mongoose.Schema({
         type: String,
         default: ""
     },
+    soundCloudSongName: {
+    	type: String,
+    	default: ""
+    },
 	resetToken: {
 		type: String,
 		default: ""
