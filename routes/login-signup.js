@@ -3,6 +3,11 @@ const guid = require("node-uuid");
 const path = require("path");
 
 module.exports = function(app, passport) {
+
+	/**
+	 * create a new user account using the local strategy
+	 * also sends an email to require user validation to prevent bots from overflowing the system
+	 */
 	app.post('/signup-local', passport.authenticate('local-signup'), (req, res) => {
 		// this function only gets called when signup was succesful
 		// req.user contains authenticated user.
@@ -32,6 +37,9 @@ module.exports = function(app, passport) {
 		}).send();
 	});
 
+	/**
+	 * login user with the local strategy and recieve an OAuth cookie
+	 */
 	app.post('/login-local',
 		passport.authenticate('local-login', {
 			failureFlash: true
@@ -47,11 +55,19 @@ module.exports = function(app, passport) {
 			res.status(200).json(sendObject).send();
 		});
 
+	/**
+	 * terminate the current session
+	 * does nothing if user is not loged in
+	 */
 	app.get('/logout', (req, res) => {
 		req.logout();
 		res.status(200).send("{}");
 	});
 
+	/**
+	 * utility path to check wether the user is logged in
+	 * @type {Boolean}
+	 */
 	app.get('/isLoggedIn', (req, res) => {
 		if (!req.user) {
 			res.json({
@@ -66,6 +82,10 @@ module.exports = function(app, passport) {
 		}
 	});
 
+	/**
+	 * log in or create new user using facebook-token
+	 * requires a valid facebook auth token in body
+	 */
 	app.post('/login-facebook',
 		passport.authenticate('facebook-token'),
 		(req, res) => {
@@ -76,6 +96,10 @@ module.exports = function(app, passport) {
 			});
 		});
 
+	/**
+	 * log in or create new user using google id token
+	 * requires google id token which is encoded user information
+	 */
 	app.post('/login-google',
 		passport.authenticate('google-id-token'),
 		(req, res) => {
@@ -86,6 +110,10 @@ module.exports = function(app, passport) {
 			});
 		});
 
+	/**
+	 * log in or create new user using soundcloud-token
+	 * requires a valid soundcloud auth token in body
+	 */
 	app.get('/login-soundcloud',
 		passport.authenticate('soundcloud-token'),
 		(req, res) => {
@@ -97,6 +125,10 @@ module.exports = function(app, passport) {
 				hasFinishedSetup: req.user.hasFinishedSetup,
 			});
 		});
+
+	/**
+	 * set the email for currently logged in user
+	 */
 	app.post('/email', (req, res) => {
 		if (!req.body.email) {
 			res.status(412).send("{}");
@@ -181,6 +213,9 @@ module.exports = function(app, passport) {
 		});
 	});
 
+	/**
+	 * set user as validated
+	 */
 	app.get('/validate/:token', (req, res) =>{
 		User.findOne({validToken: req.params.token}, (err, doc) => {
 			doc.validToken = "";
