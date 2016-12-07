@@ -62,6 +62,7 @@ module.exports = {
 			instruments: [],
 			genres: [],
 			distance: distanceToUser,
+			location: targUser.location,
 			percentage: perc,
 			image: targUser.image,
 			dateOfBirth: targUser.dateOfBirth,
