@@ -50,7 +50,7 @@ module.exports = {
 		}
 
 		// get total number of genres for user with longer list
-		let numGenres = Math.max(currUser.genres.length, targUser.genres.length);
+		let numGenres = currUser.genres.length;
 
 		// filter call returns list shared genres
 		let perc = (currUser.genres.filter(makeFilter(targUser)).length / numGenres) * 100;
