@@ -70,7 +70,8 @@ module.exports = {
 			favoriteinstrument: targUser.favoriteinstrument,
 			soundCloudId: targUser.soundCloudId,
 			soundcloudurl: targUser.soundcloudURL,
-			soundCloudSongName: targUser.soundCloudSongName
+			soundCloudSongName: targUser.soundCloudSongName,
+			isLiked: currUser.liked.indexOf(targUser.id) !== -1
 		};
 
 		for (let i = 0; i < targUser.instruments.length; i++) {
