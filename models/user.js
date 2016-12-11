@@ -37,7 +37,7 @@ let userSchema = mongoose.Schema({
     },
     favoriteinstrument: {
         type: String,
-        default: "Favorite Instrument"
+        default: ""
     },
     searchradius: {
         type: Number,
