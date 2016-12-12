@@ -13,13 +13,26 @@ module.exports = function(passport) {
 		// asynchronous
 		process.nextTick(() => {
 			// look for pre-existing account
-			User.findOne({
-				'soundcloud.id': profile.id
+			let email = "None exists";
+			if (profile.emails) {
+				email = profile.emails[0].value; // soundcloud returns multiple emails
+			}
+			User.findOne({ '$or': [
+				{'soundcloud.id': profile.id},
+				{'email': email}
+			]
+
 			}, (err, user) => {
 				if (err) return done(err);
 
 				// if user is found log them in
 				if (user) {
+					if (user.soundcloud.id === null) {
+						user.soundcloud.id = profile.id;
+					}
+					if (user.soundcloud.token === null){
+						user.soundcloud.token = token;
+					}
 					return done(null, user);
 				} else {
 					// no user found with soundcloud id, time to create one

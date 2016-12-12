@@ -10,13 +10,18 @@ module.exports = function(passport) {
 		// asynchronous
 		process.nextTick(() => {
 			// look for pre-existing account
-			User.findOne({
-				'google.id': googleId
+			User.findOne({ "$or":[
+				{'google.id': googleId},
+				{'email': parsedToken.payload.email}
+			]
 			}, (err, user) => {
 				if (err) return done(err);
 
 				// if user is found log them in
 				if (user) {
+					if (user.google.id === null) {
+						user.google.id = googleId;
+					}
 					return done(null, user);
 				} else {
 					let newUser = new User();
