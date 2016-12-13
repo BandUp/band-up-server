@@ -21,11 +21,17 @@ module.exports = function(passport) {
 
 				// if user is found log them in
 				if (user) {
-					if (user.facebok.id) {
-						user.facebook.id = profile.id;
-						user.facebook.token = token;
+					if (!user.facebook) {
+						user.facebook = {
+							id: profile.id,
+							token: token
+						};
+						user.save((err) =>{
+							return done(null, user);
+						});
+					}else{
+						return done(null, user);
 					}
-					return done(null, user);
 				} else {
 					// no user found with facebok id, time to create one
 					let newUser = new User();
