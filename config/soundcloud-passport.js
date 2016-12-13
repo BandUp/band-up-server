@@ -27,13 +27,18 @@ module.exports = function(passport) {
 
 				// if user is found log them in
 				if (user) {
-					if (user.soundcloud.id === null) {
-						user.soundcloud.id = profile.id;
+					if (!user.soundcloud) {
+						user.soundcloud = {
+							id: profile.id,
+							token: token,
+						};
+						user.soundCloudId = profile.id;
+						user.save((err)=>{
+							return done(null, user);
+						});
+					}else{
+						return done(null, user);
 					}
-					if (user.soundcloud.token === null){
-						user.soundcloud.token = token;
-					}
-					return done(null, user);
 				} else {
 					// no user found with soundcloud id, time to create one
 					let newUser = new User();

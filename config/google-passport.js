@@ -19,8 +19,8 @@ module.exports = function(passport) {
 
 				// if user is found log them in
 				if (user) {
-					if (user.google.id === null) {
-						user.google.id = googleId;
+					if (!user.google) {
+						user.google = { id: googleId};
 					}
 					return done(null, user);
 				} else {
