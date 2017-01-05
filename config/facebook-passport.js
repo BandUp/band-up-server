@@ -11,12 +11,16 @@ module.exports = function(passport) {
 		// asynchronous
 		process.nextTick(() => {
 			// look for pre-existing account
-			User.findOne({ '$or': [
-				{'facebook.id': profile.id},
-				{'email': profile.emails[0].value}
-			]
+			
+			var query = [{'facebook.id': profile.id}];
+			
+			if (profile.emails[0].value) {
+				query.append({'email': profile.emails[0].value});
+			}
+			
 
-			}, (err, user) => {
+
+			User.findOne({ '$or': query }, (err, user) => {
 				if (err) return done(err);
 
 				// if user is found log them in
