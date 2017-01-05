@@ -97,6 +97,14 @@ module.exports = function(app, passport) {
 		});
 	});
 
+	app.delete("/user-delete", isLoggedIn, (req, res) => {
+		req.logout();
+		User.remove({ "_id": req.user.id }, (err) => {
+			if (err) throw err;
+			res.status(204).json({}).send();
+		});
+	});
+
 };
 
 // route middleware to make sure user is logged in
