@@ -100,7 +100,7 @@ module.exports = function(app, passport) {
 	app.delete("/user-delete", isLoggedIn, (req, res) => {
 		User.remove({ "_id": req.user._id }, (err) => {
 			if (err) throw err;
-			res.status(204).json({}).send();
+			res.status(204).send("{}");
 		});
 	});
 
