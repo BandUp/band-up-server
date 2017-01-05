@@ -14,11 +14,12 @@ module.exports = function(passport) {
 			
 			var query = [{'facebook.id': profile.id}];
 			
-			if (profile.emails[0].value) {
-				query.push({'email': profile.emails[0].value});
+			if (profile.emails.length !== 0) {
+				if (profile.emails[0].value) {
+					query.push({'email': profile.emails[0].value});
+				}
 			}
 
-			console.log(query);
 			User.findOne({ '$or': query }, (err, user) => {
 				if (err) return done(err);
 
