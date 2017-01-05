@@ -83,7 +83,7 @@ module.exports = function(app, passport) {
 		req.user.gcmToken = req.body.regToken;
 
 		req.user.save((err) => {
-			res.status(200).json({}).send();
+			res.json({}).status(200);
 		});
 
 	});
@@ -93,14 +93,14 @@ module.exports = function(app, passport) {
 		req.user.soundCloudSongName = req.body.soundcloudsongname;
 		req.user.save((err) => {
 			if (err) throw err;
-			res.status(200).json({}).send();
+			res.json({}).status(200);
 		});
 	});
 
 	app.delete("/user-delete", isLoggedIn, (req, res) => {
 		User.remove({ "_id": req.user._id }, (err) => {
 			if (err) throw err;
-			res.status(204).send("{}");
+			res.json({}).status(204);
 		});
 	});
 
