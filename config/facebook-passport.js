@@ -42,7 +42,20 @@ module.exports = function(passport) {
 					newUser.facebook.id = profile.id;
 					newUser.facebook.token = token;
 					newUser.username = profile.name.givenName;
-					newUser.email = profile.emails[0].value; // facebook returns multiple emails
+					
+					if (profile.emails) {
+						if (profile.emails.length !== 0) {
+							newUser.email = profile.emails[0].value; // facebook returns multiple emails
+						}
+
+					}
+					
+					if (profile.photos) {
+						if (profile.photos.length !== 0) {
+							newUser.image.url = profile.photos[0].value; // The first profile picture from Facebook.
+							newUser.image.public_id = null;
+						}
+					}
 
 					newUser.save((err) => {
 						if (err) throw err;
