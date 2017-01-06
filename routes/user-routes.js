@@ -98,7 +98,9 @@ module.exports = function(app, passport) {
 	});
 
 	app.delete("/user-delete", isLoggedIn, (req, res) => {
-		User.remove({ "_id": req.user._id }, (err) => {
+		User.remove({
+			"_id": req.user._id
+		}, (err) => {
 			if (err) throw err;
 			res.json({}).status(204);
 		});
