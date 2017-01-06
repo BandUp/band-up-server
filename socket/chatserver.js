@@ -59,6 +59,12 @@ module.exports.setup = function socketioApp(server, app, io) {
                         }
                     });
 
+                console.log("msgObj");
+                console.log(msgObj);
+
+                console.log("users");
+                console.log(users);
+
                 // If user exists in global user list.
                 if (users[msgObj.nick] !== undefined) {
                     // Send the message only to this user.
