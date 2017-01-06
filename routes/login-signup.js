@@ -221,7 +221,11 @@ module.exports = function(app, passport) {
 
 		User.findOne({validToken: req.params.token}, (err1, doc) => {
 			if (err1) throw err1;
-			if (!doc) return;
+			if (!doc) {
+				res.sendFile(path.join(__dirname + '/../static/404.html'));
+				return;
+			} 
+
 
 			doc.validToken = "";
 			doc.save((err2) => {
