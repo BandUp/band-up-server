@@ -218,10 +218,18 @@ module.exports = function(app, passport) {
 	 * set user as validated
 	 */
 	app.get('/validate/:token', (req, res) =>{
-		User.findOne({validToken: req.params.token}, (err, doc) => {
+
+		User.findOne({validToken: req.params.token}, (err1, doc) => {
+			if (err1) throw err1;
+			if (!doc) {
+				res.sendFile(path.join(__dirname + '/../static/404.html'));
+				return;
+			} 
+
+
 			doc.validToken = "";
-			doc.save((err) => {
-				if(err) throw err;
+			doc.save((err2) => {
+				if(err2) throw err2;
 				res.sendFile(path.join(__dirname + '/../static/validate.html'));
 			});
 		});
