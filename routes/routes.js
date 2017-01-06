@@ -72,7 +72,7 @@ module.exports = function(app, passport) {
      * index function also used to quickly test various featuress
      */
     app.get('/', (req, res) => {
-        if (req.user) {
+        if (req.user != null) {
             console.log(req.user.gcmToken);
             app.gcmSender.sendTestMessage([req.user.gcmToken]);
         }
