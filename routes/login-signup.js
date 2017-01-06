@@ -31,10 +31,11 @@ module.exports = function(app, passport) {
 				}
 			});
 		}, 7 * 86400000);//*/
-
-		res.status(201).json({
-			id: req.user._id
-		}).send();
+		req.user.save((err) => {
+			res.status(201).json({
+				id: req.user._id
+			}).send();
+		})
 	});
 
 	/**
