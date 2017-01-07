@@ -381,6 +381,7 @@ module.exports = function(app, passport) {
 			} else {
 				checkNudity(imgPath, (nude) => {
 					if (nude) {
+						console.log("Nudity Detected");
 						res.status(406).send({
 							err: 11,
 							msg: "nudity detected"
@@ -425,7 +426,13 @@ module.exports = function(app, passport) {
 			let sightEngine = new nudity(API_USER, API_SECRET);
 
 			sightEngine.checkNudityForFile(path, (err, result) => {
-				if (err) console.log(err);
+				if (err) {
+					console.log(err);
+					return;
+				}
+				console.log("result.safe");
+				console.log(result.safe);
+
 				if (result.safe > 0.5) {
 					done(false);
 				} else {
