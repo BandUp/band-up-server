@@ -391,18 +391,25 @@ module.exports = function(app, passport) {
 							_id: req.user._id
 						}, function(err, doc) {
 							if (err) throw "err";
+							console.log("DOC");
+							console.log(doc);
 							if (doc.image.public_id) {
 								cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {}, {
 									invalidate: true
 								});
 							}
+
 							cloudinary.uploader.upload(imgPath, function(result) {
+								console.log("Uploaded Image"); 
 								let imageObject = {
 									url: result.secure_url,
 									public_id: result.public_id
 								};
 								doc.image = imageObject;
 								doc.save();
+								console.log("IMAGE");
+								console.log(doc.image);
+
 								res.status(201).json({
 									'url': result.secure_url
 								}).send();
