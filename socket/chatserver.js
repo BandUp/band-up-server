@@ -19,8 +19,9 @@ module.exports.setup = function socketioApp(server, app, io) {
                     username: socket.username,
                     socket: this
                 };
+                fn(true);
             } else {
-                console.log("User not logged in.");
+                fn(false);
             }
         });
 
