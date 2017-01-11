@@ -163,7 +163,16 @@ module.exports = function(app, passport) {
      */
 	app.post('/reset-password', (req, res) =>{
 		User.findOne({email: req.body.email}, (err, doc) =>{
-			if(err) throw err;
+			if (err) {
+				res.json({succesfull: false}).status(500);
+				return;
+			}
+			
+			if (!doc) {
+				res.json({succesfull: false}).status(404);
+				return;
+			}
+
 			doc.resetToken = guid.v4();
 			app.mailer.sendPaswordReset(doc);
 			setTimeout(() => {
