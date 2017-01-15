@@ -28,7 +28,6 @@ module.exports = function(app, passport) {
 	});
 
 	app.get('/matches', isLoggedIn, (req, res) => {
-		console.log(req.user.matched);
 		User.find({
 			'_id': {
 				$in: req.user.matched

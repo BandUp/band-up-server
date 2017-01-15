@@ -22,7 +22,6 @@ module.exports = function(app, passport) {
 			throw "need location info in body";
 		}
 		let currUser = req.user;
-		console.log(req.body);
 		currUser.location.lat = req.body.location.lat;
 		currUser.location.lon = req.body.location.lon;
 
@@ -72,11 +71,6 @@ module.exports = function(app, passport) {
      * index function also used to quickly test various featuress
      */
     app.get('/', (req, res) => {
-			console.log(req.user);
-        if (req.user) {
-            console.log(req.user.gcmToken);
-            app.gcmSender.sendTestMessage([req.user.gcmToken]);
-        }
         res.sendFile(path.join(__dirname + '/../static/index.html'));
     });
 
@@ -376,7 +370,6 @@ module.exports = function(app, passport) {
 
 		sampleFile.mv(imgPath, function(err) {
 			if (err) {
-				console.log("ERR");
 				res.status(500).send(err);
 			} else {
 				checkNudity(imgPath, (nude) => {
@@ -391,8 +384,6 @@ module.exports = function(app, passport) {
 							_id: req.user._id
 						}, function(err, doc) {
 							if (err) throw "err";
-							console.log("DOC");
-							console.log(doc);
 							if (doc.image.public_id) {
 								cloudinary.api.delete_resources([doc.image.public_id], (deleteResult) => {}, {
 									invalidate: true
@@ -400,15 +391,12 @@ module.exports = function(app, passport) {
 							}
 
 							cloudinary.uploader.upload(imgPath, function(result) {
-								console.log("Uploaded Image"); 
 								let imageObject = {
 									url: result.secure_url,
 									public_id: result.public_id
 								};
 								doc.image = imageObject;
 								doc.save();
-								console.log("IMAGE");
-								console.log(doc.image);
 
 								res.status(201).json({
 									'url': result.secure_url
@@ -437,8 +425,6 @@ module.exports = function(app, passport) {
 					console.log(err);
 					return;
 				}
-				console.log("result.safe");
-				console.log(result.safe);
 
 				if (result.safe > 0.5) {
 					done(false);

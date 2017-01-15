@@ -1,4 +1,5 @@
 const chat = require('../models/chatHistory');
+const User = require('../models/user');
 
 module.exports.setup = function socketioApp(server, app, io) {
     // Global user object, since we want to know what rooms each user is in etc.
@@ -56,6 +57,7 @@ module.exports.setup = function socketioApp(server, app, io) {
                         if (err) {
                             console.log("Error occurred:");
                             console.log(err);
+                            fn(false);
                             return;
                         }
                     });
@@ -67,10 +69,19 @@ module.exports.setup = function socketioApp(server, app, io) {
                     // Callback recieves true.
                     fn(true);
                 } else {
-                    app.gcmSender.sendMsgNotification(socket.username, msgObj.nick, msgObj.message);
+                	User.findById(socket.username, (err, userDoc) => {
+						if (err || !userDoc) {
+							res.status(500).send();
+							console.log("error");
+							fn(false);
+						} else if (userDoc) {
+							app.gcmSender.sendMsgNotification(socket.username, msgObj.nick, userDoc.username, msgObj.message);
+							fn(true);
+						}
+					});
                 }
-                fn(false);
             } else {
+            	fn(false);
                 console.log("User not logged in.");
             }
         });

@@ -10,21 +10,22 @@ class gcmSender {
 	 * takes in sender user doc and reciever user doc
 	 * and sends match notification to reciever
 	 */
-	sendMatchNotification(senderDoc, recieverDoc) {
+	sendMatchNotification(senderDoc, receiverDoc) {
 		let message = new gcm.Message({
-			data: {
-				from: senderDoc._id,
-				type: "matchNotification"
-			},
+			to : receiverDoc.gcmToken,
 			notification: {
-				title: "you have a new match!!!",
-				icon: "ic_launcher",
-				body: "user: " + senderDoc.username + "also likes your style"
+				title: "New Match!",
+				icon: "ic_band_up_notification",
+				body: "You have matched with " + senderDoc.username
+			},
+
+			data: {
+				type: "matchNotification"
 			}
 		});
-
+		
 		this.sender.send(message, {
-			registrationToken: recieverDoc.gcmToken
+			registrationTokens: [receiverDoc.gcmToken]
 		}, (err, response) => {
 			if (err) console.log(err);
 			else console.log(response);
@@ -35,24 +36,27 @@ class gcmSender {
 	 * takes in sender user id, reciever user id and a message string
 	 * finds reciever user doc and sends message to it
 	 */
-	sendMsgNotification(senderid, recieverid, msg) {
+	sendMsgNotification(senderid, recieverid, username, msg) {
 		Users.findOne({
 			_id: recieverid
 		}, (err, doc) => {
 			let message = new gcm.Message({
-				data: {
-					from: senderid,
-					type: "msgNotification"
-				},
-				notification: {
-					title: "you have a new message from someone",
-					icon: "ic_launcher",
-					body: msg
-				}
-			});
+			to : doc.gcmToken,
+			notification: {
+				title: "New Chat Message",
+				icon: "ic_band_up_notification",
+				body: username + ": " + msg
+			},
+
+			data: {
+				senderId: senderid,
+				senderName: username,
+				type: "msgNotification"
+			}
+		});
 
 			this.sender.send(message, {
-				registrationToken: doc.gcmToken
+				registrationTokens: [doc.gcmToken]
 			}, (err, response) => {
 				if (err) console.log(err);
 				else console.log(response);
@@ -68,9 +72,9 @@ class gcmSender {
 				type: "testNotification"
 			},
 			notification: {
-				title: "hello world",
-				icon: "ic_band_up_logo_notification",
-				body: "this is a test message"
+				title: "Hello World!",
+				icon: "ic_band_up_notification",
+				body: "This is a test message."
 			},
 			message: "here is a test message"
 		});
