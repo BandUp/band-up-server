@@ -7,7 +7,13 @@ module.exports = function(app, passport) {
 
 	// returns user all data to client
 	app.all('/user', isLoggedIn, (req, res) => {
-		User.findById(req.body.userId, (err, userDoc) => {
+		var userId = "";
+		if (!req.body.userId) {
+			userId = req.user._id;
+		} else {
+			userId = req.body.userId;
+		}
+		User.findById(userId, (err, userDoc) => {
 			if (err || !userDoc) {
 				res.status(500).send();
 				console.log("error");
