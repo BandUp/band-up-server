@@ -14,9 +14,9 @@ module.exports.setup = function socketioApp(server, app, io) {
             if (socket.request.user && socket.request.user.logged_in) {
                 // Set the username as the ID of the user.
                 socket.username = socket.request.user._id;
-
+                
                 // Store user object in global user roster.
-                users[username] = {
+                users[socket.username] = {
                     username: socket.username,
                     socket: this
                 };
