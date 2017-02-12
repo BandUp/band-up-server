@@ -18,7 +18,6 @@ module.exports = function(app, passport) {
 				res.status(500).send();
 				console.log("error");
 			} else if (userDoc) {
-				let userList = [];
 				shared.itemNamesToMap(instrument, (instruMap) => {
 					shared.itemNamesToMap(genre, (genresMap) => {
 						if (!instruMap || !genresMap) {
@@ -38,18 +37,32 @@ module.exports = function(app, passport) {
 			'_id': {
 				$in: req.user.matched
 			}
-		}, (err, doc) => {
+		}, (err, userDoc) => {
 			if (err) {
 				res.sendStatus(500);
 				return;
 			}
+			let userList = [];
+			shared.itemNamesToMap(instrument, (instruMap) => {
+				shared.itemNamesToMap(genre, (genresMap) => {
+					if (!instruMap || !genresMap) {
+						res.status(500).send("Unknown internal server error occurred.");
+						return;
+					}
 
-			res.status(200).send(doc);
+					for (let i = 0; i < userDoc.length; i++) {
+						let userDTO = shared.userToDTO(req.user, userDoc[i], instruMap, genresMap);
+						if (userDTO) {
+							userList.push(userDTO);
+						}
+					}
+					res.status(200).send(userList);
+				});
+			});
 		});
 	});
 
 	app.all('/get-instrument', (req, res) => {
-		console.log(req.body.id);
 		instrument.findById(req.body.id, (err, doc) => {
 			if (err) {
 				res.sendStatus(500);
@@ -71,6 +84,7 @@ module.exports = function(app, passport) {
 	app.all('/edit-user', isLoggedIn, (req, res) => {
 		let editedUser = req.body;
 		let origUser = req.user;
+		console.log(editedUser);
 
 		for (let attrName of Object.keys(editedUser)) {
 			if (editedUser[attrName] != origUser[attrName]) {
