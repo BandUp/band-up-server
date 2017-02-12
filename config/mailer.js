@@ -28,13 +28,16 @@ class Mailer{
         let mailOptions = {
             from: "Bad Melody <support@badmelody.com>",
             to: user.email,
-            subject: "Password reset",
-            text: "Please go to this address to reset your password: " + url,
+            subject: "Password Reset",
+            text: "Please go to the following address to reset your password: " + url,
             html: '<p>Please click <a href="' + url + '">this</a> to reset your password</p>'
         };
 
         this.transporter.sendMail(mailOptions, (err, info) =>{
-            if(err) throw err;
+            if (err) {
+                console.log(err);
+                return;
+            }
             console.log("password reset message sent");
         });
     }
@@ -51,7 +54,11 @@ class Mailer{
         };
 
         this.transporter.sendMail(mailOptions, (err, info) =>{
-            if(err) throw err;
+            if(err) {
+                console.log(err);
+                return;
+            }
+
             console.log("password reset message sent");
         });
     }
