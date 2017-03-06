@@ -102,7 +102,7 @@ module.exports = function(app, passport) {
 	 * requires google id token which is encoded user information
 	 */
 	app.post('/login-google',
-		passport.authenticate('google-id-token'),
+		passport.authenticate(['google-id-token-android', 'google-id-token-ios']),
 		(req, res) => {
 			res.json({
 				sessionID: req.sessionID,

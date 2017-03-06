@@ -4,9 +4,8 @@ const GoogleStrategy = require('passport-google-id-token');
 const User = require('../models/user');
 
 module.exports = function(passport) {
-	passport.use(new GoogleStrategy({
-		clientID: process.env.GOOGLE_CLIENT_ID
-	}, (parsedToken, googleId, done) => {
+
+	var loginHandler = function(parsedToken, googleId, done) {
 		// asynchronous
 		process.nextTick(() => {
 			// look for pre-existing account
@@ -42,5 +41,14 @@ module.exports = function(passport) {
 				}
 			});
 		});
-	}));
+	};
+
+	passport.use('google-id-token-android', new GoogleStrategy({
+		clientID: process.env.GOOGLE_CLIENT_ID
+	}, loginHandler));
+
+	passport.use('google-id-token-ios', new GoogleStrategy({
+		clientID: process.env.GOOGLE_CLIENT_ID_IOS
+	}, loginHandler));
+
 };
