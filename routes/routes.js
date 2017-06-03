@@ -68,14 +68,70 @@ module.exports = function(app, passport) {
 
 
     /**
-     * index function also used to quickly test various featuress
+     * Index function also used to quickly test various features
      */
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname + '/../static/index.html'));
     });
 
 	/**
-	 * get x many user nearby that are not already liked
+	 * Get all users nearby that are not already liked
+	 */
+	app.get('/v2/users/nearby', isLoggedIn, (req, res) => {
+		if (!req.query.lat || !req.query.lon) {
+			res.status(412).send("lat and lon cannot be empty.");
+			return;
+		}
+
+		var searchRadius = 50;
+
+		if (!(!req.query.radius)) {
+			searchRadius = req.query.radius;
+		}
+
+		user.find({
+			'_id': {
+				$ne: req.user._id,
+				$nin: req.user.liked
+			},
+			hasFinishedSetup: true
+		}, function(err, userDoc) {
+			if (err) {
+				console.log("Error occurred:");
+				console.log(err);
+				res.status(500).send("Unknown internal server error occurred.");
+				return;
+			}
+
+			let userList = [];
+			shared.itemNamesToMap(instrument, (instruMap) => {
+				shared.itemNamesToMap(genre, (genresMap) => {
+					if (!instruMap || !genresMap) {
+						res.status(500).send("Unknown internal server error occurred.");
+						return;
+					}
+
+					for (let i = 0; i < userDoc.length; i++) {
+						let userDTO = shared.userToDTO2(req.query.lat, req.query.lon, searchRadius, req.user, userDoc[i], instruMap, genresMap);
+						if (userDTO) {
+							userList.push(userDTO);
+						}
+					}
+					for (var i = 0; i < userList.length; i++) {
+						if (userList[i].username === "Tómas") {
+							console.log(userList[i]);
+						}
+					}
+					
+					res.status(200).send(userList);
+				});
+			});
+
+		});
+	});
+
+	/**
+	 * Get all users nearby that are not already liked
 	 */
 	app.get('/nearby-users', isLoggedIn, (req, res) => {
 		user.find({
