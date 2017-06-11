@@ -114,7 +114,15 @@ userSchema.methods.generateHash = function(password) {
 };
 
 userSchema.methods.validPassword = function(password) {
-	return bcrypt.compareSync(password, this.local.password);
+    if (!this.local) {
+        return false;
+    }
+    
+    if (!this.local.password) {
+        return false;
+    }
+    
+    return bcrypt.compareSync(password, this.local.password);
 };
 
 module.exports = mongoose.model('User', userSchema);
