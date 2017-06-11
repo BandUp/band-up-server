@@ -117,12 +117,6 @@ module.exports = function(app, passport) {
 							userList.push(userDTO);
 						}
 					}
-					for (var i = 0; i < userList.length; i++) {
-						if (userList[i].username === "Tómas") {
-							console.log(userList[i]);
-						}
-					}
-					
 					res.status(200).send(userList);
 				});
 			});
